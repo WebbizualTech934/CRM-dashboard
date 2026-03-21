@@ -6,29 +6,41 @@ import {
     LayoutDashboard,
     Briefcase,
     Users,
-    Settings,
+    Settings as SettingsIcon,
     ChevronLeft,
     ChevronRight,
     LogOut,
     Layers,
-    Mail
+    Mail,
+    Table2
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, useMemo } from "react"
+import { useCRMData } from "@/hooks/use-crm-data"
 
 const navItems = [
-    { name: "Dashboard", href: "/", icon: LayoutDashboard },
-    { name: "Projects", href: "/projects", icon: Briefcase },
-    { name: "Emails", href: "/emails", icon: Mail },
-    { name: "Leads", href: "/leads", icon: Users },
-    { name: "Team", href: "/team", icon: Users },
-    { name: "Settings", href: "/settings", icon: Settings },
+    { id: 'dashboard', name: "Dashboard", href: "/", icon: LayoutDashboard },
+    { id: 'projects',  name: "Projects",  href: "/projects", icon: Briefcase },
+    { id: 'emails',    name: "Emails",    href: "/emails", icon: Mail },
+    { id: 'leads',     name: "Leads",     href: "/leads", icon: Users },
+    { id: 'team',      name: "Team",      href: "/team", icon: Users },
+    { id: 'custom-tables', name: "My Tables", href: "/custom-tables", icon: Table2 },
+    { id: 'settings',  name: "Settings",  href: "/settings", icon: SettingsIcon },
 ]
 
 export function Sidebar() {
     const pathname = usePathname()
+    const { currentUser } = useCRMData()
     const [isCollapsed, setIsCollapsed] = useState(false)
+
+    const visibleNavItems = useMemo(() => {
+        if (!currentUser) return navItems
+        if (currentUser.userRole === "Admin") return navItems
+        
+        const perms = currentUser.menuPermissions || []
+        return navItems.filter(item => perms.includes(item.id))
+    }, [currentUser])
 
     return (
         <div className={cn(
@@ -55,7 +67,7 @@ export function Sidebar() {
             </div>
 
             <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-                {navItems.map((item) => {
+                {visibleNavItems.map((item) => {
                     const isActive = pathname === item.href
                     return (
                         <Link key={item.name} href={item.href}>

@@ -10,11 +10,14 @@ import { DataTable } from "@/components/shared/DataTable"
 import { ImportExportDialog } from "@/components/shared/ImportExportDialog"
 import { NewLeadModal } from "@/components/leads/NewLeadModal"
 import { RowDetailDrawer } from "./RowDetailDrawer"
+import { EditManufacturerModal } from "./EditManufacturerModal"
+import { Manufacturer } from "@/providers/crm-provider"
 
 export function ManufacturersTable({ projectId }: { projectId?: string }) {
     const { manufacturers, deleteManufacturer, deleteManyManufacturers, isLoaded } = useCRMData()
-    const [selectedManufacturer, setSelectedManufacturer] = useState<any>(null)
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const [selectedManufacturer, setSelectedManufacturer] = useState<Manufacturer | null>(null)
+    const [viewingManufacturer, setViewingManufacturer] = useState<Manufacturer | null>(null)
+    const [editingManufacturer, setEditingManufacturer] = useState<Manufacturer | null>(null)
     const [isNewModalOpen, setIsNewModalOpen] = useState(false)
 
     if (!isLoaded) return null
@@ -55,10 +58,10 @@ export function ManufacturersTable({ projectId }: { projectId?: string }) {
             sortable: true,
             className: "text-center",
             cell: (m: any) => (
-                <Badge className={cn("rounded-full border-none px-3 py-1 font-bold shadow-sm text-white", 
+                <Badge className={cn("rounded-full border-none px-3 py-1 font-bold shadow-sm text-white",
                     m.fitLevel === "High" ? "bg-green-500" :
-                    m.fitLevel === "Low" ? "bg-red-500" :
-                    "bg-yellow-500"
+                        m.fitLevel === "Low" ? "bg-red-500" :
+                            "bg-yellow-500"
                 )}>
                     {m.fitLevel || "Medium"}
                 </Badge>
@@ -97,9 +100,9 @@ export function ManufacturersTable({ projectId }: { projectId?: string }) {
             cell: (m: any) => (
                 <Badge variant="outline" className={cn("rounded-full px-3 py-1 font-bold shadow-sm border-2 whitespace-nowrap",
                     m.visualPresence === "Excellent" ? "border-green-500 text-green-600" :
-                    m.visualPresence === "Good" ? "border-blue-500 text-blue-600" :
-                    m.visualPresence === "Poor" ? "border-red-500 text-red-600" :
-                    "border-yellow-500 text-yellow-600"
+                        m.visualPresence === "Good" ? "border-blue-500 text-blue-600" :
+                            m.visualPresence === "Poor" ? "border-red-500 text-red-600" :
+                                "border-yellow-500 text-yellow-600"
                 )}>
                     {m.visualPresence || "Average"}
                 </Badge>
@@ -109,7 +112,7 @@ export function ManufacturersTable({ projectId }: { projectId?: string }) {
 
     const handleRowClick = (m: any) => {
         setSelectedManufacturer(m)
-        setIsDrawerOpen(true)
+        setViewingManufacturer(m)
     }
 
     return (
@@ -118,15 +121,16 @@ export function ManufacturersTable({ projectId }: { projectId?: string }) {
                 data={projectManufacturers}
                 columns={columns}
                 searchKey="parentCompany"
-                searchPlaceholder="Search manufacturers..."
+                searchKeys={["parentCompany", "peerBrand", "website", "country"]}
                 entityType="Manufacturer"
+                onView={(m) => setViewingManufacturer(m)}
+                onEdit={(m) => setEditingManufacturer(m)}
                 onDelete={(m) => deleteManufacturer(m.id)}
                 onBulkDelete={deleteManyManufacturers}
-                rowClickable
-                onRowClick={handleRowClick}
+                onRowClick={(m) => setViewingManufacturer(m)}
                 toolbarActions={
                     <>
-                        <Button 
+                        <Button
                             onClick={() => setIsNewModalOpen(true)}
                             className="rounded-xl font-bold h-11 px-6 shadow-lg shadow-primary/20 gap-2 text-white"
                         >
@@ -139,9 +143,16 @@ export function ManufacturersTable({ projectId }: { projectId?: string }) {
             />
 
             <RowDetailDrawer
-                open={isDrawerOpen}
-                onOpenChange={setIsDrawerOpen}
-                data={selectedManufacturer}
+                open={!!viewingManufacturer}
+                onOpenChange={(open) => !open && setViewingManufacturer(null)}
+                data={viewingManufacturer}
+                onEdit={(m) => setEditingManufacturer(m)}
+            />
+
+            <EditManufacturerModal
+                open={!!editingManufacturer}
+                onOpenChange={(open) => !open && setEditingManufacturer(null)}
+                manufacturer={editingManufacturer}
             />
 
             <NewLeadModal

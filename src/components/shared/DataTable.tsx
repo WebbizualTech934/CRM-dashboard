@@ -1,14 +1,13 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useRef } from "react"
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -19,27 +18,27 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
-import { 
-    ChevronDown, 
-    MoreHorizontal, 
-    Download, 
-    Trash2, 
-    Search, 
-    Filter, 
+import {
+    ChevronDown,
+    ChevronLeft,
+    ChevronRight,
+    MoreHorizontal,
+    Trash2,
+    Search,
+    Filter,
     Columns,
-    ArrowUpDown,
-    CheckCircle2,
-    XCircle,
+    SortAsc,
+    SortDesc,
+    Check,
+    Database,
     Loader2
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
 
-interface Column<T> {
+export interface Column<T> {
     header: string | React.ReactNode
     accessorKey: keyof T | string
-    cell?: (item: T) => React.ReactNode
+    cell?: (item: T, index: number) => React.ReactNode
     sortable?: boolean
     filterable?: boolean
     className?: string
@@ -51,6 +50,9 @@ interface DataTableProps<T> {
     columns: Column<T>[]
     searchPlaceholder?: string
     searchKey?: keyof T
+    searchKeys?: (keyof T)[]
+    onView?: (item: T) => void
+    onEdit?: (item: T) => void
     onDelete?: (item: T) => void
     onBulkDelete?: (ids: string[]) => void
     isLoading?: boolean
@@ -59,13 +61,22 @@ interface DataTableProps<T> {
     rowClickable?: boolean
     onRowClick?: (item: T) => void
     entityType?: string
+    filters?: {
+        key: keyof T
+        label: string
+        options: { label: string, value: string }[]
+    }[]
+    customRowActions?: (item: T) => { label: string, onClick: () => void, icon?: React.ReactNode, variant?: string }[]
 }
 
 export function DataTable<T extends { id: string }>({
     data,
     columns,
-    searchPlaceholder = "Search...",
+    searchPlaceholder = "Search records...",
     searchKey,
+    searchKeys,
+    onView,
+    onEdit,
     onDelete,
     onBulkDelete,
     isLoading = false,
@@ -73,26 +84,60 @@ export function DataTable<T extends { id: string }>({
     toolbarActions,
     rowClickable,
     onRowClick,
-    entityType
+    entityType = "Record",
+    filters: filterConfig,
+    customRowActions
 }: DataTableProps<T>) {
     const [searchQuery, setSearchQuery] = useState("")
-    const [selectedIds, setSelectedIds] = useState<string[]>([])
+    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
     const [visibleColumns, setVisibleColumns] = useState<string[]>(
         columns.map(c => c.accessorKey as string)
     )
     const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null)
+    const [activeFilters, setActiveFilters] = useState<Record<string, string>>({})
+    const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+    const handleHorizScroll = (dir: 'left' | 'right') => {
+        if (scrollContainerRef.current) {
+            const scrollAmount = 300
+            scrollContainerRef.current.scrollBy({
+                left: dir === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            })
+        }
+    }
 
     // Filtering & Sorting Logic
     const filteredData = useMemo(() => {
         let result = [...data]
 
-        if (searchQuery && searchKey) {
-            result = result.filter(item => {
-                const val = item[searchKey]
-                return String(val).toLowerCase().includes(searchQuery.toLowerCase())
-            })
+        // Global Search
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase()
+            const keys = searchKeys || (searchKey ? [searchKey] : [])
+            
+            if (keys.length > 0) {
+                result = result.filter(item => {
+                    return keys.some(key => {
+                        const val = item[key]
+                        return String(val).toLowerCase().includes(query)
+                    })
+                })
+            }
         }
 
+        // Active Filters
+        Object.keys(activeFilters).forEach(key => {
+            const filterValue = activeFilters[key]
+            if (filterValue && filterValue !== "_all") {
+                result = result.filter(item => {
+                    const val = (item as any)[key]
+                    return String(val) === filterValue
+                })
+            }
+        })
+
+        // Sorting
         if (sortConfig) {
             result.sort((a, b) => {
                 const aVal = (a as any)[sortConfig.key]
@@ -104,20 +149,23 @@ export function DataTable<T extends { id: string }>({
         }
 
         return result
-    }, [data, searchQuery, searchKey, sortConfig])
+    }, [data, searchQuery, searchKey, searchKeys, sortConfig, activeFilters])
 
     const toggleSelectAll = () => {
-        if (selectedIds.length === filteredData.length) {
-            setSelectedIds([])
+        if (selectedIds.size === filteredData.length && filteredData.length > 0) {
+            setSelectedIds(new Set())
         } else {
-            setSelectedIds(filteredData.map(item => item.id))
+            setSelectedIds(new Set(filteredData.map(item => item.id)))
         }
     }
 
-    const toggleSelect = (id: string) => {
-        setSelectedIds(prev =>
-            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-        )
+    const toggleSelect = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation()
+        setSelectedIds(prev => {
+            const n = new Set(prev)
+            n.has(id) ? n.delete(id) : n.add(id)
+            return n
+        })
     }
 
     const handleSort = (key: string) => {
@@ -132,199 +180,245 @@ export function DataTable<T extends { id: string }>({
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                <Loader2 className="h-10 w-10 text-primary animate-spin" />
-                <p className="text-muted-foreground font-medium">Loading {entityType || "data"}...</p>
+                <Loader2 className="h-10 w-10 text-[#ff7a59] animate-spin" />
+                <p className="text-slate-500 font-medium">Loading {entityType}s...</p>
             </div>
         )
     }
 
+    const visibleColsData = columns.filter(c => visibleColumns.includes(c.accessorKey as string))
+
     return (
-        <div className="space-y-4">
-            {/* Toolbar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-2 flex-1 max-w-sm">
-                    <div className="relative w-full">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            placeholder={searchPlaceholder}
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-10 rounded-xl bg-card border-border/50 h-11 focus:ring-primary/20"
-                        />
-                    </div>
-                    {selectedIds.length > 0 && onBulkDelete && (
-                        <Button
-                            variant="destructive"
-                            size="sm"
-                            className="rounded-xl h-11 px-4 gap-2 animate-in fade-in zoom-in"
-                            onClick={() => {
-                                if (confirm(`Are you sure you want to delete ${selectedIds.length} items?`)) {
-                                    onBulkDelete(selectedIds)
-                                    setSelectedIds([])
-                                }
-                            }}
+        <div className="flex flex-col border border-slate-200 rounded-md bg-white shadow-sm overflow-hidden h-[calc(100vh-220px)] min-h-[500px]">
+            {/* Filter / Search Bar */}
+            <div className="h-14 bg-white border-b border-slate-200 flex items-center px-4 gap-3 shrink-0">
+                <div className="relative w-72">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <Input
+                        placeholder={searchPlaceholder}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-9 h-9 text-xs border-slate-300 rounded-sm shadow-none focus-visible:ring-1 focus-visible:ring-[#00a4bd] transition-all"
+                    />
+                </div>
+                
+                {filterConfig && filterConfig.length > 0 && <div className="h-5 w-[1px] bg-slate-200 mx-1" />}
+                
+                <div className="flex items-center gap-2">
+                    {filterConfig?.map(filter => (
+                        <Select
+                            key={filter.key as string}
+                            value={activeFilters[filter.key as string] || "_all"}
+                            onValueChange={(val: any) => setActiveFilters(prev => ({ ...prev, [filter.key as string]: val }))}
                         >
-                            <Trash2 className="h-4 w-4" />
-                            <span className="hidden sm:inline">Delete {selectedIds.length}</span>
-                        </Button>
-                    )}
+                            <SelectTrigger className="h-9 rounded-sm bg-slate-50 border-slate-200 min-w-[140px] font-semibold text-xs text-slate-700 shadow-none">
+                                <SelectValue placeholder={`Filter by ${filter.label}`} />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-sm border-slate-200 shadow-md">
+                                <SelectItem value="_all" className="font-semibold text-xs text-slate-500">All {filter.label}</SelectItem>
+                                {filter.options.map(opt => (
+                                    <SelectItem key={opt.value} value={opt.value} className="text-xs font-medium text-slate-800">
+                                        {opt.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    ))}
                 </div>
 
-                <div className="flex items-center gap-2">
-                    {toolbarActions}
+                <div className="ml-auto flex items-center gap-2">
+                    {selectedIds.size > 0 ? (
+                        <div className="flex items-center gap-2 bg-[#ff7a59]/10 text-[#ff7a59] rounded-sm px-3 py-1.5 border border-[#ff7a59]/20 mr-2">
+                            <span className="text-xs font-bold">{selectedIds.size} selected</span>
+                            <div className="h-3 w-[1px] bg-[#ff7a59]/30 mx-1" />
+                            <button onClick={() => {
+                                if (onBulkDelete && confirm(`Delete ${selectedIds.size} items?`)) {
+                                    onBulkDelete(Array.from(selectedIds))
+                                    setSelectedIds(new Set())
+                                }
+                            }} className="text-xs font-bold hover:underline flex items-center gap-1">
+                                <Trash2 className="h-3 w-3" /> Delete
+                            </button>
+                        </div>
+                    ) : (
+                        <span className="text-xs text-slate-400 font-medium mr-2">{filteredData.length} records</span>
+                    )}
+                    
                     <DropdownMenu>
-                        <DropdownMenuTrigger>
-                            <Button variant="outline" size="sm" className="rounded-xl h-11 px-4 gap-2 border-border/50">
-                                <Columns className="h-4 w-4" /> Columns
-                            </Button>
+                        <DropdownMenuTrigger className="inline-flex items-center justify-center whitespace-nowrap h-9 px-3 rounded-sm border border-slate-300 font-medium text-xs hover:bg-slate-50 transition-colors shadow-none text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-[#00a4bd]">
+                            <Columns className="h-3.5 w-3.5 mr-2" /> Columns
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-[200px] rounded-xl">
+                        <DropdownMenuContent align="end" className="w-[200px] rounded-sm shadow-md">
                             {columns.map(col => (
                                 <DropdownMenuCheckboxItem
                                     key={col.accessorKey as string}
                                     checked={visibleColumns.includes(col.accessorKey as string)}
                                     onCheckedChange={(checked) => {
                                         setVisibleColumns(prev =>
-                                            checked 
-                                            ? [...prev, col.accessorKey as string]
-                                            : prev.filter(c => c !== col.accessorKey)
+                                            checked
+                                                ? [...prev, col.accessorKey as string]
+                                                : prev.filter(c => c !== col.accessorKey)
                                         )
                                     }}
+                                    className="text-xs font-medium cursor-pointer"
                                 >
                                     {col.header as string}
                                 </DropdownMenuCheckboxItem>
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
+
+                    <div className="flex items-center gap-1 border-l border-slate-200 pl-2">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-sm" onClick={() => handleHorizScroll('left')}>
+                            <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-sm" onClick={() => handleHorizScroll('right')}>
+                            <ChevronRight className="h-4 w-4" />
+                        </Button>
+                    </div>
+
+                    {toolbarActions}
                 </div>
             </div>
 
-            {/* Table Container */}
-            <div className="rounded-[2rem] border border-border/40 bg-card/30 backdrop-blur-sm overflow-hidden shadow-xl shadow-black/5">
-                <div className="overflow-x-auto">
-                    <Table>
-                        <TableHeader className="bg-muted/30">
-                            <TableRow className="hover:bg-transparent border-border/40 h-14">
-                                <TableHead className="w-[50px] px-6 text-center">
-                                    <Checkbox
-                                        checked={selectedIds.length === filteredData.length && filteredData.length > 0}
-                                        onCheckedChange={toggleSelectAll}
-                                        className="rounded-md border-muted-foreground/30 data-[state=checked]:bg-primary"
-                                    />
-                                </TableHead>
-                                {columns.filter(c => visibleColumns.includes(c.accessorKey as string)).map((col, i) => (
-                                    <TableHead 
-                                        key={i} 
-                                        className={cn(
-                                            "text-xs font-black uppercase tracking-widest text-muted-foreground/60 px-4",
-                                            col.className,
-                                            col.sortable && "cursor-pointer hover:text-foreground transition-colors"
-                                        )}
-                                        onClick={() => col.sortable && handleSort(col.accessorKey as string)}
-                                        style={{ width: col.width }}
-                                    >
-                                        <div className="flex items-center gap-2">
+            {/* Data Grid / Spreadsheet */}
+            <div ref={scrollContainerRef} className="flex-1 overflow-auto bg-white relative">
+                <table className="w-full text-sm border-collapse table-fixed min-w-max">
+                    <thead className="bg-[#f5f8fa] border-b border-slate-200 sticky top-0 z-20 shadow-sm text-slate-600">
+                        <tr>
+                            <th className="w-10 h-[36px] sticky left-0 z-30 bg-[#f5f8fa] border-r border-slate-200 text-center px-0">
+                                <button onClick={toggleSelectAll} className="flex items-center justify-center w-full h-full">
+                                    <div className={cn("h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors",
+                                        selectedIds.size === filteredData.length && filteredData.length > 0
+                                            ? "bg-[#ff7a59] border-[#ff7a59] text-white"
+                                            : "border-slate-300 bg-white")}>
+                                        {selectedIds.size === filteredData.length && filteredData.length > 0 && <Check className="h-2.5 w-2.5 stroke-[3]" />}
+                                    </div>
+                                </button>
+                            </th>
+                            {visibleColsData.map((col, i) => (
+                                <th key={i} className="px-4 h-[36px] text-left border-r border-slate-200 font-semibold text-[11px] uppercase tracking-wider select-none overflow-hidden" style={{ width: col.width || '180px' }}>
+                                    {col.sortable ? (
+                                        <button onClick={() => handleSort(col.accessorKey as string)} className="flex items-center gap-1.5 w-full hover:text-slate-900 group">
                                             {col.header}
-                                            {col.sortable && <ArrowUpDown className="h-3 w-3" />}
+                                            <span className="text-slate-400">
+                                                {sortConfig?.key === col.accessorKey
+                                                    ? (sortConfig.direction === "asc" ? <SortAsc className="h-3 w-3" /> : <SortDesc className="h-3 w-3" />)
+                                                    : <SortAsc className="h-3 w-3 opacity-0 group-hover:opacity-100" />}
+                                            </span>
+                                        </button>
+                                    ) : (
+                                        col.header
+                                    )}
+                                </th>
+                            ))}
+                            <th className="w-[80px] px-4 border-b border-l border-slate-200 bg-[#f5f8fa] sticky right-0 z-30 shadow-[-4px_0_12px_rgba(0,0,0,0.02)]"></th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white text-[13px] text-slate-800">
+                        {filteredData.length === 0 ? (
+                            <tr>
+                                <td colSpan={visibleColsData.length + 2} className="text-center py-24 bg-slate-50 border-b border-slate-100">
+                                    {emptyState || (
+                                        <div className="flex flex-col items-center justify-center space-y-3">
+                                            <Database className="h-10 w-10 text-slate-300 mx-auto mb-2" />
+                                            <p className="text-sm font-medium text-slate-600">No {entityType.toLowerCase()}s found matching your filters.</p>
                                         </div>
-                                    </TableHead>
-                                ))}
-                                <TableHead className="w-[80px] px-6 text-right">Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {filteredData.length > 0 ? (
-                                filteredData.map((item) => (
-                                    <TableRow 
-                                        key={item.id}
-                                        className={cn(
-                                            "group border-border/30 hover:bg-primary/[0.02] transition-colors h-16",
+                                    )}
+                                </td>
+                            </tr>
+                        ) : (
+                            filteredData.map(item => {
+                                const isSelected = selectedIds.has(item.id)
+                                return (
+                                    <tr key={item.id}
+                                        className={cn("border-b border-slate-200 group hover:bg-[#f5f8fa] transition-colors relative",
+                                            isSelected ? "bg-blue-50/40" : "",
                                             rowClickable && "cursor-pointer"
                                         )}
                                         onClick={() => rowClickable && onRowClick?.(item)}
                                     >
-                                        <TableCell className="px-6 text-center" onClick={(e) => e.stopPropagation()}>
-                                            <Checkbox
-                                                checked={selectedIds.includes(item.id)}
-                                                onCheckedChange={() => toggleSelect(item.id)}
-                                                className="rounded-md border-muted-foreground/30 data-[state=checked]:bg-primary"
-                                            />
-                                        </TableCell>
-                                        {columns.filter(c => visibleColumns.includes(c.accessorKey as string)).map((col, i) => (
-                                            <TableCell key={i} className={cn("px-4 font-medium text-sm", col.className)}>
-                                                {col.cell ? col.cell(item) : (item as any)[col.accessorKey]}
-                                            </TableCell>
+                                        <td className={cn("w-10 h-[40px] sticky left-0 z-10 border-r border-slate-200 text-center px-0 transition-colors", 
+                                            isSelected ? "bg-blue-50/40" : "bg-white group-hover:bg-[#f5f8fa]")}
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <button onClick={(e) => toggleSelect(item.id, e)} className="flex items-center justify-center w-full h-full">
+                                                <div className={cn("h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors shadow-sm",
+                                                    isSelected ? "bg-[#ff7a59] border-[#ff7a59] text-white" : "border-slate-300 bg-white")}>
+                                                    {isSelected && <Check className="h-2.5 w-2.5 stroke-[3]" />}
+                                                </div>
+                                            </button>
+                                        </td>
+                                        
+                                        {visibleColsData.map((col, i) => (
+                                            <td key={i} className={cn("px-4 h-[40px] border-r border-slate-200 overflow-hidden text-ellipsis whitespace-nowrap", col.className)}>
+                                                {col.cell ? col.cell(item, filteredData.indexOf(item)) : (item as any)[col.accessorKey]}
+                                            </td>
                                         ))}
-                                        <TableCell className="px-6 text-right" onClick={(e) => e.stopPropagation()}>
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger>
-                                                <Button variant="ghost" size="icon" className="rounded-xl opacity-0 group-hover:opacity-100 transition-all h-9 w-9">
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end" className="rounded-xl w-48 p-2">
-                                                    <DropdownMenuItem className="rounded-lg gap-2 cursor-pointer font-medium">
-                                                        View Details
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem className="rounded-lg gap-2 cursor-pointer font-medium text-primary">
-                                                        Edit {entityType}
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuSeparator />
-                                                    {onDelete && (
-                                                        <DropdownMenuItem 
-                                                            className="rounded-lg gap-2 cursor-pointer font-medium text-destructive focus:bg-destructive/10 focus:text-destructive"
-                                                            onClick={() => {
-                                                                if (confirm(`Are you sure you want to delete this ${entityType}?`)) {
-                                                                    onDelete(item)
-                                                                }
-                                                            }}
-                                                        >
-                                                            <Trash2 className="h-4 w-4" /> Delete
-                                                        </DropdownMenuItem>
-                                                    )}
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell 
-                                        colSpan={columns.filter(c => visibleColumns.includes(c.accessorKey as string)).length + 2} 
-                                        className="h-[300px] text-center"
-                                    >
-                                        {emptyState || (
-                                            <div className="flex flex-col items-center justify-center space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                                                <div className="relative">
-                                                    <div className="h-24 w-24 rounded-[2.5rem] bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
-                                                        <Search className="h-10 w-10 text-primary/30" />
-                                                    </div>
-                                                    <div className="absolute -bottom-2 -right-2 h-10 w-10 rounded-2xl bg-background border border-border/50 flex items-center justify-center shadow-lg">
-                                                        <Filter className="h-4 w-4 text-muted-foreground/40" />
-                                                    </div>
-                                                </div>
-                                                <div className="space-y-2 text-center max-w-[300px]">
-                                                    <p className="text-xl font-black tracking-tighter">No results found</p>
-                                                    <p className="text-sm font-medium text-muted-foreground leading-relaxed">
-                                                        We couldn't find any {entityType ? entityType.toLowerCase() + "s" : "data"} matching your current filters or search terms.
-                                                    </p>
-                                                </div>
+
+                                        <td className="w-[80px] px-4 border-b border-l border-slate-200 bg-white group-hover:bg-[#f5f8fa] sticky right-0 z-10 shadow-[-4px_0_12px_rgba(0,0,0,0.02)] transition-colors">
+                                            <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity justify-end">
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger className="inline-flex items-center justify-center h-7 w-7 p-0 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-sm focus:outline-none focus:ring-2 focus:ring-[#00a4bd]">
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                    </DropdownMenuTrigger>
+                                                     <DropdownMenuContent align="end" className="w-40 rounded-xl shadow-xl border-none p-2 bg-white/95 backdrop-blur-sm" onClick={e=>e.stopPropagation()}>
+                                                         {(onView || onRowClick) && (
+                                                             <DropdownMenuItem 
+                                                                onClick={() => (onView || onRowClick)?.(item)} 
+                                                                className="text-xs font-bold gap-2 rounded-lg cursor-pointer py-2 px-3 hover:bg-primary/5 text-slate-700"
+                                                             >
+                                                                 <Database className="h-3.5 w-3.5 text-blue-500" /> View Details
+                                                             </DropdownMenuItem>
+                                                         )}
+                                                         {onEdit && (
+                                                             <DropdownMenuItem 
+                                                                onClick={() => onEdit(item)} 
+                                                                className="text-xs font-bold gap-2 rounded-lg cursor-pointer py-2 px-3 hover:bg-primary/5 text-slate-700"
+                                                             >
+                                                                 <SortAsc className="h-3.5 w-3.5 text-orange-500 rotate-90" /> Edit Record
+                                                             </DropdownMenuItem>
+                                                         )}
+                                                         
+                                                         {(onView || onEdit) && customRowActions && <DropdownMenuSeparator className="my-1 bg-slate-100" />}
+                                                         
+                                                         {customRowActions && customRowActions(item).map((action, idx) => (
+                                                             <DropdownMenuItem 
+                                                                 key={idx} 
+                                                                 onClick={action.onClick} 
+                                                                 className={cn("text-xs font-bold gap-2 rounded-lg cursor-pointer py-2 px-3 hover:bg-primary/5 text-slate-700", action.variant === 'destructive' ? "text-red-600 focus:bg-red-50 focus:text-red-600" : "")}
+                                                             >
+                                                                 {action.icon || <Database className="h-3.5 w-3.5 opacity-40" />}
+                                                                 {action.label}
+                                                             </DropdownMenuItem>
+                                                         ))}                                                            
+                                                         {onDelete && (
+                                                             <>
+                                                                 <DropdownMenuSeparator className="my-1 bg-slate-100" />
+                                                                 <DropdownMenuItem
+                                                                     className="text-xs font-bold gap-2 rounded-lg cursor-pointer py-2 px-3 text-red-600 hover:bg-red-50 focus:bg-red-50 focus:text-red-600"
+                                                                     onClick={() => {
+                                                                         if (confirm(`Delete this ${entityType}?`)) {
+                                                                             onDelete(item)
+                                                                         }
+                                                                     }}
+                                                                 >
+                                                                     <Trash2 className="h-3.5 w-3.5" /> Delete
+                                                                 </DropdownMenuItem>
+                                                             </>
+                                                         )}
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
                                             </div>
-                                        )}
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
-            
-            {/* Pagination / Footer */}
-            <div className="flex items-center justify-between px-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                <div>Showing {filteredData.length} of {data.length} {entityType || "items"}</div>
-                {selectedIds.length > 0 && (
-                    <div className="text-primary">{selectedIds.length} items selected</div>
-                )}
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        )}
+                        {/* Empty spacing block */}
+                        <tr><td colSpan={visibleColsData.length + 2} className="h-20 bg-white"></td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     )

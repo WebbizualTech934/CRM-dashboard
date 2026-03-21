@@ -1,13 +1,18 @@
 "use client"
 
+import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { useCRMData } from "@/hooks/use-crm-data"
+import { useCRMData, TeamMember } from "@/hooks/use-crm-data"
 import { cn } from "@/lib/utils"
 import { DataTable } from "@/components/shared/DataTable"
+import { EditMemberModal } from "@/components/team/EditMemberModal"
+import { MemberDetailsSheet } from "@/components/team/MemberDetailsSheet"
 
 export function TeamTable({ memberIds }: { memberIds?: string[] }) {
     const { teamMembers, deleteTeamMember, deleteManyTeamMembers, isLoaded } = useCRMData()
+    const [editingMember, setEditingMember] = useState<TeamMember | null>(null)
+    const [viewingMember, setViewingMember] = useState<TeamMember | null>(null)
 
     if (!isLoaded) return null
 
@@ -71,14 +76,50 @@ export function TeamTable({ memberIds }: { memberIds?: string[] }) {
     ]
 
     return (
-        <DataTable
-            data={filteredMembers}
-            columns={columns}
-            searchKey="name"
-            searchPlaceholder="Search team members..."
-            entityType="Member"
-            onDelete={(member) => deleteTeamMember(member.id)}
-            onBulkDelete={deleteManyTeamMembers}
-        />
+        <>
+            <DataTable
+                data={filteredMembers}
+                columns={columns}
+                searchPlaceholder="Search by name or email..."
+                searchKeys={["name", "email"]}
+                entityType="Member"
+                onView={(member) => setViewingMember(member)}
+                onEdit={(member) => setEditingMember(member)}
+                onDelete={(member) => deleteTeamMember(member.id)}
+                onBulkDelete={deleteManyTeamMembers}
+                filters={[
+                    {
+                        key: "role",
+                        label: "Role",
+                        options: [
+                            { label: "Admin", value: "Admin" },
+                            { label: "Manager", value: "Manager" },
+                            { label: "Lead Gen", value: "Lead Gen" },
+                            { label: "Designer", value: "Designer" },
+                            { label: "Linkedin + Content Writer", value: "Linkedin + Content Writer" },
+                            { label: "Linkedin", value: "Linkedin" },
+                            { label: "CRM", value: "CRM" }
+                        ]
+                    },
+                    {
+                        key: "status",
+                        label: "Status",
+                        options: [
+                            { label: "Active", value: "Active" },
+                            { label: "Inactive", value: "Inactive" }
+                        ]
+                    }
+                ]}
+            />
+            <EditMemberModal
+                member={editingMember}
+                onClose={() => setEditingMember(null)}
+            />
+            <MemberDetailsSheet
+                member={viewingMember}
+                onClose={() => setViewingMember(null)}
+                onEdit={(member) => setEditingMember(member)}
+            />
+        </>
     )
 }

@@ -42,8 +42,8 @@ interface ColumnMapping {
 }
 
 export function ImportExportDialog({ mode, type: entityType = "leads", projectId }: { mode: "import" | "export", type?: "leads" | "manufacturers" | "campaigns" | "creative", projectId?: string }) {
-    const { 
-        replaceLeads, leads, 
+    const {
+        replaceLeads, leads,
         replaceManufacturers, manufacturers,
         replaceCampaigns, campaigns,
         replaceCreativeAssets, creativeAssets
@@ -87,7 +87,7 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
                         }
                     }
                     values.push(current.trim())
-                    
+
                     const obj: any = {}
                     headers.forEach((header, index) => {
                         obj[header] = values[index] ? values[index].replace(/^"|"$/g, '') : ""
@@ -228,7 +228,7 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
         else if (entityType === "campaigns") dataToExport = campaigns
         else if (entityType === "creative") dataToExport = creativeAssets
         else dataToExport = leads
-        
+
         // Filter by projectId if one is provided
         if (projectId) {
             dataToExport = dataToExport.filter((item: any) => item.projectId === projectId || item.project_id === projectId)
@@ -237,7 +237,7 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
             alert(`No ${entityType} to export`)
             return
         }
-        
+
         let headers: string[] = []
         let keys: string[] = []
 
@@ -254,9 +254,9 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
             headers = ["First Name", "Last Name", "Work Email", "Company Name", "Job Title", "Website Link", "Speciality", "Sub-speciality", "Company Size", "Country", "Lead Stage", "Message", "Status", "Priority"]
             keys = ["firstName", "lastName", "email", "company", "jobTitle", "websiteLink", "speciality", "subSpeciality", "companySize", "country", "serviceInterest", "message", "status", "priority"]
         }
-        
+
         let csvContent = headers.join(",") + "\n"
-        
+
         dataToExport.forEach((item: any) => {
             const row = keys.map(k => {
                 let val = item[k] || ""
@@ -267,7 +267,7 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
             })
             csvContent += row.join(",") + "\n"
         })
-        
+
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
         const url = URL.createObjectURL(blob)
         const link = document.createElement("a")
@@ -363,7 +363,7 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
                 }
             />
             <DialogContent className={cn(
-                "border-none shadow-2xl rounded-[2.5rem] p-0 overflow-hidden bg-background/80 backdrop-blur-xl transition-all duration-500",
+                "border-none shadow-2xl rounded-[2.5rem] p-0 overflow-hidden bg-background/80 backdrop-blur-xl transition-all duration-500 flex flex-col max-h-[90vh]",
                 step === "mapping" ? "sm:max-w-[700px]" : "sm:max-w-[450px]"
             )}>
                 <div className="bg-primary/5 p-8 border-b border-primary/10">
@@ -382,7 +382,7 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
                     </DialogHeader>
                 </div>
 
-                <div className="p-8">
+                <div className="p-8 overflow-y-auto flex-1 custom-scrollbar">
                     {mode === "import" ? (
                         <div className="space-y-6">
                             {step === "upload" && (
@@ -525,12 +525,12 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
                         step === "upload" ? (
                             <Button disabled className="w-full h-14 rounded-2xl font-black uppercase tracking-widest opacity-50">Select File to Continue</Button>
                         ) : step === "mapping" ? (
-                            <Button onClick={handleImport} className="w-full h-14 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20">Start Import</Button>
+                            <Button onClick={handleImport} className="w-full h-14 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white border-none">Start Import</Button>
                         ) : (
                             <Button onClick={reset} className="w-full h-14 rounded-2xl font-black uppercase tracking-widest">Close</Button>
                         )
                     ) : (
-                        <Button onClick={handleExportCSV} className="w-full h-14 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20">Download CSV</Button>
+                        <Button onClick={handleExportCSV} className="w-full h-14 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white border-none">Download CSV</Button>
                     )}
                 </DialogFooter>
             </DialogContent>

@@ -3,7 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LeadsTable } from "@/components/tables/LeadsTable"
 import { ManufacturersTable } from "@/components/tables/ManufacturersTable"
-import { OutreachTable } from "@/components/tables/OutreachTable"
+import { CampaignTable } from "@/components/emails/CampaignTable"
 import { CreativeTable } from "@/components/tables/CreativeTable"
 import { Users, Briefcase, Mail, Palette } from "lucide-react"
 import { useCRMData } from "@/hooks/use-crm-data"
@@ -19,7 +19,7 @@ export default function LeadsPage() {
                 <div>
                     <h1 className="text-4xl font-bold tracking-tighter text-foreground">Global Database</h1>
                     <p className="text-muted-foreground font-medium mt-1">
-                        Manage all leads, manufacturers, outreach, and creative assets across all projects.
+                        Manage all leads, manufacturers, emails, and creative assets across all projects.
                     </p>
                 </div>
             </div>
@@ -29,7 +29,7 @@ export default function LeadsPage() {
                     {[
                         { value: "leads", label: "All Leads", icon: Users },
                         { value: "manufacturers", label: "Manufacturers", icon: Briefcase },
-                        { value: "outreach", label: "Outreach Campaigns", icon: Mail },
+                        { value: "outreach", label: "Emails", icon: Mail },
                         { value: "creative", label: "Creative Assets", icon: Palette },
                     ].map((tab) => (
                         <TabsTrigger
@@ -45,13 +45,13 @@ export default function LeadsPage() {
                 <TabsContent value="leads" className="mt-6">
                     <LeadsTable />
                 </TabsContent>
-                
+
                 <TabsContent value="manufacturers" className="mt-6">
                     <ManufacturersTable />
                 </TabsContent>
-                
+
                 <TabsContent value="outreach" className="mt-6">
-                    <OutreachTable />
+                    <CampaignTable />
                 </TabsContent>
 
                 <TabsContent value="creative" className="mt-6">

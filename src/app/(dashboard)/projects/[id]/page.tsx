@@ -3,8 +3,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LeadsTable } from "@/components/tables/LeadsTable"
 import { ManufacturersTable } from "@/components/tables/ManufacturersTable"
-import { OutreachTable } from "@/components/tables/OutreachTable"
 import { CreativeTable } from "@/components/tables/CreativeTable"
+import { EmailModule } from "@/components/emails/EmailModule"
 import { NewCampaignModal } from "@/components/projects/NewCampaignModal"
 import { NewLeadModal } from "@/components/leads/NewLeadModal"
 import { EditProjectModal } from "@/components/projects/EditProjectModal"
@@ -147,7 +147,7 @@ export default function ProjectDetailPage() {
                         { value: "overview", label: "Overview", icon: LayoutDashboard },
                         { value: "leads", label: "Leads", icon: Users },
                         { value: "manufacturers", label: "Manufacturers", icon: Briefcase },
-                        { value: "outreach", label: "Outreach", icon: Mail },
+                        { value: "emails", label: "Emails", icon: Mail },
                         { value: "creative", label: "Creative", icon: Palette },
                         { value: "tasks", label: "Tasks", icon: CheckSquare },
                         { value: "team", label: "Team", icon: Users },
@@ -169,8 +169,8 @@ export default function ProjectDetailPage() {
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                         {[
                             { label: "Total Leads", value: totalLeads.toString(), sub: `${leadsThisWeek} this week`, icon: Users, color: "text-primary", bg: "bg-primary/5" },
-                            { label: "Outreach Sent", value: totalOutreach.toString(), sub: "Total emails", icon: Mail, color: "text-blue-600", bg: "bg-blue-500/5" },
-                            { label: "Interested", value: interestedLeads.toString(), sub: `${((interestedLeads / totalLeads || 0) * 100).toFixed(0)}% conversion`, icon: Activity, color: "text-green-600", bg: "bg-green-500/5" },
+                            { label: "Emails Sent", value: totalOutreach.toString(), sub: "Campaign outreach", icon: Mail, color: "text-blue-600", bg: "bg-blue-500/5" },
+                            { label: "Conversions", value: interestedLeads.toString(), sub: `${((interestedLeads / totalLeads || 0) * 100).toFixed(0)}% conversion`, icon: Activity, color: "text-green-600", bg: "bg-green-500/5" },
                             { label: "Follow-ups Due", value: "0", sub: "Next 24h", icon: Calendar, color: "text-orange-600", bg: "bg-orange-500/5" },
                         ].map((stat) => (
                             <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-card/50 backdrop-blur-sm overflow-hidden group">
@@ -257,7 +257,7 @@ export default function ProjectDetailPage() {
                                     <div className="h-8 w-8 rounded-xl bg-muted/50 flex items-center justify-center group-hover/btn:bg-white/20 transition-colors">
                                         <Mail className="h-5 w-5" />
                                     </div>
-                                    Start Outreach
+                                    Create Campaign
                                 </Button>
                                 <Button className="w-full h-14 rounded-2xl font-bold justify-start gap-4 bg-muted/30 text-foreground hover:bg-muted/50 transition-all group/btn">
                                     <div className="h-8 w-8 rounded-xl bg-muted/50 flex items-center justify-center group-hover/btn:bg-white/20 transition-colors">
@@ -336,45 +336,8 @@ export default function ProjectDetailPage() {
                 <TabsContent value="manufacturers" className="mt-6">
                     <ManufacturersTable />
                 </TabsContent>
-                <TabsContent value="outreach" className="mt-6 space-y-8">
-                    <div className="grid gap-6 md:grid-cols-3">
-                        <Card className="border-none shadow-xl shadow-primary/5 rounded-3xl bg-card/50 backdrop-blur-sm">
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Emails Sent</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-3xl font-bold tracking-tighter text-primary">{totalOutreach}</div>
-                                <div className="text-[10px] font-bold text-muted-foreground mt-1 uppercase tracking-widest">Total recipients</div>
-                            </CardContent>
-                        </Card>
-                        <Card className="border-none shadow-xl shadow-primary/5 rounded-3xl bg-card/50 backdrop-blur-sm">
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Open Rate</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-3xl font-bold tracking-tighter text-blue-600">{avgOpenRate.toFixed(1)}%</div>
-                                <div className="text-[10px] font-bold text-muted-foreground mt-1 uppercase tracking-widest">Industry avg: 22%</div>
-                            </CardContent>
-                        </Card>
-                        <Card className="border-none shadow-xl shadow-primary/5 rounded-3xl bg-card/50 backdrop-blur-sm">
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Reply Rate</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-3xl font-bold tracking-tighter text-green-600">{avgReplyRate.toFixed(1)}%</div>
-                                <div className="text-[10px] font-bold text-muted-foreground mt-1 uppercase tracking-widest">Target: 15%</div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-2xl font-bold tracking-tight">Recent Outreach</h3>
-                        <Button onClick={() => setIsCampaignModalOpen(true)} className="rounded-2xl font-bold gap-2 h-12 px-6 shadow-lg shadow-primary/20">
-                            <Plus className="h-4 w-4" /> New Campaign
-                        </Button>
-                    </div>
-
-                    <OutreachTable projectId={project.id} />
+                <TabsContent value="emails" className="mt-6 space-y-8">
+                    <EmailModule projectId={project.id} />
                 </TabsContent>
 
                 <TabsContent value="creative" className="mt-6 space-y-8">

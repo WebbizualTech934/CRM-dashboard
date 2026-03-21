@@ -10,10 +10,12 @@ import { EditLeadModal } from "@/components/leads/EditLeadModal"
 import { NewLeadModal } from "@/components/leads/NewLeadModal"
 import { DataTable } from "@/components/shared/DataTable"
 import { ImportExportDialog } from "@/components/shared/ImportExportDialog"
+import { RowDetailDrawer } from "./RowDetailDrawer"
 
 export function LeadsTable({ projectId }: { projectId?: string }) {
     const { leads, updateLead, deleteLead, deleteManyLeads, isLoaded } = useCRMData()
     const [selectedLead, setSelectedLead] = useState<any>(null)
+    const [viewingLead, setViewingLead] = useState<any>(null)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isNewLeadModalOpen, setIsNewLeadModalOpen] = useState(false)
 
@@ -86,11 +88,11 @@ export function LeadsTable({ projectId }: { projectId?: string }) {
             accessorKey: "serviceInterest",
             sortable: true,
             cell: (lead: any) => (
-                <Badge className={cn("rounded-full border-none px-3 py-1 font-bold shadow-sm whitespace-nowrap", 
+                <Badge className={cn("rounded-full border-none px-3 py-1 font-bold shadow-sm whitespace-nowrap",
                     lead.serviceInterest === "Cold" ? "bg-blue-300 text-blue-900" :
-                    lead.serviceInterest === "Warm" ? "bg-orange-400 text-orange-950" :
-                    lead.serviceInterest === "Hot" ? "bg-red-500 text-white" :
-                    "bg-slate-400 text-slate-900"
+                        lead.serviceInterest === "Warm" ? "bg-orange-400 text-orange-950" :
+                            lead.serviceInterest === "Hot" ? "bg-red-500 text-white" :
+                                "bg-slate-400 text-slate-900"
                 )}>
                     {lead.serviceInterest || "Cold"}
                 </Badge>
@@ -119,16 +121,31 @@ export function LeadsTable({ projectId }: { projectId?: string }) {
             <DataTable
                 data={projectLeads}
                 columns={columns}
-                searchKey="company"
-                searchPlaceholder="Search leads by company..."
+                searchPlaceholder="Search by company, name, or email..."
+                searchKeys={["company", "firstName", "lastName", "email", "websiteLink"]}
                 entityType="Lead"
+                onView={(lead) => setViewingLead(lead)}
+                onEdit={(lead) => {
+                    setSelectedLead(lead)
+                    setIsEditModalOpen(true)
+                }}
                 onDelete={(lead) => deleteLead(lead.id)}
                 onBulkDelete={deleteManyLeads}
-                rowClickable
-                onRowClick={handleRowClick}
+                onRowClick={(lead) => setViewingLead(lead)}
+                filters={[
+                    {
+                        key: "serviceInterest",
+                        label: "Stage",
+                        options: [
+                            { label: "Cold", value: "Cold" },
+                            { label: "Warm", value: "Warm" },
+                            { label: "Hot", value: "Hot" }
+                        ]
+                    }
+                ]}
                 toolbarActions={
                     <>
-                        <Button 
+                        <Button
                             onClick={() => setIsNewLeadModalOpen(true)}
                             className="rounded-xl font-bold h-11 px-6 shadow-lg shadow-primary/20 gap-2 text-white"
                         >
@@ -145,7 +162,17 @@ export function LeadsTable({ projectId }: { projectId?: string }) {
                 onOpenChange={setIsEditModalOpen}
                 lead={selectedLead}
             />
-            
+
+            <RowDetailDrawer
+                open={!!viewingLead}
+                onOpenChange={(open) => !open && setViewingLead(null)}
+                data={viewingLead}
+                onEdit={(lead) => {
+                    setSelectedLead(lead)
+                    setIsEditModalOpen(true)
+                }}
+            />
+
             <NewLeadModal
                 open={isNewLeadModalOpen}
                 onOpenChange={setIsNewLeadModalOpen}

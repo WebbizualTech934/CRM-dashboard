@@ -7,9 +7,11 @@ import { useCRMData } from "@/hooks/use-crm-data"
 import { cn } from "@/lib/utils"
 import { DataTable } from "@/components/shared/DataTable"
 import { ImportExportDialog } from "@/components/shared/ImportExportDialog"
+import { RowDetailDrawer } from "./RowDetailDrawer"
 
 export function OutreachTable({ projectId }: { projectId?: string }) {
     const { campaigns, deleteCampaign, deleteManyCampaigns, isLoaded } = useCRMData()
+    const [viewingCampaign, setViewingCampaign] = useState<any>(null)
 
     if (!isLoaded) return null
 
@@ -42,9 +44,9 @@ export function OutreachTable({ projectId }: { projectId?: string }) {
             cell: (campaign: any) => (
                 <Badge className={cn(
                     "rounded-full px-4 py-1 text-[10px] font-bold uppercase tracking-widest border-none",
-                    campaign.status === "Sent" ? "bg-primary text-white shadow-lg shadow-primary/20" : 
-                    campaign.status === "Completed" ? "bg-green-500 text-white" :
-                    "bg-muted text-muted-foreground"
+                    campaign.status === "Sent" ? "bg-primary text-white shadow-lg shadow-primary/20" :
+                        campaign.status === "Completed" ? "bg-green-500 text-white" :
+                            "bg-muted text-muted-foreground"
                 )}>
                     {campaign.status}
                 </Badge>
@@ -74,14 +76,17 @@ export function OutreachTable({ projectId }: { projectId?: string }) {
     ]
 
     return (
+        <>
         <DataTable
             data={projectCampaigns}
             columns={columns}
             searchKey="name"
             searchPlaceholder="Search campaigns..."
             entityType="Campaign"
+            onView={(c) => setViewingCampaign(c)}
             onDelete={(campaign) => deleteCampaign(campaign.id)}
             onBulkDelete={deleteManyCampaigns}
+            onRowClick={(c) => setViewingCampaign(c)}
             toolbarActions={
                 <>
                     <ImportExportDialog mode="import" type="campaigns" projectId={projectId} />
@@ -89,5 +94,17 @@ export function OutreachTable({ projectId }: { projectId?: string }) {
                 </>
             }
         />
+        
+        <RowDetailDrawer 
+            open={!!viewingCampaign}
+            onOpenChange={(open) => !open && setViewingCampaign(null)}
+            data={viewingCampaign}
+            onEdit={(campaign) => {
+                // For now, campaigns don't have a dedicated edit modal in the same way
+                // but we can provide the hook for future expansion
+                console.log("Edit campaign:", campaign.id)
+            }}
+        />
+        </>
     )
 }

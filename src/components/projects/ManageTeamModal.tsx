@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react"
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetDescription,
+    SheetFooter,
+} from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Check, Plus } from "lucide-react"
+import { Check, Plus, Users } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 import { useCRMData, Project } from "@/hooks/use-crm-data"
@@ -45,16 +46,23 @@ export function ManageTeamModal({ project, open, onOpenChange }: ManageTeamModal
     }
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px] border-none shadow-2xl rounded-[2.5rem] p-0 overflow-hidden bg-white/95 backdrop-blur-xl">
-                <DialogHeader className="p-8 pb-0">
-                    <DialogTitle className="text-3xl font-bold tracking-tighter">Manage Team</DialogTitle>
-                    <DialogDescription className="text-base font-medium text-muted-foreground">
-                        Assign team members to "{project.name}".
-                    </DialogDescription>
-                </DialogHeader>
+        <Sheet open={open} onOpenChange={onOpenChange}>
+            <SheetContent side="right" className="w-full sm:max-w-xl p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
+                <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0">
+                    <SheetHeader>
+                        <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                <Users className="h-6 w-6" />
+                            </div>
+                            Manage Team
+                        </SheetTitle>
+                        <SheetDescription className="text-muted-foreground font-medium mt-1">
+                            Assign team members to "{project.name}".
+                        </SheetDescription>
+                    </SheetHeader>
+                </div>
 
-                <div className="p-8 space-y-4 max-h-[60vh] overflow-y-auto">
+                <div className="flex-1 overflow-y-auto p-8 space-y-4 custom-scrollbar">
                     {teamMembers.map((member) => {
                         const isAssigned = selectedMemberIds.includes(member.id)
                         return (
@@ -64,42 +72,44 @@ export function ManageTeamModal({ project, open, onOpenChange }: ManageTeamModal
                                     "flex items-center justify-between p-4 rounded-2xl border transition-all cursor-pointer group",
                                     isAssigned
                                         ? "bg-primary/5 border-primary/20 shadow-sm"
-                                        : "bg-muted/30 border-transparent hover:bg-muted/50"
+                                        : "bg-muted/20 border-transparent hover:bg-muted/30"
                                 )}
                                 onClick={() => toggleMember(member.id)}
                             >
-                                <div className="flex items-center gap-3">
-                                    <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
+                                <div className="flex items-center gap-4">
+                                    <Avatar className="h-12 w-12 border-2 border-white shadow-sm ring-2 ring-primary/5">
                                         <AvatarImage src={member.avatar} />
-                                        <AvatarFallback className="bg-primary/10 text-primary font-bold">{member.name[0]}</AvatarFallback>
+                                        <AvatarFallback className="bg-primary/10 text-primary font-black">{member.name[0]}</AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <div className="font-bold text-sm text-foreground">{member.name}</div>
-                                        <div className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">{member.role}</div>
+                                        <div className="font-black text-slate-900">{member.name}</div>
+                                        <div className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-widest">{member.role}</div>
                                     </div>
                                 </div>
                                 <div className={cn(
-                                    "h-8 w-8 rounded-xl flex items-center justify-center transition-all",
+                                    "h-10 w-10 rounded-2xl flex items-center justify-center transition-all",
                                     isAssigned
-                                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                                        : "bg-background text-muted-foreground/30 group-hover:text-muted-foreground"
+                                        ? "bg-[#ff7a59] text-white shadow-lg shadow-primary/20 scale-110"
+                                        : "bg-muted/30 text-muted-foreground/30 group-hover:text-muted-foreground"
                                 )}>
-                                    {isAssigned ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                                    {isAssigned ? <Check className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
                                 </div>
                             </div>
                         )
                     })}
                 </div>
 
-                <div className="p-8 pt-0">
-                    <Button
-                        onClick={handleSave}
-                        className="w-full rounded-2xl h-14 font-bold shadow-lg shadow-primary/20 transition-all hover:scale-[1.01]"
-                    >
-                        Done
-                    </Button>
+                <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md">
+                    <SheetFooter>
+                        <Button
+                            onClick={handleSave}
+                            className="w-full rounded-2xl h-14 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-[#ff7a59] text-white border-none"
+                        >
+                            Save Changes
+                        </Button>
+                    </SheetFooter>
                 </div>
-            </DialogContent>
-        </Dialog>
+            </SheetContent>
+        </Sheet>
     )
 }

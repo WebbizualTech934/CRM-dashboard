@@ -37,8 +37,7 @@ export default function EmailsPage() {
 
     const filteredCampaigns = campaigns.filter(c =>
         c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.to.toLowerCase().includes(searchQuery.toLowerCase())
+        c.subject.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
     const getProjectName = (projectId: string) => {
@@ -53,7 +52,7 @@ export default function EmailsPage() {
         <div className="space-y-8 p-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-4xl font-black tracking-tighter text-foreground">Global Outreach</h1>
+                    <h1 className="text-4xl font-black tracking-tighter text-foreground">Email Campaigns</h1>
                     <p className="text-muted-foreground font-medium mt-1">Track and manage all email campaigns across your workspace.</p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -72,7 +71,7 @@ export default function EmailsPage() {
                     { label: "Total Sent", value: campaigns.reduce((acc, c) => acc + c.recipients, 0).toString(), icon: Mail, color: "text-primary", bg: "bg-primary/5" },
                     { label: "Avg Open Rate", value: "64.2%", icon: ArrowUpRight, color: "text-blue-600", bg: "bg-blue-500/5" },
                     { label: "Avg Reply Rate", value: "18.5%", icon: CheckCircle2, color: "text-green-600", bg: "bg-green-500/5" },
-                    { label: "Active Campaigns", value: campaigns.filter(c => c.status === "Sent").length.toString(), icon: Clock, color: "text-orange-600", bg: "bg-orange-500/5" },
+                    { label: "Active Campaigns", value: campaigns.filter(c => (c.status as string) === "Active" || (c.status as string) === "Sent").length.toString(), icon: Clock, color: "text-orange-600", bg: "bg-orange-500/5" },
                 ].map((stat) => (
                     <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-card/50 backdrop-blur-sm overflow-hidden group">
                         <CardHeader className="pb-2 flex flex-row items-center justify-between">
@@ -130,11 +129,11 @@ export default function EmailsPage() {
                                             <ExternalLink className="h-3 w-3" />
                                         </Link>
                                     </TableCell>
-                                    <TableCell className="py-6 font-medium text-muted-foreground">{campaign.to}</TableCell>
+                                    <TableCell className="py-6 font-medium text-muted-foreground">{campaign.recipients} Recipients</TableCell>
                                     <TableCell className="py-6">
-                                        <Badge variant={campaign.status === "Sent" ? "default" : campaign.status === "Completed" ? "secondary" : "outline"} className={cn(
+                                        <Badge variant={(campaign.status as string) === "Active" || (campaign.status as string) === "Sent" ? "default" : campaign.status === "Completed" ? "secondary" : "outline"} className={cn(
                                             "rounded-full px-4 py-1 text-[10px] font-bold uppercase tracking-widest",
-                                            campaign.status === "Sent" ? "bg-primary shadow-lg shadow-primary/20" : "bg-muted text-muted-foreground"
+                                            (campaign.status as string) === "Active" || (campaign.status as string) === "Sent" ? "bg-primary shadow-lg shadow-primary/20" : "bg-muted text-muted-foreground"
                                         )}>
                                             {campaign.status}
                                         </Badge>

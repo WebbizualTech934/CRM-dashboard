@@ -229,7 +229,7 @@ export default function ProjectsPage() {
                             </div>
                         </CardContent>
                         <CardFooter className="p-8 pt-4">
-                            <Button variant="ghost" className="w-full justify-between h-14 rounded-2xl px-6 bg-primary/5 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-bold group/btn" render={<Link href={`/projects/${project.id}`} />}>
+                            <Button variant="ghost" className="w-full justify-between h-14 rounded-2xl px-6 bg-primary/5 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-bold group/btn" nativeButton={false} render={<Link href={`/projects/${project.id}`} />}>
                                 Open Workspace <ArrowRight className="h-5 w-5 transition-transform group-hover/btn:translate-x-1" />
                             </Button>
                         </CardFooter>

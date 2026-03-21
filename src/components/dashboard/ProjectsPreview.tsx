@@ -30,7 +30,7 @@ export function ProjectsPreview() {
         <Card className="col-span-4 border-none shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 p-8 pb-6">
                 <CardTitle className="text-2xl font-bold tracking-tight">Active Projects</CardTitle>
-                <Button variant="ghost" size="sm" render={<Link href="/projects" className="flex items-center gap-2 font-bold text-primary hover:bg-primary/5 rounded-xl px-4 h-10" />}>
+                <Button variant="ghost" size="sm" nativeButton={false} render={<Link href="/projects" className="flex items-center gap-2 font-bold text-primary hover:bg-primary/5 rounded-xl px-4 h-10" />}>
                     View All <ArrowUpRight className="h-4 w-4" />
                 </Button>
             </CardHeader>

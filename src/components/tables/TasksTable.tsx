@@ -1,24 +1,31 @@
 "use client"
 
 import React, { useState } from "react"
-import { DataTable } from "@/components/shared/DataTable"
+import { DataTable, Column } from "@/components/shared/DataTable"
+import { RowDetailDrawer } from "./RowDetailDrawer"
 import { useCRMData } from "@/hooks/use-crm-data"
 import { Task } from "@/providers/crm-provider"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+
 import { cn } from "@/lib/utils"
 import { Calendar, User, Tag, CheckCircle2, Clock, AlertCircle } from "lucide-react"
 import { format } from "date-fns"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { NewTaskModal } from "@/components/projects/NewTaskModal"
 
 interface TasksTableProps {
     projectId: string
 }
 
 export function TasksTable({ projectId }: TasksTableProps) {
+    const [isNewModalOpen, setIsNewModalOpen] = useState(false)
+    const [editingTask, setEditingTask] = useState<Task | null>(null)
+    const [viewingTask, setViewingTask] = useState<Task | null>(null)
     const { tasks, teamMembers, updateTask, deleteManyTasks, deleteTask } = useCRMData()
     const projectTasks = tasks.filter(t => t.projectId === projectId)
 
-    const columns: any[] = [
+    const columns: Column<Task>[] = [
         {
             header: "Task Title",
             accessorKey: "title",
@@ -117,27 +124,60 @@ export function TasksTable({ projectId }: TasksTableProps) {
     ]
 
     return (
-        <DataTable
-            data={projectTasks}
-            columns={columns}
-            searchPlaceholder="Search tasks..."
-            searchKey="title"
-            entityType="Task"
-            onDelete={(task) => deleteTask(task.id)}
-            onBulkDelete={(ids) => deleteManyTasks(ids)}
-            emptyState={
-                <div className="flex flex-col items-center justify-center py-10 space-y-4">
-                    <div className="h-20 w-20 rounded-[2.5rem] bg-primary/5 flex items-center justify-center text-primary/30">
-                        <CheckCircle2 className="h-10 w-10" />
+        <div className="space-y-4">
+            <DataTable
+                data={projectTasks}
+                columns={columns}
+                searchKey="title"
+                searchPlaceholder="Search tasks..."
+                entityType="Task"
+                onView={(task) => setViewingTask(task)}
+                onEdit={(task) => setEditingTask(task)}
+                onDelete={(task) => deleteTask(task.id)}
+                onBulkDelete={(ids) => deleteManyTasks(ids)}
+                onRowClick={(task) => setViewingTask(task)}
+                emptyState={
+                    <div className="flex flex-col items-center justify-center py-10 space-y-4">
+                        <div className="h-20 w-20 rounded-[2.5rem] bg-primary/5 flex items-center justify-center text-primary/30">
+                            <CheckCircle2 className="h-10 w-10" />
+                        </div>
+                        <div className="text-center">
+                            <h3 className="text-xl font-bold">All caught up!</h3>
+                            <p className="text-muted-foreground text-sm max-w-[250px] mx-auto mt-1">
+                                No tasks found for this project. Start by adding a task to track your progress.
+                            </p>
+                        </div>
                     </div>
-                    <div className="text-center">
-                        <h3 className="text-xl font-bold">All caught up!</h3>
-                        <p className="text-muted-foreground text-sm max-w-[250px] mx-auto mt-1">
-                            No tasks found for this project. Start by adding a task to track your progress.
-                        </p>
-                    </div>
-                </div>
-            }
-        />
+                }
+                toolbarActions={
+                    <Button 
+                        size="sm" 
+                        onClick={() => setIsNewModalOpen(true)}
+                        className="h-8 rounded-lg bg-primary text-white font-bold px-4 hover:shadow-lg hover:shadow-primary/20 transition-all gap-2"
+                    >
+                        <Tag className="h-3.5 w-3.5" /> Add Task
+                    </Button>
+                }
+            />
+
+            <NewTaskModal
+                open={isNewModalOpen || !!editingTask}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setIsNewModalOpen(false)
+                        setEditingTask(null)
+                    }
+                }}
+                projectId={projectId || "1"}
+                task={editingTask}
+            />
+
+            <RowDetailDrawer
+                open={!!viewingTask}
+                onOpenChange={(open) => !open && setViewingTask(null)}
+                data={viewingTask}
+                onEdit={(task) => setEditingTask(task)}
+            />
+        </div>
     )
 }
