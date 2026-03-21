@@ -85,13 +85,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, [router])
 
     const signOut = async () => {
-        // Clear demo user
-        localStorage.removeItem("demo-user")
-        document.cookie = `demo-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
-        
-        await supabase.auth.signOut()
-        router.push("/login")
-        router.refresh()
+        try {
+            // Clear demo user and cookie first (optimistic)
+            localStorage.removeItem("demo-user")
+            document.cookie = `demo-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax`
+            
+            // Clear standard auth cookie
+            document.cookie = `sb-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax`
+
+            // Update local state immediately
+            setUser(null)
+            setSession(null)
+
+            // Attempt Supabase sign out but don't let it block us
+            await supabase.auth.signOut().catch(err => console.error("Supabase signOut error:", err))
+        } catch (error) {
+            console.error("Logout error:", error)
+        } finally {
+            // Always redirect and refresh
+            router.push("/login")
+            router.refresh()
+            // Optional: Hard reload to ensure all states are cleared
+            // window.location.href = "/login" 
+        }
     }
 
     return (

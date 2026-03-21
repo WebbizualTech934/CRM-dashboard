@@ -74,8 +74,8 @@ export function LoginForm() {
     }
 
     const handleDemoLogin = () => {
-        setEmail("admin@digitalmarketingcrm.com")
-        setPassword("12345678")
+        setEmail("admin@dmcrm.com")
+        setPassword("1234")
         // Trigger submit manually or just wait for user to click
         // Let's make it automatic for "quick access"
         const fakeEvent = { preventDefault: () => { } } as React.FormEvent
@@ -85,7 +85,7 @@ export function LoginForm() {
 
         const demoUser = {
             id: "demo-user-id",
-            email: "admin@digitalmarketingcrm.com",
+            email: "admin@dmcrm.com",
             user_metadata: {
                 full_name: "Demo Admin",
                 avatar_url: ""
