@@ -1,6 +1,6 @@
 "use client"
 
-import { Search, Bell, User, HelpCircle, Briefcase } from "lucide-react"
+import { Search, Bell, User, HelpCircle, Briefcase, LogOut } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,11 +14,18 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 import { useCRMData } from "@/hooks/use-crm-data"
+import { useAuth } from "@/hooks/use-auth"
 import { useState } from "react"
 
 export function Navbar() {
     const { projects, leads, resetData } = useCRMData()
+    const { user, signOut } = useAuth()
     const [searchQuery, setSearchQuery] = useState("")
+
+    const displayName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User"
+    const displayEmail = user?.email || ""
+    const initials = displayName.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2) || "U"
+    const avatarUrl = user?.user_metadata?.avatar_url || ""
 
     const filteredProjects = projects.filter(p =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -119,12 +126,12 @@ export function Navbar() {
                         (props) => (
                             <Button {...props} variant="ghost" className="relative h-11 px-2 rounded-2xl hover:bg-primary/5 transition-colors flex items-center gap-3">
                                 <Avatar className="h-8 w-8 border-2 border-primary/10">
-                                    <AvatarImage src="" alt="User" />
-                                    <AvatarFallback className="bg-primary/10 text-primary font-bold">AD</AvatarFallback>
+                                    <AvatarImage src={avatarUrl} alt={displayName} />
+                                    <AvatarFallback className="bg-primary/10 text-primary font-bold">{initials}</AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col items-start text-left hidden sm:flex">
-                                    <span className="text-sm font-bold leading-none tracking-tight">Admin User</span>
-                                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Administrator</span>
+                                    <span className="text-sm font-bold leading-none tracking-tight">{displayName}</span>
+                                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Team Member</span>
                                 </div>
                             </Button>
                         )
@@ -132,10 +139,8 @@ export function Navbar() {
                     <DropdownMenuContent className="w-56" align="end">
                         <DropdownMenuLabel className="font-normal">
                             <div className="flex flex-col space-y-1">
-                                <p className="text-sm font-medium leading-none">Admin User</p>
-                                <p className="text-xs leading-none text-muted-foreground">
-                                    admin@example.com
-                                </p>
+                                <p className="text-sm font-medium leading-none">{displayName}</p>
+                                <p className="text-xs leading-none text-muted-foreground">{displayEmail}</p>
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
@@ -156,13 +161,10 @@ export function Navbar() {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                            className="text-destructive focus:text-destructive cursor-pointer"
-                            onClick={() => {
-                                document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
-                                window.location.href = "/login"
-                            }}
+                            className="text-destructive focus:text-destructive cursor-pointer font-bold gap-2"
+                            onClick={signOut}
                         >
-                            Log out
+                            <LogOut className="h-4 w-4" /> Log out
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

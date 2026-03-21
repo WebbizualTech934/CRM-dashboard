@@ -9,11 +9,12 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "CRM Dashboard | Lead & Project Management",
-  description: "Professional CRM and project management dashboard for lead generation and team operations.",
+  title: "Digital Marketing CRM | 3D Animation Sales Team",
+  description: "Internal CRM workspace for managing 3D animation leads, campaigns, client follow-ups, and sales performance.",
 };
 
 import { CRMProvider } from "@/providers/crm-provider";
+import { AuthProvider } from "@/hooks/use-auth";
 
 export default function RootLayout({
   children,
@@ -25,9 +26,11 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} font-sans antialiased`}
       >
-        <CRMProvider>
-          {children}
-        </CRMProvider>
+        <AuthProvider>
+          <CRMProvider>
+            {children}
+          </CRMProvider>
+        </AuthProvider>
       </body>
     </html>
   );
