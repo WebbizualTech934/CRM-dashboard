@@ -1,7 +1,8 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect } from "react"
-import { supabase } from "@/lib/supabase"
+import { supabase, isSupabaseConfigured } from "@/lib/supabase"
+
 
 export interface Project {
     id: string
@@ -329,6 +330,19 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
 
     // Initial Fetch
     useEffect(() => {
+        // Guard: if Supabase is not configured, show a helpful error and bail out
+        if (!isSupabaseConfigured) {
+            console.error(
+                "[CRM] Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and " +
+                "NEXT_PUBLIC_SUPABASE_ANON_KEY in your environment variables (Netlify/Vercel dashboard, or .env.local locally)."
+            )
+            setConnectionError(
+                "Supabase is not configured. Please add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment variables."
+            )
+            setIsLoaded(true)
+            return
+        }
+        
         const fetchData = async () => {
             try {
                 const [
@@ -363,9 +377,18 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
 
                 const errors = [pErr, lErr, mErr, tErr, cErr, tmErr, sqErr, inErr, aErr, tsErr, tgErr, schErr, recErr].filter(Boolean)
                 if (errors.length > 0) {
-                    console.error("Supabase fetch errors:", errors)
-                    setConnectionError(errors[0]?.message || "Unknown connection error")
+                    const firstError = errors[0]
+                    console.error("[Supabase] Fetch errors:", errors.map((e: any) => e?.message))
+                    setConnectionError(
+                        firstError?.message.includes("does not exist")
+                            ? "Database tables not found. Run the SQL setup script in your Supabase dashboard."
+                            : firstError?.message || "Unknown connection error"
+                    )
+                } else {
+                    // Clear any previous connection error on successful fetch
+                    setConnectionError(null)
                 }
+
 
                 if (projectsData) {
                     setProjects(projectsData.map((p: any) => ({
@@ -594,7 +617,9 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
 
         fetchData()
 
-        // Real-time subscriptions
+        // Real-time subscriptions — only connect when Supabase is properly configured
+        if (!isSupabaseConfigured) return
+
         const channel = supabase.channel("schema-db-changes")
             .on("postgres_changes", { event: "*", schema: "public", table: "projects" }, () => fetchData())
             .on("postgres_changes", { event: "*", schema: "public", table: "leads" }, () => fetchData())

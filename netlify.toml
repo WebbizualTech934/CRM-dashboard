@@ -1,0 +1,21 @@
+# Netlify Build Configuration for CRM Dashboard (Next.js)
+# This file ensures Netlify builds and deploys the app correctly.
+
+[build]
+  command   = "npm run build"
+  publish   = ".next"
+
+# Required environment variables — add these in Netlify UI:
+# Site Settings → Environment Variables
+#   NEXT_PUBLIC_SUPABASE_URL      = https://your-project.supabase.co
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY = your-anon-key
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Redirect all routes through Next.js (SSR/SSG/API)
+[[redirects]]
+  from   = "/*"
+  to     = "/_next/:splat"
+  status = 200
+  force  = false
