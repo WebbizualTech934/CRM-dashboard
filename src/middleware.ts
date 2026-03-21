@@ -19,20 +19,12 @@ export function middleware(request: NextRequest) {
 
     const isPublicPath = PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))
 
-    // Read Supabase session from the storage cookie (supabase uses 'crm-auth' storageKey)
-    // The session token is stored in localStorage by supabase-js on the client side.
-    // For server-side middleware, we check for the Supabase auth cookie.
-    // The cookie name pattern is: sb-<project-ref>-auth-token
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
-    const projectRef = supabaseUrl.match(/https:\/\/([^.]+)\.supabase\.co/)?.[1] ?? ""
-    const authCookieName = `sb-${projectRef}-auth-token`
-
-    // Check multiple cookie variants Supabase may use
+    // Read Supabase session from the storage cookie
+    // We manually set 'sb-auth-token' in use-auth.tsx because we don't have @supabase/ssr
     const authCookie =
-        request.cookies.get(authCookieName)?.value ||
+        request.cookies.get("sb-auth-token")?.value ||
         request.cookies.get("sb-access-token")?.value ||
         request.cookies.get("supabase-auth-token")?.value ||
-        // Legacy mock token for backward compat during transition
         request.cookies.get("auth_token")?.value
 
     const isAuthenticated = Boolean(authCookie)

@@ -26,24 +26,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        const syncSessionToCookie = (session: Session | null) => {
+            if (session) {
+                // Set cookie that middleware can read
+                // Expires in 7 days (matching Supabase default)
+                const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()
+                document.cookie = `sb-auth-token=${session.access_token}; path=/; expires=${expires}; SameSite=Lax; Secure`
+            } else {
+                // Remove cookie
+                document.cookie = `sb-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
+            }
+        }
+
         // Get initial session
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session)
             setUser(session?.user ?? null)
+            syncSessionToCookie(session)
             setLoading(false)
         })
 
         // Listen for auth state changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
-            (_event, session) => {
+            (event, session) => {
                 setSession(session)
                 setUser(session?.user ?? null)
+                syncSessionToCookie(session)
                 setLoading(false)
+
+                if (event === "SIGNED_IN") router.refresh()
+                if (event === "SIGNED_OUT") router.refresh()
             }
         )
 
         return () => subscription.unsubscribe()
-    }, [])
+    }, [router])
 
     const signOut = async () => {
         await supabase.auth.signOut()
