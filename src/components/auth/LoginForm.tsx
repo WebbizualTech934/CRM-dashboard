@@ -21,21 +21,21 @@ export function LoginForm() {
         setLoading(true)
 
         // Hardcoded Demo Login
-        if (email.trim() === "admin@digitalmarketingcrm.com" && password === "12345678") {
+        if (email.trim() === "admin@dmcrm.com" && password === "1234") {
             const demoUser = {
                 id: "demo-user-id",
-                email: "admin@digitalmarketingcrm.com",
+                email: "admin@dmcrm.com",
                 user_metadata: {
                     full_name: "Demo Admin",
                     avatar_url: ""
                 }
             }
             localStorage.setItem("demo-user", JSON.stringify(demoUser))
-            
+
             // Set demo cookie for middleware
             const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()
-            document.cookie = `demo-auth-token=demo-token; path=/; expires=${expires}; SameSite=Lax; Secure`
-            
+            document.cookie = `demo-auth-token=demo-token; path=/; expires=${expires}; SameSite=Lax`
+
             setTimeout(() => {
                 setLoading(false)
                 router.push("/")
@@ -78,11 +78,11 @@ export function LoginForm() {
         setPassword("12345678")
         // Trigger submit manually or just wait for user to click
         // Let's make it automatic for "quick access"
-        const fakeEvent = { preventDefault: () => {} } as React.FormEvent
-        
+        const fakeEvent = { preventDefault: () => { } } as React.FormEvent
+
         setError(null)
         setLoading(true)
-        
+
         const demoUser = {
             id: "demo-user-id",
             email: "admin@digitalmarketingcrm.com",
@@ -92,10 +92,10 @@ export function LoginForm() {
             }
         }
         localStorage.setItem("demo-user", JSON.stringify(demoUser))
-        
+
         const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()
-        document.cookie = `demo-auth-token=demo-token; path=/; expires=${expires}; SameSite=Lax; Secure`
-        
+        document.cookie = `demo-auth-token=demo-token; path=/; expires=${expires}; SameSite=Lax`
+
         setTimeout(() => {
             setLoading(false)
             router.push("/")

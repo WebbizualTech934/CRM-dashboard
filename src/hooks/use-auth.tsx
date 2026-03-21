@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 // Set cookie that middleware can read
                 // Expires in 7 days (matching Supabase default)
                 const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()
-                document.cookie = `sb-auth-token=${session.access_token}; path=/; expires=${expires}; SameSite=Lax; Secure`
+                document.cookie = `sb-auth-token=${session.access_token}; path=/; expires=${expires}; SameSite=Lax`
             } else {
                 // Remove cookie
                 document.cookie = `sb-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
