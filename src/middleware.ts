@@ -25,7 +25,8 @@ export function middleware(request: NextRequest) {
         request.cookies.get("sb-auth-token")?.value ||
         request.cookies.get("sb-access-token")?.value ||
         request.cookies.get("supabase-auth-token")?.value ||
-        request.cookies.get("auth_token")?.value
+        request.cookies.get("auth_token")?.value ||
+        request.cookies.get("demo-auth-token")?.value
 
     const isAuthenticated = Boolean(authCookie)
 

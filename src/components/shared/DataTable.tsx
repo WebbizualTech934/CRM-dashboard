@@ -334,9 +334,14 @@ export function DataTable<T extends { id: string }>({
                                     <tr key={item.id}
                                         className={cn("border-b border-slate-200 group hover:bg-[#f5f8fa] transition-colors relative",
                                             isSelected ? "bg-blue-50/40" : "",
-                                            rowClickable && "cursor-pointer"
+                                            (rowClickable !== false && (onRowClick || onView)) && "cursor-pointer"
                                         )}
-                                        onClick={() => rowClickable && onRowClick?.(item)}
+                                        onClick={() => {
+                                            if (rowClickable !== false) {
+                                                if (onRowClick) onRowClick(item)
+                                                else if (onView) onView(item)
+                                            }
+                                        }}
                                     >
                                         <td className={cn("w-10 h-[40px] sticky left-0 z-10 border-r border-slate-200 text-center px-0 transition-colors", 
                                             isSelected ? "bg-blue-50/40" : "bg-white group-hover:bg-[#f5f8fa]")}

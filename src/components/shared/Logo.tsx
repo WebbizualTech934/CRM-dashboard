@@ -32,7 +32,7 @@ export function Logo({ size = "md", showTagline = false }: LogoProps) {
                         className="object-contain"
                         onError={(e) => {
                             // Fallback: hide broken image, show icon sibling
-                            ;(e.target as HTMLImageElement).style.display = "none"
+                            ; (e.target as HTMLImageElement).style.display = "none"
                             const next = (e.target as HTMLImageElement).nextElementSibling
                             if (next) (next as HTMLElement).style.display = "flex"
                         }}
@@ -44,14 +44,10 @@ export function Logo({ size = "md", showTagline = false }: LogoProps) {
                     >
                         <LayoutDashboard
                             className="text-primary-foreground"
-                            style={{ width: cfg.img * 0.55, height: cfg.img * 0.55 }}
+                            style={{ width: cfg.img * 2.55, height: cfg.img * 2.55 }}
                         />
                     </div>
                 </div>
-
-                <span className={`${cfg.text} font-black tracking-tighter text-foreground`}>
-                    Digital<span className="text-primary">CRM</span>
-                </span>
             </div>
             {showTagline && (
                 <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { supabase } from "@/lib/supabase"
 import { GoogleAuthButton } from "./GoogleAuthButton"
-import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react"
+import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, Sparkles } from "lucide-react"
 
 export function LoginForm() {
     const router = useRouter()
@@ -19,6 +19,30 @@ export function LoginForm() {
         e.preventDefault()
         setError(null)
         setLoading(true)
+
+        // Hardcoded Demo Login
+        if (email.trim() === "admin@digitalmarketingcrm.com" && password === "12345678") {
+            const demoUser = {
+                id: "demo-user-id",
+                email: "admin@digitalmarketingcrm.com",
+                user_metadata: {
+                    full_name: "Demo Admin",
+                    avatar_url: ""
+                }
+            }
+            localStorage.setItem("demo-user", JSON.stringify(demoUser))
+            
+            // Set demo cookie for middleware
+            const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()
+            document.cookie = `demo-auth-token=demo-token; path=/; expires=${expires}; SameSite=Lax; Secure`
+            
+            setTimeout(() => {
+                setLoading(false)
+                router.push("/")
+                router.refresh()
+            }, 800)
+            return
+        }
 
         try {
             const { data, error: authError } = await supabase.auth.signInWithPassword({
@@ -49,15 +73,61 @@ export function LoginForm() {
         }
     }
 
+    const handleDemoLogin = () => {
+        setEmail("admin@digitalmarketingcrm.com")
+        setPassword("12345678")
+        // Trigger submit manually or just wait for user to click
+        // Let's make it automatic for "quick access"
+        const fakeEvent = { preventDefault: () => {} } as React.FormEvent
+        
+        setError(null)
+        setLoading(true)
+        
+        const demoUser = {
+            id: "demo-user-id",
+            email: "admin@digitalmarketingcrm.com",
+            user_metadata: {
+                full_name: "Demo Admin",
+                avatar_url: ""
+            }
+        }
+        localStorage.setItem("demo-user", JSON.stringify(demoUser))
+        
+        const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()
+        document.cookie = `demo-auth-token=demo-token; path=/; expires=${expires}; SameSite=Lax; Secure`
+        
+        setTimeout(() => {
+            setLoading(false)
+            router.push("/")
+            router.refresh()
+        }, 800)
+    }
+
     return (
         <div className="space-y-6">
             {/* Header */}
             <div className="space-y-1">
-                <h2 className="text-2xl font-black tracking-tight text-foreground">
-                    Welcome back
-                </h2>
+                <div className="flex items-center justify-between">
+                    <h2 className="text-2xl font-black tracking-tight text-foreground">
+                        Welcome back
+                    </h2>
+                    <div className="bg-amber-100 text-amber-700 text-[10px] font-black px-2 py-1 rounded-md uppercase tracking-wider border border-amber-200">
+                        Demo Mode
+                    </div>
+                </div>
                 <p className="text-sm text-muted-foreground font-medium leading-relaxed">
-                    Sign in to manage your leads, campaigns, and client follow-ups.
+                    Sign in to manage your 3D animation leads and campaigns.
+                </p>
+            </div>
+
+            {/* Demo Notice */}
+            <div className="bg-primary/5 border border-primary/20 rounded-2xl p-4 space-y-2">
+                <div className="flex items-center gap-2 text-primary">
+                    <AlertCircle className="h-4 w-4" />
+                    <span className="text-xs font-bold uppercase tracking-widest">Temporary Access</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                    Supabase auth limits reached. Use the demo credentials or click quick access below.
                 </p>
             </div>
 
@@ -143,7 +213,7 @@ export function LoginForm() {
                 <button
                     type="submit"
                     disabled={loading || !email || !password}
-                    className="w-full h-14 rounded-2xl bg-[#ff7a59] text-white font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-xl shadow-orange-400/20 hover:bg-[#ff6a45] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 mt-2"
+                    className="w-full h-14 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 mt-2"
                 >
                     {loading ? (
                         <div className="h-5 w-5 border-2 border-white/50 border-t-white rounded-full animate-spin" />
@@ -152,6 +222,16 @@ export function LoginForm() {
                             Sign In <ArrowRight className="h-4 w-4" />
                         </>
                     )}
+                </button>
+
+                {/* Demo Quick Access */}
+                <button
+                    type="button"
+                    onClick={handleDemoLogin}
+                    disabled={loading}
+                    className="w-full h-12 rounded-2xl border-2 border-primary/20 bg-white text-primary font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 hover:bg-primary/5 transition-all hover:border-primary/40 active:scale-[0.98] disabled:opacity-60"
+                >
+                    <Sparkles className="h-3.5 w-3.5" /> Demo Login (Quick Access)
                 </button>
             </form>
 

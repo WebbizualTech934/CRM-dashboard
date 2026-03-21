@@ -393,11 +393,20 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                 let currentProfile: any = null
                 if (session?.user) {
                     currentProfile = teamData?.find((m: any) => m.id === session.user.id)
+                    
+                    // If session exists but no profile is found, the user might have been deleted in Supabase
+                    if (!currentProfile && teamData && teamData.length > 0) {
+                        console.warn("[CRM] User profile not found. Session may be invalid or user deleted.")
+                        // Only sign out if we actually have data but the user is missing
+                        // (Avoid signing out during initial loading or empty states)
+                        // supabase.auth.signOut() // Uncomment this if you want aggressive auto-logout
+                    }
+
                     if (currentProfile) {
                         const isAdminByName = currentProfile.full_name === "Prasanna Kumar"
                         setCurrentUser({
                             id: currentProfile.id,
-                            name: currentProfile.full_name,
+                            name: currentProfile.full_name || "New User",
                             email: currentProfile.email,
                             role: isAdminByName ? "Admin" : (currentProfile.role || "Member"),
                             userRole: isAdminByName ? "Admin" : (currentProfile.role as any || "Lead Gen"),
@@ -408,9 +417,13 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                             lastActive: currentProfile.created_at,
                             menuPermissions: isAdminByName 
                                 ? ['dashboard', 'projects', 'emails', 'leads', 'team', 'custom-tables', 'settings']
-                                : ['dashboard', 'leads', 'manufacturers', 'creative', 'emails', 'my-tables', 'team']
+                                : (currentProfile.menu_permissions || ['dashboard', 'leads', 'manufacturers', 'creative', 'emails', 'my-tables', 'team'])
                         })
+                    } else if (!session.user) {
+                        setCurrentUser(null)
                     }
+                } else {
+                    setCurrentUser(null)
                 }
 
                 const isSuperAdmin = currentProfile?.full_name === "Prasanna Kumar"
@@ -921,38 +934,37 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
     }
 
     const addTeamMember = async (member: Omit<TeamMember, "id" | "leadsAdded" | "emailsSent">) => {
+        // Since we are using profiles, 'adding' a member usually means creating a profile for an Auth user
+        // If we don't have an auth user yet, this will just be a profile record
         const mapped = {
-            name: member.name,
+            full_name: member.name,
             email: member.email,
             role: member.role,
-            status: member.status,
-            leads_added: 0,
-            emails_sent: 0,
-            avatar: member.avatar,
+            avatar_url: member.avatar,
             menu_permissions: member.menuPermissions || ['dashboard', 'leads', 'manufacturers', 'creative', 'emails', 'my-tables', 'team'],
             updated_at: new Date().toISOString()
         }
-        const { data, error } = await supabase.from("team_members").insert([mapped]).select().single()
+        const { data, error } = await supabase.from("profiles").insert([mapped]).select().single()
         if (error) {
-            console.error("Error adding team member:", error)
+            console.error("Error adding team member (profile):", error)
             return null
         }
         return {
             ...member,
             id: data.id,
-            leadsAdded: data.leads_added,
-            emailsSent: data.emails_sent
+            leadsAdded: 0,
+            emailsSent: 0
         } as TeamMember
     }
 
     const deleteTeamMember = async (id: string) => {
-        const { error } = await supabase.from("team_members").delete().eq("id", id)
-        if (error) console.error("Error deleting team member:", error)
+        const { error } = await supabase.from("profiles").delete().eq("id", id)
+        if (error) console.error("Error deleting team member (profile):", error)
     }
 
     const deleteManyTeamMembers = async (ids: string[]) => {
-        const { error } = await supabase.from("team_members").delete().in("id", ids)
-        if (error) console.error("Error deleting team members:", error)
+        const { error } = await supabase.from("profiles").delete().in("id", ids)
+        if (error) console.error("Error deleting team members (profiles):", error)
     }
 
     const addCampaign = async (campaign: Omit<Campaign, "id" | "updatedAt">) => {
@@ -1301,8 +1313,8 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         // permissions is stored as-is jsonb
         if ((updates as any).permissions !== undefined) mapped.permissions = (updates as any).permissions
         mapped.updated_at = new Date().toISOString()
-        const { error } = await supabase.from("team_members").update(mapped).eq("id", id)
-        if (error) console.error("Error updating team member:", error)
+        const { error } = await supabase.from("profiles").update(mapped).eq("id", id)
+        if (error) console.error("Error updating team member (profile):", error)
     }
 
     // ── Custom Schemas CRUD ─────────────────────────────────

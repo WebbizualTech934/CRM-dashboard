@@ -73,9 +73,15 @@ export function RowDetailDrawer({ open, onOpenChange, data, onEdit }: RowDetailD
                         </div>
                         <div className="p-6 space-y-5">
                             <div className="grid grid-cols-[140px_1fr] gap-4 items-center">
-                                <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Company</div>
-                                <div className="text-sm font-bold text-slate-900">{data.company || "N/A"}</div>
+                                <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Company / Brand</div>
+                                <div className="text-sm font-bold text-slate-900">{data.parentCompany || data.company || "N/A"}</div>
                             </div>
+                            {data.peerBrand && (
+                                <div className="grid grid-cols-[140px_1fr] gap-4 items-center">
+                                    <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Peer Brand</div>
+                                    <div className="text-sm font-bold text-slate-900">{data.peerBrand}</div>
+                                </div>
+                            )}
                             <div className="grid grid-cols-[140px_1fr] gap-4 items-center">
                                 <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Job Title</div>
                                 <div className="text-sm font-bold text-slate-900">{data.jobTitle || "N/A"}</div>
@@ -93,12 +99,47 @@ export function RowDetailDrawer({ open, onOpenChange, data, onEdit }: RowDetailD
                                     <div className="text-sm font-bold text-slate-900">{data.country}</div>
                                 </div>
                             )}
-                            {data.status && (
+                            {data.fitLevel && (
                                 <div className="grid grid-cols-[140px_1fr] gap-4 items-center">
-                                    <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Status</div>
+                                    <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Fit Level</div>
+                                    <div>
+                                        <Badge className={cn("rounded-full px-4 py-1 text-[10px] font-black uppercase tracking-widest border-none shadow-sm text-white",
+                                            data.fitLevel === "High" ? "bg-green-500" : data.fitLevel === "Low" ? "bg-red-500" : "bg-yellow-500")}>
+                                            {data.fitLevel}
+                                        </Badge>
+                                    </div>
+                                </div>
+                            )}
+                            {data.productMatchRate && (
+                                <div className="grid grid-cols-[140px_1fr] gap-4 items-center">
+                                    <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Match Rate</div>
+                                    <div className="text-sm font-bold text-primary">{data.productMatchRate}</div>
+                                </div>
+                            )}
+                            {data.visualPresence && (
+                                <div className="grid grid-cols-[140px_1fr] gap-4 items-center">
+                                    <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Visual Presence</div>
+                                    <div className="text-sm font-bold text-slate-900">{data.visualPresence}</div>
+                                </div>
+                            )}
+                            {data.decisionMaker && (
+                                <div className="grid grid-cols-[140px_1fr] gap-4 items-center">
+                                    <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Decision Maker</div>
+                                    <div className="text-sm font-bold text-slate-900">{data.decisionMaker}</div>
+                                </div>
+                            )}
+                            {data.leadBy && (
+                                <div className="grid grid-cols-[140px_1fr] gap-4 items-center">
+                                    <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Lead By</div>
+                                    <div className="text-sm font-bold text-slate-900">{data.leadBy}</div>
+                                </div>
+                            )}
+                            {(data.status || data.serviceInterest) && (
+                                <div className="grid grid-cols-[140px_1fr] gap-4 items-center">
+                                    <div className="text-[11px] text-muted-foreground font-black uppercase tracking-widest">Status / Stage</div>
                                     <div>
                                         <Badge className="rounded-full px-4 py-1 text-[10px] font-black uppercase tracking-widest bg-primary/10 text-primary border-none shadow-sm">
-                                            {data.status}
+                                            {data.status || data.serviceInterest}
                                         </Badge>
                                     </div>
                                 </div>
