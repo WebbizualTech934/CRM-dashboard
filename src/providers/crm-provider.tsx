@@ -358,12 +358,13 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                     { data: tasksData, error: tsErr },
                     { data: tagsData, error: tgErr },
                     { data: schemasData, error: schErr },
-                    { data: recordsData, error: recErr }
+                    { data: recordsData, error: recErr },
+                    { data: { session }, error: sErr }
                 ] = await Promise.all([
                     supabase.from("projects").select("*").order("updated_at", { ascending: false }),
                     supabase.from("leads").select("*").order("id", { ascending: false }),
                     supabase.from("manufacturers").select("*").order("id", { ascending: false }),
-                    supabase.from("team_members").select("*"),
+                    supabase.from("profiles").select("*"),
                     supabase.from("campaigns").select("*").order("updated_at", { ascending: false }),
                     supabase.from("email_templates").select("*").order("created_at", { ascending: false }),
                     supabase.from("email_sequences").select("*").order("created_at", { ascending: false }),
@@ -372,26 +373,57 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                     supabase.from("tasks").select("*").order("updated_at", { ascending: false }),
                     supabase.from("tags").select("*"),
                     supabase.from("custom_schemas").select("*").order("created_at", { ascending: false }),
-                    supabase.from("custom_records").select("*").order("created_at", { ascending: false })
+                    supabase.from("custom_records").select("*").order("created_at", { ascending: false }),
+                    supabase.auth.getSession()
                 ])
 
-                const errors = [pErr, lErr, mErr, tErr, cErr, tmErr, sqErr, inErr, aErr, tsErr, tgErr, schErr, recErr].filter(Boolean)
-                if (errors.length > 0) {
-                    const firstError = errors[0]
-                    console.error("[Supabase] Fetch errors:", errors.map((e: any) => e?.message))
+                const errorFound = [pErr, lErr, mErr, tErr, cErr, tmErr, sqErr, inErr, aErr, tsErr, tgErr, schErr, recErr].find(Boolean)
+                if (errorFound) {
+                    console.error("[Supabase] Fetch error:", errorFound.message)
                     setConnectionError(
-                        firstError?.message.includes("does not exist")
+                        errorFound.message.includes("does not exist")
                             ? "Database tables not found. Run the SQL setup script in your Supabase dashboard."
-                            : firstError?.message || "Unknown connection error"
+                            : errorFound.message
                     )
                 } else {
-                    // Clear any previous connection error on successful fetch
                     setConnectionError(null)
                 }
 
+                // Identify current user and admin status
+                let currentProfile: any = null
+                if (session?.user) {
+                    currentProfile = teamData?.find((m: any) => m.id === session.user.id)
+                    if (currentProfile) {
+                        const isAdminByName = currentProfile.full_name === "Prasanna Kumar"
+                        setCurrentUser({
+                            id: currentProfile.id,
+                            name: currentProfile.full_name,
+                            email: currentProfile.email,
+                            role: isAdminByName ? "Admin" : (currentProfile.role || "Member"),
+                            userRole: isAdminByName ? "Admin" : (currentProfile.role as any || "Lead Gen"),
+                            status: "Active",
+                            leadsAdded: 0,
+                            emailsSent: 0,
+                            avatar: currentProfile.avatar_url,
+                            lastActive: currentProfile.created_at,
+                            menuPermissions: isAdminByName 
+                                ? ['dashboard', 'projects', 'emails', 'leads', 'team', 'custom-tables', 'settings']
+                                : ['dashboard', 'leads', 'manufacturers', 'creative', 'emails', 'my-tables', 'team']
+                        })
+                    }
+                }
+
+                const isSuperAdmin = currentProfile?.full_name === "Prasanna Kumar"
 
                 if (projectsData) {
-                    setProjects(projectsData.map((p: any) => ({
+                    let filteredProjects = projectsData
+                    if (!isSuperAdmin && currentProfile) {
+                        filteredProjects = projectsData.filter((p: any) => 
+                            p.team_member_ids?.includes(currentProfile.id) || 
+                            p.team_member_ids?.includes("1")
+                        )
+                    }
+                    setProjects(filteredProjects.map((p: any) => ({
                         id: p.id,
                         name: p.name,
                         description: p.description,
@@ -402,8 +434,17 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         updatedAt: p.updated_at
                     })))
                 }
+
                 if (leadsData) {
-                    setLeads(leadsData.map((l: any) => ({
+                    let filteredLeads = leadsData
+                    if (!isSuperAdmin && currentProfile) {
+                        filteredLeads = leadsData.filter((l: any) => 
+                            l.assigned_to === currentProfile.id || 
+                            l.assigned_to === currentProfile.full_name ||
+                            !l.assigned_to
+                        )
+                    }
+                    setLeads(filteredLeads.map((l: any) => ({
                         id: l.id,
                         firstName: l.first_name,
                         lastName: l.last_name,
@@ -426,6 +467,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         websiteLink: l.website_link
                     })))
                 }
+
                 if (manufacturersData) {
                     setManufacturers(manufacturersData.map((m: any) => ({
                         id: m.id,
@@ -445,21 +487,31 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         projectId: m.project_id
                     })))
                 }
+                
                 if (teamData) {
-                    setTeamMembers(teamData.map((t: any) => ({
-                        id: t.id,
-                        name: t.name,
-                        email: t.email,
-                        role: t.role,
-                        userRole: t.user_role as any,
-                        status: t.status,
-                        leadsAdded: t.leads_added,
-                        emailsSent: t.emails_sent,
-                        avatar: t.avatar,
-                        lastActive: t.last_active,
-                        menuPermissions: t.menu_permissions || ['dashboard', 'leads', 'manufacturers', 'creative', 'emails', 'my-tables', 'team']
-                    })))
+                    setTeamMembers(teamData.map((t: any) => {
+                        const isAdminByName = t.full_name === "Prasanna Kumar"
+                        const role = isAdminByName ? "Admin" : (t.role || "Member")
+                        const userRole = isAdminByName ? "Admin" : (t.role || "Lead Gen")
+
+                        return {
+                            id: t.id,
+                            name: t.full_name || "New User",
+                            email: t.email,
+                            role: role,
+                            userRole: userRole as any,
+                            status: "Active",
+                            leadsAdded: 0,
+                            emailsSent: 0,
+                            avatar: t.avatar_url,
+                            lastActive: t.created_at,
+                            menuPermissions: isAdminByName 
+                                ? ['dashboard', 'projects', 'emails', 'leads', 'team', 'custom-tables', 'settings']
+                                : ['dashboard', 'leads', 'manufacturers', 'creative', 'emails', 'my-tables', 'team']
+                        }
+                    }))
                 }
+
                 if (tasksData) {
                     setTasks(tasksData.map((ts: any) => ({
                         id: ts.id,
@@ -478,6 +530,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         updatedAt: ts.updated_at
                     })))
                 }
+
                 if (campaignsData) {
                     setCampaigns(campaignsData.map((c: any) => ({
                         id: c.id,
@@ -500,6 +553,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         updatedAt: c.updated_at
                     })))
                 }
+
                 if (templatesData) {
                     setTemplates(templatesData.map((t: any) => ({
                         id: t.id,
@@ -510,6 +564,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         createdAt: t.created_at
                     })))
                 }
+
                 if (sequencesData) {
                     setSequences(sequencesData.map((s: any) => ({
                         id: s.id,
@@ -519,6 +574,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         createdAt: s.created_at
                     })))
                 }
+
                 if (inboxData) {
                     setInbox(inboxData.map((m: any) => ({
                         id: m.id,
@@ -533,6 +589,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         sentAt: m.sent_at
                     })))
                 }
+
                 if (assetsData) {
                     setCreativeAssets(assetsData.map((a: any) => ({
                         id: a.id,
@@ -558,6 +615,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         updatedAt: a.updated_at
                     })))
                 }
+
                 if (tagsData) setTags(tagsData)
                 if (schemasData) {
                     setCustomSchemas(schemasData.map((s: any) => ({
@@ -571,8 +629,6 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         createdAt: s.created_at,
                         updatedAt: s.updated_at
                     })))
-                } else {
-                    setCustomSchemas([])
                 }
                 
                 if (recordsData) {
@@ -584,28 +640,8 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         createdAt: r.created_at,
                         updatedAt: r.updated_at
                     })))
-                } else {
-                    setCustomRecords([])
                 }
 
-                // Set admin as default user if available
-                if (teamData && teamData.length > 0) {
-                    const admin = teamData.find(m => m.user_role === 'Admin') || teamData[0]
-                    setCurrentUser({
-                        id: admin.id,
-                        name: admin.name,
-                        email: admin.email,
-                        role: admin.role,
-                        userRole: admin.user_role as any,
-                        status: admin.status,
-                        leadsAdded: admin.leads_added,
-                        emailsSent: admin.emails_sent,
-                        avatar: admin.avatar,
-                        lastActive: admin.last_active,
-                        menuPermissions: admin.menu_permissions || ['dashboard', 'projects', 'emails', 'leads', 'team', 'custom-tables', 'settings']
-                    })
-                }
-                
                 setIsLoaded(true)
 
             } catch (err: any) {
@@ -624,7 +660,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             .on("postgres_changes", { event: "*", schema: "public", table: "projects" }, () => fetchData())
             .on("postgres_changes", { event: "*", schema: "public", table: "leads" }, () => fetchData())
             .on("postgres_changes", { event: "*", schema: "public", table: "manufacturers" }, () => fetchData())
-            .on("postgres_changes", { event: "*", schema: "public", table: "team_members" }, () => fetchData())
+            .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, () => fetchData())
             .on("postgres_changes", { event: "*", schema: "public", table: "campaigns" }, () => fetchData())
             .on("postgres_changes", { event: "*", schema: "public", table: "email_templates" }, () => fetchData())
             .on("postgres_changes", { event: "*", schema: "public", table: "email_sequences" }, () => fetchData())

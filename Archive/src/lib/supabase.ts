@@ -14,6 +14,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 // Use placeholders if variables are missing to prevent the "supabaseUrl is required" crash
 export const supabase = createClient(
-    supabaseUrl || "https://your-project.supabase.co",
-    supabaseAnonKey || "your-anon-key"
+    supabaseUrl || "https://swpwcpogulfoejjkanbe.supabase.co",
+    supabaseAnonKey || "sb_publishable_cCLa-yRr8_fy9eRLfg04cw_iZbSwHCU"
 )
