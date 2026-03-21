@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useState, useMemo } from "react"
 import { useCRMData } from "@/hooks/use-crm-data"
+import { useAuth } from "@/hooks/use-auth"
 
 const navItems = [
     { id: 'dashboard', name: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -32,6 +33,7 @@ const navItems = [
 export function Sidebar() {
     const pathname = usePathname()
     const { currentUser } = useCRMData()
+    const { signOut } = useAuth()
     const [isCollapsed, setIsCollapsed] = useState(false)
 
     const visibleNavItems = useMemo(() => {
@@ -92,6 +94,7 @@ export function Sidebar() {
             <div className="p-4 border-t border-border/50">
                 <Button
                     variant="ghost"
+                    onClick={signOut}
                     className={cn(
                         "w-full flex items-center gap-4 justify-start px-4 py-6 rounded-xl text-muted-foreground hover:bg-destructive/5 hover:text-destructive transition-colors",
                         isCollapsed && "justify-center px-0"

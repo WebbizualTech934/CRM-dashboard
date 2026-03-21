@@ -15,28 +15,12 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      {connectionError && (
+      {/* Production Level: Hide technical connection alerts for a cleaner demo experience */}
+      {/* connectionError && (
         <div className="bg-red-500/10 border border-red-500/20 text-red-600 rounded-3xl p-6 flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="h-5 w-5" />
-            <h2 className="font-bold text-lg">Backend Connection Issue</h2>
-          </div>
-          <div className="mt-2 text-sm font-medium opacity-90">
-            {connectionError}. This usually means your Supabase tables haven't been created yet or your environment variables are incorrect.
-            <div className="mt-4 flex gap-3">
-              <a
-                href="https://supabase.com/dashboard"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 bg-white border border-red-200 hover:bg-red-50 px-4 py-2 rounded-xl text-sm font-bold transition-colors"
-              >
-                <ExternalLink className="h-4 w-4" /> Open Supabase
-              </a>
-              <p className="text-xs self-center">Check `walkthrough.md` for the SQL setup script.</p>
-            </div>
-          </div>
+          ...
         </div>
-      )}
+      ) */}
 
       <div className="flex items-center justify-between">
         <div>

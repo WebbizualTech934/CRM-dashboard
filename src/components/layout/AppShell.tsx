@@ -2,6 +2,7 @@
 
 import { Sidebar } from "./Sidebar"
 import { Navbar } from "./Navbar"
+import { CopyrightFooter } from "./CopyrightFooter"
 
 export function AppShell({ children }: { children: React.ReactNode }) {
     return (
@@ -15,6 +16,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     </div>
                 </main>
             </div>
+            <CopyrightFooter />
         </div>
     )
 }

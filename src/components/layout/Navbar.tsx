@@ -1,6 +1,7 @@
 "use client"
 
-import { Search, Bell, User, HelpCircle, Briefcase, LogOut } from "lucide-react"
+import Link from "next/link"
+import { Search, Bell, User, HelpCircle, Briefcase, LogOut, Settings as SettingsIcon, Users } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -136,36 +137,57 @@ export function Navbar() {
                             </Button>
                         )
                     } />
-                    <DropdownMenuContent className="w-56" align="end">
-                        <DropdownMenuLabel className="font-normal">
-                            <div className="flex flex-col space-y-1">
-                                <p className="text-sm font-medium leading-none">{displayName}</p>
-                                <p className="text-xs leading-none text-muted-foreground">{displayEmail}</p>
+                    <DropdownMenuContent className="w-64 p-2 rounded-2xl shadow-2xl border-border/50" align="end">
+                        <DropdownMenuLabel className="font-normal p-3">
+                            <div className="flex flex-col space-y-2">
+                                <p className="text-sm font-black leading-none tracking-tight">{displayName}</p>
+                                <p className="text-xs leading-none text-muted-foreground font-medium">{displayEmail}</p>
                             </div>
                         </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Profile</DropdownMenuItem>
-                        <DropdownMenuItem>Settings</DropdownMenuItem>
-                        <DropdownMenuItem>Team</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            className="text-amber-600 focus:text-amber-600 cursor-pointer font-bold"
-                            onClick={() => {
-                                if (confirm("Are you sure you want to reset all CRM data? This cannot be undone.")) {
-                                    resetData();
-                                    window.location.reload();
-                                }
-                            }}
-                        >
-                            Reset Data
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            className="text-destructive focus:text-destructive cursor-pointer font-bold gap-2"
-                            onClick={signOut}
-                        >
-                            <LogOut className="h-4 w-4" /> Log out
-                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="opacity-50" />
+                        
+                        <div className="p-1 space-y-1">
+                            <Link href="/settings">
+                                <DropdownMenuItem className="rounded-xl cursor-pointer py-2.5 font-bold gap-3 focus:bg-primary/5 focus:text-primary transition-colors">
+                                    <User className="h-4 w-4" /> Edit Profile
+                                </DropdownMenuItem>
+                            </Link>
+                            <Link href="/settings">
+                                <DropdownMenuItem className="rounded-xl cursor-pointer py-2.5 font-bold gap-3 focus:bg-primary/5 focus:text-primary transition-colors">
+                                    <SettingsIcon className="h-4 w-4" /> Account Settings
+                                </DropdownMenuItem>
+                            </Link>
+                            <DropdownMenuItem className="rounded-xl cursor-pointer py-2.5 font-bold gap-3 focus:bg-primary/5 focus:text-primary transition-colors">
+                                <Users className="h-4 w-4" /> Team Management
+                            </DropdownMenuItem>
+                        </div>
+
+                        <DropdownMenuSeparator className="opacity-50" />
+                        
+                        <div className="p-1">
+                            <DropdownMenuItem
+                                className="rounded-xl text-amber-600 focus:text-amber-600 focus:bg-amber-50 cursor-pointer font-bold py-2.5 gap-3 transition-colors"
+                                onClick={() => {
+                                    if (confirm("Are you sure you want to reset all CRM data? This cannot be undone.")) {
+                                        resetData();
+                                        window.location.reload();
+                                    }
+                                }}
+                            >
+                                <Bell className="h-4 w-4" /> Reset CRM Data
+                            </DropdownMenuItem>
+                        </div>
+
+                        <DropdownMenuSeparator className="opacity-50" />
+                        
+                        <div className="p-1">
+                            <DropdownMenuItem
+                                className="rounded-xl text-destructive focus:text-destructive focus:bg-destructive/5 cursor-pointer font-bold py-2.5 gap-3 transition-colors"
+                                onClick={signOut}
+                            >
+                                <LogOut className="h-4 w-4" /> Log out Account
+                            </DropdownMenuItem>
+                        </div>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
