@@ -29,8 +29,9 @@ export function ManufacturersTable({ projectId }: { projectId?: string }) {
             header: "Parent Company",
             accessorKey: "parentCompany",
             sortable: true,
+            width: "250px",
             cell: (m: any) => (
-                <div className="font-bold text-foreground truncate max-w-[200px]" title={m.parentCompany}>
+                <div className="font-bold text-foreground" title={m.parentCompany}>
                     {m.parentCompany}
                 </div>
             )
@@ -39,15 +40,17 @@ export function ManufacturersTable({ projectId }: { projectId?: string }) {
             header: "Peer Brand",
             accessorKey: "peerBrand",
             sortable: true,
-            cell: (m: any) => <span className="text-muted-foreground">{m.peerBrand || "-"}</span>
+            width: "200px",
+            cell: (m: any) => <span className="text-muted-foreground font-bold">{m.peerBrand || "-"}</span>
         },
         {
             header: "Match Rate",
             accessorKey: "productMatchRate",
             sortable: true,
+            width: "140px",
             className: "text-center",
             cell: (m: any) => (
-                <Badge className="bg-primary/10 text-primary border-none rounded-full px-3 py-1 font-bold shadow-sm">
+                <Badge className="bg-primary/10 text-primary border-none rounded-full px-4 py-1 font-bold shadow-sm">
                     {m.productMatchRate || "-"}
                 </Badge>
             )
@@ -56,9 +59,10 @@ export function ManufacturersTable({ projectId }: { projectId?: string }) {
             header: "Fit Level",
             accessorKey: "fitLevel",
             sortable: true,
+            width: "140px",
             className: "text-center",
             cell: (m: any) => (
-                <Badge className={cn("rounded-full border-none px-3 py-1 font-bold shadow-sm text-white",
+                <Badge className={cn("rounded-full border-none px-4 py-1 font-bold shadow-sm text-white",
                     m.fitLevel === "High" ? "bg-green-500" :
                         m.fitLevel === "Low" ? "bg-red-500" :
                             "bg-yellow-500"
@@ -70,9 +74,10 @@ export function ManufacturersTable({ projectId }: { projectId?: string }) {
         {
             header: "Website",
             accessorKey: "website",
+            width: "220px",
             cell: (m: any) => (
                 <div className="flex items-center gap-2 group/link min-w-[120px]">
-                    <span className="text-muted-foreground truncate max-w-[150px]">{m.website || "-"}</span>
+                    <span className="text-muted-foreground">{m.website || "-"}</span>
                     {m.website && (
                         <a
                             href={m.website.startsWith('http') ? m.website : `https://${m.website}`}
@@ -91,14 +96,16 @@ export function ManufacturersTable({ projectId }: { projectId?: string }) {
             header: "Country",
             accessorKey: "country",
             sortable: true,
+            width: "150px",
             cell: (m: any) => <span className="text-muted-foreground">{m.country || "-"}</span>
         },
         {
             header: "Visual Presence",
             accessorKey: "visualPresence",
+            width: "180px",
             className: "text-center",
             cell: (m: any) => (
-                <Badge variant="outline" className={cn("rounded-full px-3 py-1 font-bold shadow-sm border-2 whitespace-nowrap",
+                <Badge variant="outline" className={cn("rounded-full px-4 py-1 font-bold shadow-sm border-2 whitespace-nowrap",
                     m.visualPresence === "Excellent" ? "border-green-500 text-green-600" :
                         m.visualPresence === "Good" ? "border-blue-500 text-blue-600" :
                             m.visualPresence === "Poor" ? "border-red-500 text-red-600" :

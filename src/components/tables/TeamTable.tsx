@@ -25,15 +25,16 @@ export function TeamTable({ memberIds }: { memberIds?: string[] }) {
             header: "Team Member",
             accessorKey: "name",
             sortable: true,
+            width: "300px",
             cell: (member: any) => (
-                <div className="flex items-center gap-3">
-                    <Avatar className="h-9 w-9 border-2 border-background shadow-sm">
+                <div className="flex items-center gap-4">
+                    <Avatar className="h-10 w-10 border-2 border-background shadow-md">
                         <AvatarImage src={member.avatar} />
-                        <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">{member.name[0]}</AvatarFallback>
+                        <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm">{member.name[0]}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
                         <div className="font-bold text-sm text-foreground leading-tight">{member.name}</div>
-                        <div className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">{member.email}</div>
+                        <div className="text-[11px] font-bold text-muted-foreground/40">{member.email}</div>
                     </div>
                 </div>
             )
@@ -42,8 +43,9 @@ export function TeamTable({ memberIds }: { memberIds?: string[] }) {
             header: "Role",
             accessorKey: "role",
             sortable: true,
+            width: "200px",
             cell: (member: any) => (
-                <Badge variant="outline" className="rounded-full px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest border-primary/20 bg-primary/5 text-primary">
+                <Badge variant="outline" className="rounded-full px-4 py-1 text-[10px] font-black uppercase tracking-widest border-primary/20 bg-primary/5 text-primary">
                     {member.role}
                 </Badge>
             )
@@ -52,10 +54,11 @@ export function TeamTable({ memberIds }: { memberIds?: string[] }) {
             header: "Status",
             accessorKey: "status",
             sortable: true,
+            width: "150px",
             cell: (member: any) => (
-                <div className="flex items-center gap-2">
-                    <div className={cn("h-1.5 w-1.5 rounded-full", member.status === "Active" ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" : "bg-muted")} />
-                    <span className="text-[11px] font-bold text-muted-foreground">{member.status}</span>
+                <div className="flex items-center gap-3">
+                    <div className={cn("h-2 w-2 rounded-full", member.status === "Active" ? "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.6)]" : "bg-muted")} />
+                    <span className="text-[11px] font-black text-muted-foreground uppercase tracking-widest">{member.status}</span>
                 </div>
             )
         },
@@ -63,15 +66,17 @@ export function TeamTable({ memberIds }: { memberIds?: string[] }) {
             header: "Leads Added",
             accessorKey: "leadsAdded",
             sortable: true,
+            width: "150px",
             className: "text-center",
-            cell: (member: any) => <span className="font-bold text-sm">{member.leadsAdded.toLocaleString()}</span>
+            cell: (member: any) => <span className="font-bold text-sm text-foreground">{member.leadsAdded.toLocaleString()}</span>
         },
         {
             header: "Emails Sent",
             accessorKey: "emailsSent",
             sortable: true,
+            width: "150px",
             className: "text-center",
-            cell: (member: any) => <span className="font-bold text-sm">{member.emailsSent.toLocaleString()}</span>
+            cell: (member: any) => <span className="font-bold text-sm text-foreground">{member.emailsSent.toLocaleString()}</span>
         }
     ]
 

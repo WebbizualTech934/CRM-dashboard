@@ -28,8 +28,9 @@ export function LeadsTable({ projectId }: { projectId?: string }) {
             header: "Company",
             accessorKey: "company",
             sortable: true,
+            width: "250px",
             cell: (lead: any) => (
-                <div className="font-bold text-foreground truncate max-w-[200px]" title={lead.company}>
+                <div className="font-bold text-foreground" title={lead.company}>
                     {lead.company}
                 </div>
             )
@@ -38,9 +39,10 @@ export function LeadsTable({ projectId }: { projectId?: string }) {
             header: "Contact Person",
             accessorKey: "firstName",
             sortable: true,
+            width: "200px",
             cell: (lead: any) => (
                 <div className="flex items-center gap-2">
-                    <span className="font-medium">{lead.firstName} {lead.lastName}</span>
+                    <span className="font-bold">{lead.firstName} {lead.lastName}</span>
                 </div>
             )
         },
@@ -48,9 +50,10 @@ export function LeadsTable({ projectId }: { projectId?: string }) {
             header: "Work Email",
             accessorKey: "email",
             sortable: true,
+            width: "250px",
             cell: (lead: any) => (
                 <div className="flex items-center gap-2 group/link">
-                    <span className="text-muted-foreground truncate max-w-[180px]">{lead.email}</span>
+                    <span className="text-muted-foreground">{lead.email}</span>
                     <a
                         href={`mailto:${lead.email}`}
                         className="h-7 w-7 rounded-lg bg-primary/5 flex items-center justify-center text-primary opacity-0 group-hover/link:opacity-100 transition-all hover:bg-primary/10"
@@ -65,9 +68,10 @@ export function LeadsTable({ projectId }: { projectId?: string }) {
         {
             header: "Website",
             accessorKey: "websiteLink",
+            width: "220px",
             cell: (lead: any) => (
                 <div className="flex items-center gap-2 group/link min-w-[120px]">
-                    <span className="text-muted-foreground truncate max-w-[150px]">{lead.websiteLink || "-"}</span>
+                    <span className="text-muted-foreground">{lead.websiteLink || "-"}</span>
                     {lead.websiteLink && (
                         <a
                             href={lead.websiteLink.startsWith('http') ? lead.websiteLink : `https://${lead.websiteLink}`}
@@ -107,7 +111,8 @@ export function LeadsTable({ projectId }: { projectId?: string }) {
         {
             header: "Speciality",
             accessorKey: "speciality",
-            cell: (lead: any) => <span className="text-muted-foreground truncate max-w-[150px]">{lead.speciality || "-"}</span>
+            width: "200px",
+            cell: (lead: any) => <span className="text-muted-foreground">{lead.speciality || "-"}</span>
         }
     ]
 

@@ -28,14 +28,15 @@ export function CampaignTable({ projectId, status }: { projectId?: string, statu
             header: "Campaign Name",
             accessorKey: "name",
             sortable: true,
+            width: "300px",
             cell: (c: any) => (
-                <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 shadow-sm border border-primary/5">
                         <Mail className="h-4.5 w-4.5" />
                     </div>
                     <div>
-                        <div className="font-bold text-foreground">{c.name}</div>
-                        <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Sequence V1</div>
+                        <div className="font-bold text-sm text-foreground">{c.name}</div>
+                        <div className="text-[11px] font-bold text-muted-foreground/40 uppercase tracking-widest leading-none mt-1">Sequence V1</div>
                     </div>
                 </div>
             )
@@ -44,12 +45,13 @@ export function CampaignTable({ projectId, status }: { projectId?: string, statu
             header: "Project",
             accessorKey: "projectId",
             sortable: true,
+            width: "180px",
             cell: (c: any) => {
                 const project = projects.find(p => p.id === c.projectId)
                 return (
                     <Link 
                         href={`/projects/${c.projectId}`} 
-                        className="text-xs font-bold text-primary hover:underline"
+                        className="text-xs font-bold text-primary hover:underline hover:text-primary/80 transition-colors"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {project?.name || "Global"}
@@ -61,13 +63,13 @@ export function CampaignTable({ projectId, status }: { projectId?: string, statu
             header: "Status",
             accessorKey: "status",
             sortable: true,
+            width: "150px",
             cell: (c: any) => (
                 <Badge className={cn(
-                    "rounded-full px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest border-none",
-                    c.status === "Active" ? "bg-green-500 text-white shadow-lg shadow-green-500/20" :
+                    "rounded-full px-4 py-1 text-[10px] font-black uppercase tracking-widest border-none shadow-none",
+                    c.status === "Active" ? "bg-green-500 text-white" :
                         c.status === "Paused" ? "bg-orange-500 text-white" :
-                            c.status === "Draft" ? "bg-muted text-muted-foreground" :
-                                "bg-muted text-muted-foreground"
+                            "bg-muted text-muted-foreground"
                 )}>
                     {c.status}
                 </Badge>
@@ -77,56 +79,62 @@ export function CampaignTable({ projectId, status }: { projectId?: string, statu
             header: "Leads",
             accessorKey: "leadsCount",
             sortable: true,
+            width: "100px",
             className: "text-center",
-            cell: (c: any) => <span className="font-bold">{c.leadsCount}</span>
+            cell: (c: any) => <span className="font-bold text-sm text-foreground">{c.leadsCount}</span>
         },
         {
             header: "Sent",
             accessorKey: "emailsSent",
             sortable: true,
+            width: "100px",
             className: "text-center",
-            cell: (c: any) => <span className="font-bold text-blue-600">{c.emailsSent}</span>
+            cell: (c: any) => <span className="font-bold text-sm text-blue-600">{c.emailsSent}</span>
         },
         {
             header: "Open %",
             accessorKey: "opens",
             sortable: true,
+            width: "110px",
             className: "text-center",
             cell: (c: any) => {
                 const rate = c.emailsSent > 0 ? (c.opens / c.emailsSent) * 100 : 0
-                return <span className="font-bold text-indigo-600">{rate.toFixed(1)}%</span>
+                return <span className="font-black text-sm text-indigo-600 font-mono">{rate.toFixed(1)}%</span>
             }
         },
         {
             header: "Reply %",
             accessorKey: "replies",
             sortable: true,
+            width: "110px",
             className: "text-center",
             cell: (c: any) => {
                 const rate = c.emailsSent > 0 ? (c.replies / c.emailsSent) * 100 : 0
-                return <span className="font-bold text-orange-600">{rate.toFixed(1)}%</span>
+                return <span className="font-black text-sm text-orange-600 font-mono">{rate.toFixed(1)}%</span>
             }
         },
         {
             header: "Positive %",
             accessorKey: "positives",
             sortable: true,
+            width: "110px",
             className: "text-center",
             cell: (c: any) => {
                 const rate = c.replies > 0 ? (c.positives / c.replies) * 100 : 0
-                return <span className="font-bold text-green-600">{rate.toFixed(1)}%</span>
+                return <span className="font-black text-sm text-green-600 font-mono">{rate.toFixed(1)}%</span>
             }
         },
         {
             header: "Owner",
             accessorKey: "owner",
             sortable: true,
+            width: "180px",
             cell: (c: any) => (
-                <div className="flex items-center gap-2">
-                    <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center">
-                        <User className="h-3 w-3 text-muted-foreground" />
+                <div className="flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-full bg-primary/5 flex items-center justify-center border border-primary/10 shadow-sm">
+                        <User className="h-3.5 w-3.5 text-primary" />
                     </div>
-                    <span className="text-xs font-bold">{c.owner || "Unassigned"}</span>
+                    <span className="text-sm font-bold text-foreground">{c.owner || "Unassigned"}</span>
                 </div>
             )
         },
@@ -134,8 +142,9 @@ export function CampaignTable({ projectId, status }: { projectId?: string, statu
             header: "Last Activity",
             accessorKey: "updatedAt",
             sortable: true,
+            width: "150px",
             cell: (c: any) => (
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                <span className="text-[11px] font-black text-muted-foreground/40 uppercase tracking-widest">
                     {new Date(c.updatedAt).toLocaleDateString()}
                 </span>
             )

@@ -66,9 +66,9 @@ export function LinkedinLeadTable({ leads, onViewDetail, onDelete, onTabSwitch }
             header: "Company Name",
             accessorKey: "companyName",
             sortable: true,
-            width: "200px",
+            width: "250px",
             cell: (lead: LinkedinLead) => (
-                <div className="font-bold text-sm text-foreground truncate" title={lead.companyName}>
+                <div className="font-bold text-sm text-foreground" title={lead.companyName}>
                     {lead.companyName}
                 </div>
             )
@@ -77,9 +77,9 @@ export function LinkedinLeadTable({ leads, onViewDetail, onDelete, onTabSwitch }
             header: "Contact Name",
             accessorKey: "contactName",
             sortable: true,
-            width: "180px",
+            width: "200px",
             cell: (lead: LinkedinLead) => (
-                <div className="font-bold text-sm text-foreground truncate">
+                <div className="font-bold text-sm text-foreground">
                     {lead.contactName}
                 </div>
             )
@@ -104,10 +104,10 @@ export function LinkedinLeadTable({ leads, onViewDetail, onDelete, onTabSwitch }
             header: "Work Email ID",
             accessorKey: "workEmail",
             sortable: true,
-            width: "220px",
+            width: "280px",
             cell: (lead: LinkedinLead) => (
                 <div className="flex items-center gap-2 group/email">
-                    <span className="text-xs font-medium text-muted-foreground truncate max-w-[180px]">{lead.workEmail}</span>
+                    <span className="text-sm font-bold text-muted-foreground">{lead.workEmail}</span>
                     <a 
                         href={`mailto:${lead.workEmail}`}
                         className="h-7 w-7 rounded-lg bg-primary/5 flex items-center justify-center text-primary opacity-0 group-hover/email:opacity-100 transition-all hover:bg-primary/10"
@@ -148,17 +148,17 @@ export function LinkedinLeadTable({ leads, onViewDetail, onDelete, onTabSwitch }
         {
             header: "Drafted Content",
             accessorKey: "draftedContent",
-            width: "180px",
+            width: "250px",
             cell: (lead: LinkedinLead) => (
                 <div 
-                    className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors group/link"
+                    className="flex items-center gap-3 cursor-pointer hover:text-primary transition-colors group/link"
                     onClick={(e) => {
                         e.stopPropagation()
                         onTabSwitch('sequences')
                     }}
                 >
-                    <FileText className="h-3.5 w-3.5 text-muted-foreground group-hover/link:text-primary transition-colors" />
-                    <span className="text-xs font-bold truncate max-w-[140px]">
+                    <FileText className="h-4 w-4 text-muted-foreground group-hover/link:text-primary transition-colors" />
+                    <span className="text-sm font-bold">
                         {lead.draftedContent || "Draft Sequence"}
                     </span>
                 </div>

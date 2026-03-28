@@ -30,11 +30,11 @@ export function TasksTable({ projectId }: TasksTableProps) {
             header: "Task Title",
             accessorKey: "title",
             sortable: true,
-            className: "min-w-[250px]",
+            width: "350px",
             cell: (task: Task) => (
-                <div className="flex flex-col gap-1">
-                    <span className="font-bold text-foreground">{task.title}</span>
-                    <span className="text-xs text-muted-foreground line-clamp-1">{task.description || "No description"}</span>
+                <div className="flex flex-col gap-1 py-1">
+                    <span className="font-bold text-sm text-foreground">{task.title}</span>
+                    <span className="text-[11px] font-bold text-muted-foreground/40">{task.description || "No description"}</span>
                 </div>
             )
         },
@@ -42,6 +42,7 @@ export function TasksTable({ projectId }: TasksTableProps) {
             header: "Status",
             accessorKey: "status",
             sortable: true,
+            width: "160px",
             cell: (task: Task) => {
                 const colors = {
                     'Todo': 'bg-slate-500/10 text-slate-600',
@@ -53,7 +54,7 @@ export function TasksTable({ projectId }: TasksTableProps) {
                     'Cancelled': 'bg-gray-500/10 text-gray-400',
                 }
                 return (
-                    <Badge className={cn("rounded-full px-3 py-0.5 text-[10px] font-black uppercase tracking-widest border-none", colors[task.status])}>
+                    <Badge className={cn("rounded-full px-4 py-1 text-[10px] font-black uppercase tracking-widest border-none shadow-none", colors[task.status])}>
                         {task.status}
                     </Badge>
                 )
@@ -63,6 +64,7 @@ export function TasksTable({ projectId }: TasksTableProps) {
             header: "Priority",
             accessorKey: "priority",
             sortable: true,
+            width: "140px",
             cell: (task: Task) => {
                 const colors = {
                     'Low': 'bg-slate-500/5 text-slate-500',
@@ -72,8 +74,8 @@ export function TasksTable({ projectId }: TasksTableProps) {
                 }
                 return (
                     <div className="flex items-center gap-2">
-                        <div className={cn("h-1.5 w-1.5 rounded-full", task.priority === 'Urgent' ? 'bg-red-600' : task.priority === 'High' ? 'bg-orange-500' : 'bg-blue-400')} />
-                        <span className={cn("text-[10px] font-bold uppercase tracking-widest", colors[task.priority].split(' ')[1])}>
+                        <div className={cn("h-2 w-2 rounded-full", task.priority === 'Urgent' ? 'bg-red-600 animate-ping' : task.priority === 'High' ? 'bg-orange-500' : 'bg-blue-400')} />
+                        <span className={cn("text-[10px] font-black uppercase tracking-widest", colors[task.priority].split(' ')[1])}>
                             {task.priority}
                         </span>
                     </div>
@@ -84,10 +86,11 @@ export function TasksTable({ projectId }: TasksTableProps) {
             header: "Due Date",
             accessorKey: "dueDate",
             sortable: true,
+            width: "150px",
             cell: (task: Task) => (
-                <div className="flex items-center gap-2 text-muted-foreground">
-                    <Clock className="h-3 w-3" />
-                    <span className="text-xs font-bold">
+                <div className="flex items-center gap-2 text-muted-foreground group">
+                    <Calendar className="h-4 w-4 opacity-50" />
+                    <span className="text-xs font-bold text-foreground/80">
                         {task.dueDate ? format(new Date(task.dueDate), "MMM d, yyyy") : "No deadline"}
                     </span>
                 </div>
@@ -96,16 +99,17 @@ export function TasksTable({ projectId }: TasksTableProps) {
         {
             header: "Assigned To",
             accessorKey: "assignedTo",
+            width: "200px",
             cell: (task: Task) => {
                 const member = teamMembers.find(m => m.id === task.assignedTo)
-                if (!member) return <span className="text-xs text-muted-foreground italic">Unassigned</span>
+                if (!member) return <span className="text-[10px] font-black uppercase text-muted-foreground/40 italic tracking-widest">Unassigned</span>
                 return (
-                    <div className="flex items-center gap-2">
-                        <Avatar className="h-6 w-6 border border-border/50">
+                    <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8 border-2 border-background shadow-sm">
                             <AvatarImage src={member.avatar} />
-                            <AvatarFallback className="text-[10px] font-bold">{member.name[0]}</AvatarFallback>
+                            <AvatarFallback className="text-[10px] font-black bg-primary/10 text-primary">{member.name[0]}</AvatarFallback>
                         </Avatar>
-                        <span className="text-xs font-bold">{member.name}</span>
+                        <span className="text-xs font-bold text-foreground">{member.name}</span>
                     </div>
                 )
             }
@@ -113,6 +117,7 @@ export function TasksTable({ projectId }: TasksTableProps) {
         {
             header: "Reference",
             accessorKey: "relatedType",
+            width: "150px",
             cell: (task: Task) => (
                 task.relatedType ? (
                     <Badge variant="outline" className="rounded-lg h-6 px-2 text-[9px] font-black uppercase tracking-tighter border-border/50 bg-background/50">

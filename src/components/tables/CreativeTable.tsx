@@ -33,34 +33,40 @@ export function CreativeTable({ projectId }: { projectId?: string }) {
         {
             header: "S.No",
             accessorKey: "id",
+            width: "80px",
             cell: (_: any, index: number) => <span className="text-muted-foreground font-medium">{index + 1}</span>
         },
         {
             header: "Company Name",
             accessorKey: "companyName",
             sortable: true,
-            cell: (asset: any) => <div className="font-bold text-foreground truncate max-w-[120px]">{asset.companyName}</div>
+            width: "200px",
+            cell: (asset: any) => <div className="font-bold text-foreground">{asset.companyName}</div>
         },
         {
             header: "Website",
             accessorKey: "website",
-            cell: (asset: any) => asset.website ? <a href={asset.website.startsWith('http') ? asset.website : `https://${asset.website}`} target="_blank" className="text-blue-500 hover:underline truncate max-w-[100px] block text-xs">{asset.website}</a> : "—"
+            width: "180px",
+            cell: (asset: any) => asset.website ? <a href={asset.website.startsWith('http') ? asset.website : `https://${asset.website}`} target="_blank" className="text-blue-500 hover:underline font-bold block text-xs">{asset.website}</a> : "—"
         },
         {
             header: "Product Link",
             accessorKey: "productLink",
-            cell: (asset: any) => asset.productLink ? <a href={asset.productLink} target="_blank" className="text-blue-500 hover:underline truncate max-w-[100px] block text-xs">Link</a> : "—"
+            width: "120px",
+            cell: (asset: any) => asset.productLink ? <a href={asset.productLink} target="_blank" className="text-blue-500 hover:underline font-bold block text-xs">Link</a> : "—"
         },
         {
             header: "Product",
             accessorKey: "product",
-            cell: (asset: any) => <span className="text-xs font-medium truncate max-w-[80px] block">{asset.product || "—"}</span>
+            width: "150px",
+            cell: (asset: any) => <span className="text-xs font-bold block">{asset.product || "—"}</span>
         },
         {
             header: "Script Status",
             accessorKey: "scriptStatus",
+            width: "140px",
             cell: (asset: any) => (
-                <Badge className={cn("rounded-full px-2 py-0.5 text-[8px] font-bold uppercase", asset.scriptStatus === "Completed" ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600")}>
+                <Badge className={cn("rounded-full px-4 py-1 text-[9px] font-black uppercase", asset.scriptStatus === "Completed" ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600 shadow-none border-none")}>
                     {asset.scriptStatus}
                 </Badge>
             )
@@ -68,8 +74,9 @@ export function CreativeTable({ projectId }: { projectId?: string }) {
         {
             header: "Story board",
             accessorKey: "storyboardStatus",
+            width: "140px",
             cell: (asset: any) => (
-                <Badge className={cn("rounded-full px-2 py-0.5 text-[8px] font-bold uppercase", asset.storyboardStatus === "Completed" ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600")}>
+                <Badge className={cn("rounded-full px-4 py-1 text-[9px] font-black uppercase", asset.storyboardStatus === "Completed" ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600 shadow-none border-none")}>
                     {asset.storyboardStatus}
                 </Badge>
             )
@@ -77,62 +84,74 @@ export function CreativeTable({ projectId }: { projectId?: string }) {
         {
             header: "Animation Plan",
             accessorKey: "animationPlan",
-            cell: (asset: any) => <span className="text-[10px] truncate max-w-[80px] block">{asset.animationPlan}</span>
+            width: "180px",
+            cell: (asset: any) => <span className="text-xs font-bold">{asset.animationPlan}</span>
         },
         {
             header: "Wireframe/Design",
             accessorKey: "wireframeDesignStatus",
-            cell: (asset: any) => <span className="text-[10px] truncate max-w-[80px] block">{asset.wireframeDesignStatus}</span>
+            width: "180px",
+            cell: (asset: any) => <span className="text-xs font-bold">{asset.wireframeDesignStatus}</span>
         },
         {
             header: "Website Status",
             accessorKey: "websiteStatus",
-            cell: (asset: any) => <span className="text-[10px] truncate max-w-[80px] block">{asset.websiteStatus}</span>
+            width: "160px",
+            cell: (asset: any) => <span className="text-xs font-bold">{asset.websiteStatus}</span>
         },
         {
             header: "Animation Status",
             accessorKey: "animationStatus",
-            cell: (asset: any) => <span className="text-[10px] truncate max-w-[80px] block">{asset.animationStatus}</span>
+            width: "160px",
+            cell: (asset: any) => <span className="text-xs font-bold">{asset.animationStatus}</span>
         },
         {
             header: "Deadline",
             accessorKey: "deadlineForDelivery",
-            cell: (asset: any) => <span className="text-[10px] font-bold text-red-600">{asset.deadlineForDelivery || "—"}</span>
+            width: "140px",
+            cell: (asset: any) => <span className="text-xs font-bold text-red-600">{asset.deadlineForDelivery || "—"}</span>
         },
         {
             header: "Duration",
             accessorKey: "timeDuration",
-            cell: (asset: any) => <span className="text-[10px]">{asset.timeDuration || "—"}</span>
+            width: "120px",
+            cell: (asset: any) => <span className="text-xs font-bold">{asset.timeDuration || "—"}</span>
         },
         {
             header: "Script Drive",
             accessorKey: "scriptAnimationPlanDriveLink",
-            cell: (asset: any) => asset.scriptAnimationPlanDriveLink ? <a href={asset.scriptAnimationPlanDriveLink} target="_blank" className="text-blue-500 hover:underline truncate max-w-[80px] block text-xs">Drive</a> : "—"
+            width: "120px",
+            cell: (asset: any) => asset.scriptAnimationPlanDriveLink ? <a href={asset.scriptAnimationPlanDriveLink} target="_blank" className="text-blue-500 hover:underline font-bold block text-xs">Drive</a> : "—"
         },
         {
             header: "Animation Drive",
             accessorKey: "animationDriveLink",
-            cell: (asset: any) => asset.animationDriveLink ? <a href={asset.animationDriveLink} target="_blank" className="text-blue-500 hover:underline truncate max-w-[80px] block text-xs">Drive</a> : "—"
+            width: "120px",
+            cell: (asset: any) => asset.animationDriveLink ? <a href={asset.animationDriveLink} target="_blank" className="text-blue-500 hover:underline font-bold block text-xs">Drive</a> : "—"
         },
         {
             header: "Figma",
             accessorKey: "figmaLink",
-            cell: (asset: any) => asset.figmaLink ? <a href={asset.figmaLink} target="_blank" className="text-purple-500 hover:underline truncate max-w-[80px] block text-xs">Figma</a> : "—"
+            width: "100px",
+            cell: (asset: any) => asset.figmaLink ? <a href={asset.figmaLink} target="_blank" className="text-purple-500 hover:underline font-bold block text-xs">Figma</a> : "—"
         },
         {
             header: "Animation Hosted",
             accessorKey: "animationHostedLink",
-            cell: (asset: any) => asset.animationHostedLink ? <a href={asset.animationHostedLink} target="_blank" className="text-blue-500 hover:underline truncate max-w-[80px] block text-xs">View</a> : "—"
+            width: "120px",
+            cell: (asset: any) => asset.animationHostedLink ? <a href={asset.animationHostedLink} target="_blank" className="text-blue-500 hover:underline font-bold block text-xs">View</a> : "—"
         },
         {
             header: "Mock Web",
             accessorKey: "mockWebsiteLink",
-            cell: (asset: any) => asset.mockWebsiteLink ? <a href={asset.mockWebsiteLink} target="_blank" className="text-blue-500 hover:underline truncate max-w-[80px] block text-xs">Mock</a> : "—"
+            width: "120px",
+            cell: (asset: any) => asset.mockWebsiteLink ? <a href={asset.mockWebsiteLink} target="_blank" className="text-blue-500 hover:underline font-bold block text-xs">Mock</a> : "—"
         },
         {
             header: "Proposal",
             accessorKey: "projectProposalLink",
-            cell: (asset: any) => asset.projectProposalLink ? <a href={asset.projectProposalLink} target="_blank" className="text-blue-500 hover:underline truncate max-w-[80px] block text-xs">Proposal</a> : "—"
+            width: "120px",
+            cell: (asset: any) => asset.projectProposalLink ? <a href={asset.projectProposalLink} target="_blank" className="text-blue-500 hover:underline font-bold block text-xs">Proposal</a> : "—"
         }
     ]
 
