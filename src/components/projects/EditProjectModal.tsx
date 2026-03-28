@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react"
 import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetDescription,
-    SheetFooter,
-} from "@/components/ui/sheet"
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -65,22 +65,22 @@ export function EditProjectModal({ project, open, onOpenChange }: EditProjectMod
     if (!project) return null
 
     return (
-        <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right">
-                <SheetHeader>
-                    <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                            <Layout className="h-6 w-6" />
-                        </div>
-                        Edit Project
-                    </SheetTitle>
-                    <SheetDescription className="text-muted-foreground font-medium mt-1">
-                        Update the details for "{project.name}".
-                    </SheetDescription>
-                </SheetHeader>
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent size="md" className="p-0 border border-border">
+                <form id="edit-project-form" onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+                    <DialogHeader className="p-10 border-b border-border bg-slate-50">
+                        <DialogTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                <Layout className="h-6 w-6" />
+                            </div>
+                            Edit Project
+                        </DialogTitle>
+                        <DialogDescription className="text-muted-foreground font-medium mt-1">
+                            Update the details for "{project.name}".
+                        </DialogDescription>
+                    </DialogHeader>
 
-                <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-                    <form id="edit-project-form" onSubmit={handleSubmit} className="space-y-8 pb-10">
+                    <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
                         <div className="space-y-6">
                             <div className="space-y-2">
                                 <Label htmlFor="edit-name" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1 flex items-center gap-2">
@@ -92,7 +92,7 @@ export function EditProjectModal({ project, open, onOpenChange }: EditProjectMod
                                     required
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all text-lg"
+                                    className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all text-lg"
                                 />
                             </div>
 
@@ -105,7 +105,7 @@ export function EditProjectModal({ project, open, onOpenChange }: EditProjectMod
                                     placeholder="Description"
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                    className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
 
@@ -116,10 +116,10 @@ export function EditProjectModal({ project, open, onOpenChange }: EditProjectMod
                                         value={formData.type}
                                         onValueChange={(v: string | null) => v && setFormData({ ...formData, type: v })}
                                     >
-                                        <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-14 rounded-2xl border-border bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue placeholder="Select type" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="lead-gen" className="rounded-xl font-bold py-3">Lead Gen</SelectItem>
                                             <SelectItem value="outreach" className="rounded-xl font-bold py-3">Outreach</SelectItem>
                                             <SelectItem value="creative" className="rounded-xl font-bold py-3">Creative</SelectItem>
@@ -133,10 +133,10 @@ export function EditProjectModal({ project, open, onOpenChange }: EditProjectMod
                                         value={formData.status}
                                         onValueChange={(v: string | null) => v && setFormData({ ...formData, status: v })}
                                     >
-                                        <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-14 rounded-2xl border-border bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue placeholder="Select status" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="Active" className="rounded-xl font-bold py-3">Active</SelectItem>
                                             <SelectItem value="Draft" className="rounded-xl font-bold py-3">Draft</SelectItem>
                                             <SelectItem value="Paused" className="rounded-xl font-bold py-3">Paused</SelectItem>
@@ -146,27 +146,27 @@ export function EditProjectModal({ project, open, onOpenChange }: EditProjectMod
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
 
-                <SheetFooter className="sm:justify-between items-center gap-4">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={() => onOpenChange(false)}
-                        className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        form="edit-project-form"
-                        type="submit"
-                        className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
-                    >
-                        Save Changes
-                    </Button>
-                </SheetFooter>
-            </SheetContent>
-        </Sheet>
+                    <DialogFooter className="p-10 border-t border-border bg-slate-50 flex-row gap-4 sm:justify-between items-center">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={() => onOpenChange(false)}
+                            className="rounded-2xl h-14 px-8 font-bold hover:bg-slate-200 transition-all"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            form="edit-project-form"
+                            type="submit"
+                            className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
+                        >
+                            Save Changes
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
     )
 }

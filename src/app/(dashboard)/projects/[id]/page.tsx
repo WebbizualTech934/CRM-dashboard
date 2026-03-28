@@ -91,7 +91,7 @@ export default function ProjectDetailPage() {
                     </div>
                     <div className="flex items-center gap-4">
                         <h1 className="text-5xl font-black tracking-tighter text-foreground">{project.name}</h1>
-                        <Badge variant="outline" className="h-7 px-3 rounded-xl border-border/50 bg-background/50 font-bold text-[10px] text-muted-foreground">
+                        <Badge variant="outline" className="h-7 px-3 rounded-xl border-border bg-background/50 font-bold text-[10px] text-muted-foreground">
                             #{project.id.slice(0, 8).toUpperCase()}
                         </Badge>
                     </div>
@@ -100,7 +100,7 @@ export default function ProjectDetailPage() {
                 <div className="flex items-center gap-3 pt-4">
                     <Button
                         variant="outline"
-                        className="rounded-2xl h-12 px-6 font-bold border-border/50 hover:bg-primary/5 hover:text-primary transition-all gap-2"
+                        className="rounded-2xl h-12 px-6 font-bold border-border hover:bg-primary/5 hover:text-primary transition-all gap-2"
                         onClick={() => {
                             navigator.clipboard.writeText(window.location.href)
                             alert("Project link copied to clipboard!")
@@ -111,14 +111,14 @@ export default function ProjectDetailPage() {
                     <div className="flex items-center gap-2">
                         <Button
                             variant="outline"
-                            className="rounded-2xl h-12 px-6 font-bold border-border/50 hover:bg-primary/5 hover:text-primary transition-all gap-2"
+                            className="rounded-2xl h-12 px-6 font-bold border-border hover:bg-primary/5 hover:text-primary transition-all gap-2"
                             onClick={() => setIsEditModalOpen(true)}
                         >
                             <Settings className="h-4 w-4" /> Settings
                         </Button>
                         <Button
                             variant="outline"
-                            className="rounded-2xl h-12 w-12 p-0 font-bold border-border/50 hover:bg-destructive/5 hover:text-destructive transition-all"
+                            className="rounded-2xl h-12 w-12 p-0 font-bold border-border hover:bg-destructive/5 hover:text-destructive transition-all"
                             onClick={() => {
                                 if (confirm("Are you sure you want to delete this project?")) {
                                     deleteProject(project.id)
@@ -133,7 +133,7 @@ export default function ProjectDetailPage() {
             </div>
 
             <Tabs defaultValue="overview" className="space-y-10">
-                <TabsList className="bg-card/50 backdrop-blur-sm border border-border/50 p-2 rounded-2xl h-auto min-h-16 gap-2 flex-wrap justify-start w-full">
+                <TabsList className="bg-white border border-border border border-border p-2 rounded-2xl h-auto min-h-16 gap-2 flex-wrap justify-start w-full">
                     {[
                         { value: "overview", label: "Overview", icon: LayoutDashboard },
                         { value: "leads", label: "Leads", icon: Users },
@@ -162,7 +162,7 @@ export default function ProjectDetailPage() {
                             { label: "Conversions", value: interestedLeads.toString(), sub: `${((interestedLeads / totalLeads || 0) * 100).toFixed(0)}% conversion`, icon: Activity, color: "text-green-600", bg: "bg-green-500/5" },
                             { label: "Follow-ups Due", value: "0", sub: "Next 24h", icon: Calendar, color: "text-orange-600", bg: "bg-orange-500/5" },
                         ].map((stat) => (
-                            <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-card/50 backdrop-blur-sm overflow-hidden group">
+                            <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-white border border-border overflow-hidden group">
                                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
                                     <CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">{stat.label}</CardTitle>
                                     <div className={cn("p-2 rounded-xl transition-colors", stat.bg)}>
@@ -179,8 +179,8 @@ export default function ProjectDetailPage() {
 
                     <div className="grid gap-8 lg:grid-cols-7">
                         {/* Leads Growth Chart (SVG) */}
-                        <Card className="col-span-4 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                            <CardHeader className="border-b border-border/50 p-8 pb-6 flex flex-row items-center justify-between">
+                        <Card className="col-span-4 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                            <CardHeader className="border-b border-border p-8 pb-6 flex flex-row items-center justify-between">
                                 <div>
                                     <CardTitle className="text-xl font-bold tracking-tight">Leads Growth</CardTitle>
                                     <p className="text-xs text-muted-foreground font-medium mt-1">Lead acquisition over the last 7 days</p>
@@ -225,8 +225,8 @@ export default function ProjectDetailPage() {
                         </Card>
 
                         {/* Quick Actions */}
-                        <Card className="col-span-3 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                            <CardHeader className="border-b border-border/50 p-8 pb-6">
+                        <Card className="col-span-3 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                            <CardHeader className="border-b border-border p-8 pb-6">
                                 <CardTitle className="text-xl font-bold tracking-tight">Quick Actions</CardTitle>
                             </CardHeader>
                             <CardContent className="p-8 space-y-4">
@@ -251,8 +251,8 @@ export default function ProjectDetailPage() {
 
                     <div className="grid gap-8 lg:grid-cols-7">
                         {/* Recent Activity */}
-                        <Card className="col-span-4 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                            <CardHeader className="border-b border-border/50 p-8 pb-6">
+                        <Card className="col-span-4 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                            <CardHeader className="border-b border-border p-8 pb-6">
                                 <CardTitle className="text-xl font-bold tracking-tight">Recent Activity</CardTitle>
                             </CardHeader>
                             <CardContent className="p-8">
@@ -277,8 +277,8 @@ export default function ProjectDetailPage() {
                         </Card>
 
                         {/* Team Workload */}
-                        <Card className="col-span-3 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                            <CardHeader className="border-b border-border/50 p-8 pb-6">
+                        <Card className="col-span-3 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                            <CardHeader className="border-b border-border p-8 pb-6">
                                 <CardTitle className="text-xl font-bold tracking-tight">Team Workload</CardTitle>
                             </CardHeader>
                             <CardContent className="p-8 space-y-6">
@@ -334,8 +334,8 @@ export default function ProjectDetailPage() {
                     <TasksTable projectId={project.id} />
                 </TabsContent>
                 <TabsContent value="team" className="mt-6">
-                    <Card className="border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                        <CardHeader className="border-b border-border/50 p-8 pb-6">
+                    <Card className="border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                        <CardHeader className="border-b border-border p-8 pb-6">
                             <CardTitle className="text-xl font-bold tracking-tight">Project Team</CardTitle>
                         </CardHeader>
                         <CardContent className="p-0">
@@ -344,8 +344,8 @@ export default function ProjectDetailPage() {
                     </Card>
                 </TabsContent>
                 <TabsContent value="activity" className="mt-6 space-y-6">
-                    <Card className="border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                        <CardHeader className="border-b border-border/50 p-8 pb-6">
+                    <Card className="border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                        <CardHeader className="border-b border-border p-8 pb-6">
                             <CardTitle className="text-xl font-bold tracking-tight">Full Activity Log</CardTitle>
                         </CardHeader>
                         <CardContent className="p-8">
@@ -379,7 +379,7 @@ export default function ProjectDetailPage() {
 
                 <TabsContent value="reports" className="mt-6 space-y-8">
                     <div className="grid gap-6 md:grid-cols-3">
-                        <Card className="border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-card/50 backdrop-blur-sm p-8">
+                        <Card className="border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-white border border-border p-8">
                             <CardTitle className="text-sm font-bold mb-6">Leads by Status</CardTitle>
                             <div className="flex items-center justify-center h-[150px] relative">
                                 <svg className="h-full w-full" viewBox="0 0 100 100">
@@ -409,7 +409,7 @@ export default function ProjectDetailPage() {
                             </div>
                         </Card>
 
-                        <Card className="col-span-2 border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-card/50 backdrop-blur-sm p-8">
+                        <Card className="col-span-2 border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-white border border-border p-8">
                             <CardTitle className="text-sm font-bold mb-6">Outreach Performance</CardTitle>
                             <div className="h-[200px] w-full flex items-end justify-between gap-4 px-4">
                                 {[65, 45, 85, 35, 95, 55, 75].map((h, i) => (
@@ -427,8 +427,8 @@ export default function ProjectDetailPage() {
                         </Card>
                     </div>
 
-                    <Card className="border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                        <CardHeader className="border-b border-border/50 p-8 pb-6 flex flex-row items-center justify-between">
+                    <Card className="border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                        <CardHeader className="border-b border-border p-8 pb-6 flex flex-row items-center justify-between">
                             <CardTitle className="text-xl font-bold tracking-tight">Detailed Analytics</CardTitle>
                             <Button variant="outline" className="rounded-xl font-bold gap-2">
                                 <Download className="h-4 w-4" /> Export PDF

@@ -116,7 +116,7 @@ export function AddMemberModal() {
                                     required
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="pl-12 h-14 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="pl-12 h-14 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
                         </div>
@@ -132,7 +132,7 @@ export function AddMemberModal() {
                                     required
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="pl-12 h-14 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="pl-12 h-14 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
                         </div>
@@ -143,7 +143,7 @@ export function AddMemberModal() {
                                 value={formData.role}
                                 onValueChange={(v: string | null) => v && setFormData({ ...formData, role: v })}
                             >
-                                <SelectTrigger className="h-14 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                <SelectTrigger className="h-14 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                     <SelectValue placeholder="Select role" />
                                 </SelectTrigger>
                                 <SelectContent className="rounded-2xl border-none shadow-xl">
@@ -163,7 +163,7 @@ export function AddMemberModal() {
                                     value={formData.accessLevel}
                                     onValueChange={(v: string | null) => v && setFormData({ ...formData, accessLevel: v })}
                                 >
-                                    <SelectTrigger className="h-14 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                    <SelectTrigger className="h-14 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                         <SelectValue placeholder="Select access" />
                                     </SelectTrigger>
                                     <SelectContent className="rounded-2xl border-none shadow-xl">
@@ -184,7 +184,7 @@ export function AddMemberModal() {
                                         required
                                         value={formData.password}
                                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                        className="pl-12 h-14 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="pl-12 h-14 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                             </div>

@@ -26,8 +26,8 @@ export function LinkedinInMail({ leads, interactions, onSelectLead }: LinkedinIn
     
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <Card className="bg-card/50 backdrop-blur-sm border-none shadow-2xl rounded-[2.5rem] overflow-hidden">
-                <CardHeader className="p-10 border-b border-border/50 bg-muted/5 flex flex-row items-center justify-between">
+            <Card className="bg-white border border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                <CardHeader className="p-10 border-b border-border bg-muted/5 flex flex-row items-center justify-between">
                     <div>
                         <CardTitle className="text-2xl font-bold tracking-tight flex items-center gap-3">
                             <Mail className="h-6 w-6 text-primary" /> InMail Tracker
@@ -52,7 +52,7 @@ export function LinkedinInMail({ leads, interactions, onSelectLead }: LinkedinIn
                                 >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-5">
-                                            <div className="h-14 w-14 rounded-2xl bg-white shadow-sm flex items-center justify-center font-bold text-primary text-xl border border-border/50">
+                                            <div className="h-14 w-14 rounded-2xl bg-white shadow-sm flex items-center justify-center font-bold text-primary text-xl border border-border">
                                                 {lead.contactName.charAt(0)}
                                             </div>
                                             <div>

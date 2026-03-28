@@ -48,7 +48,7 @@ export function EmailModule({ projectId: initialProjectId }: { projectId?: strin
     return (
         <div className="space-y-6">
             {!initialProjectId && (
-                <div className="bg-card/30 backdrop-blur-md border border-border/50 p-6 rounded-[2rem] flex flex-wrap items-center gap-4 shadow-xl shadow-primary/5">
+                <div className="bg-white border border-border border border-border p-6 rounded-[2rem] flex flex-wrap items-center gap-4 shadow-xl shadow-primary/5">
                     <div className="flex items-center gap-2 text-primary font-black uppercase tracking-widest text-[10px]">
                         <Filter className="h-4 w-4" /> Filters
                     </div>
@@ -56,7 +56,7 @@ export function EmailModule({ projectId: initialProjectId }: { projectId?: strin
                     <div className="w-px h-8 bg-border/50 mx-2 hidden md:block"></div>
  
                     <Select value={selectedProjectId} onValueChange={(val) => setSelectedProjectId(val || "all")}>
-                        <SelectTrigger className="w-[200px] h-11 rounded-xl bg-background/50 border-border/50 font-bold text-xs ring-0 focus:ring-2 focus:ring-primary/20">
+                        <SelectTrigger className="w-[200px] h-11 rounded-xl bg-background/50 border-border font-bold text-xs ring-0 focus:ring-2 focus:ring-primary/20">
                             <SelectValue placeholder="All Projects" />
                         </SelectTrigger>
                         <SelectContent className="rounded-xl border-none shadow-2xl">
@@ -68,7 +68,7 @@ export function EmailModule({ projectId: initialProjectId }: { projectId?: strin
                     </Select>
  
                     <Select value={campaignStatus} onValueChange={(val) => setCampaignStatus(val || "all")}>
-                        <SelectTrigger className="w-[160px] h-11 rounded-xl bg-background/50 border-border/50 font-bold text-xs ring-0 focus:ring-2 focus:ring-primary/20">
+                        <SelectTrigger className="w-[160px] h-11 rounded-xl bg-background/50 border-border font-bold text-xs ring-0 focus:ring-2 focus:ring-primary/20">
                             <SelectValue placeholder="All Statuses" />
                         </SelectTrigger>
                         <SelectContent className="rounded-xl border-none shadow-2xl">
@@ -79,7 +79,7 @@ export function EmailModule({ projectId: initialProjectId }: { projectId?: strin
                         </SelectContent>
                     </Select>
  
-                    <Button variant="outline" className="h-11 rounded-xl bg-background/50 border-border/50 font-bold text-xs gap-2 px-4 ml-auto">
+                    <Button variant="outline" className="h-11 rounded-xl bg-background/50 border-border font-bold text-xs gap-2 px-4 ml-auto">
                         <Calendar className="h-4 w-4" /> Last 30 Days
                     </Button>
                 </div>
@@ -150,7 +150,7 @@ export function EmailModule({ projectId: initialProjectId }: { projectId?: strin
                             { label: "Reply Rate", value: `${replyRate.toFixed(1)}%`, sub: `${totalReplies} total replies`, icon: ListTree, color: "text-green-600", bg: "bg-green-500/5" },
                             { label: "High Interest", value: `${positiveRate.toFixed(1)}%`, sub: "High engagement", icon: TrendingUp, color: "text-orange-600", bg: "bg-orange-500/5" }
                         ].map((stat, i) => (
-                            <div key={i} className="p-8 rounded-[2.5rem] bg-card/50 backdrop-blur-sm border-none shadow-xl shadow-primary/5 space-y-4 group">
+                            <div key={i} className="p-8 rounded-[2.5rem] bg-white border border-border shadow-xl shadow-primary/5 space-y-4 group">
                                 <div className="flex items-center justify-between">
                                     <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">{stat.label}</p>
                                     <div className={cn("p-2 rounded-xl transition-colors", stat.bg)}>

@@ -76,7 +76,7 @@ export function StatsCards() {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
                 <Link href={stat.link} key={stat.title}>
-                    <Card className="relative overflow-hidden border-none shadow-2xl shadow-primary/5 hover:shadow-primary/10 transition-all duration-300 group rounded-[2.5rem] bg-card/50 backdrop-blur-sm cursor-pointer h-full">
+                    <Card className="relative overflow-hidden border border-border bg-white shadow-2xl shadow-primary/5 hover:shadow-primary/10 transition-all duration-300 group rounded-[2.5rem] cursor-pointer h-full">
                         <div className={cn("absolute top-0 right-0 w-32 h-32 -mr-10 -mt-10 rounded-full opacity-10 transition-transform group-hover:scale-110", stat.bg)}></div>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 p-8 pb-4 relative z-10">
                             <CardTitle className="text-[11px] font-extrabold text-muted-foreground uppercase tracking-[0.2em]">
@@ -90,8 +90,8 @@ export function StatsCards() {
                             <div className="text-5xl font-bold tracking-tighter text-foreground">{stat.value}</div>
                             <div className="flex items-center mt-4">
                                 <div className={cn(
-                                    "flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest",
-                                    stat.trendType === "up" ? "bg-green-500/10 text-green-600" : "bg-red-500/10 text-red-600"
+                                    "flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border",
+                                    stat.trendType === "up" ? "bg-green-50 border-green-100 text-green-600" : "bg-red-50 border-red-100 text-red-600"
                                 )}>
                                     {stat.trendType === "up" ? (
                                         <TrendingUp className="h-3.5 w-3.5 mr-1.5" />

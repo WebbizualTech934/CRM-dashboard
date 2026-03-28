@@ -119,7 +119,7 @@ export function NewTaskModal({ open, onOpenChange, projectId, task }: NewTaskMod
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
                                         placeholder="What needs to be done?"
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all text-lg"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all text-lg"
                                         required
                                     />
                                 </div>
@@ -133,7 +133,7 @@ export function NewTaskModal({ open, onOpenChange, projectId, task }: NewTaskMod
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
                                         placeholder="Add more details..."
-                                        className="min-h-[120px] rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold resize-none transition-all p-4"
+                                        className="min-h-[120px] rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold resize-none transition-all p-4"
                                     />
                                 </div>
 
@@ -143,10 +143,10 @@ export function NewTaskModal({ open, onOpenChange, projectId, task }: NewTaskMod
                                             <Activity className="h-3 w-3" /> Priority
                                         </Label>
                                         <Select value={priority} onValueChange={(v: any) => setPriority(v)}>
-                                            <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                            <SelectTrigger className="h-14 rounded-2xl border-border bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                                 <SelectValue placeholder="Priority" />
                                             </SelectTrigger>
-                                            <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                            <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                                 <SelectItem value="Low" className="rounded-xl font-bold py-3">Low</SelectItem>
                                                 <SelectItem value="Medium" className="rounded-xl font-bold py-3">Medium</SelectItem>
                                                 <SelectItem value="High" className="rounded-xl font-bold py-3">High</SelectItem>
@@ -159,10 +159,10 @@ export function NewTaskModal({ open, onOpenChange, projectId, task }: NewTaskMod
                                             <User className="h-3 w-3" /> Assignee
                                         </Label>
                                         <Select value={assignedTo || ""} onValueChange={(v) => setAssignedTo(v)}>
-                                            <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                            <SelectTrigger className="h-14 rounded-2xl border-border bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                                 <SelectValue placeholder="Select member" />
                                             </SelectTrigger>
-                                            <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                            <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                                 {teamMembers.map(member => (
                                                     <SelectItem key={member.id} value={member.id} className="rounded-xl font-bold py-3">{member.name}</SelectItem>
                                                 ))}

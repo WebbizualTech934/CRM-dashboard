@@ -121,7 +121,7 @@ export function EditMemberModal({ member, onClose }: EditMemberModalProps) {
                                     <Input
                                         value={formData.name}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         disabled={!isAdmin}
                                         required
                                     />
@@ -132,7 +132,7 @@ export function EditMemberModal({ member, onClose }: EditMemberModalProps) {
                                         type="email"
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         disabled={!isAdmin}
                                         required
                                     />
@@ -145,7 +145,7 @@ export function EditMemberModal({ member, onClose }: EditMemberModalProps) {
                                     <Input
                                         value={formData.role}
                                         onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         disabled={!isAdmin}
                                     />
                                 </div>
@@ -156,7 +156,7 @@ export function EditMemberModal({ member, onClose }: EditMemberModalProps) {
                                         onValueChange={(val: string | null) => val && setFormData({ ...formData, status: val })}
                                         disabled={!isAdmin || member.id === (currentUser?.id || "")}
                                     >
-                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent className="rounded-2xl border-none shadow-xl">
@@ -168,7 +168,7 @@ export function EditMemberModal({ member, onClose }: EditMemberModalProps) {
                             </div>
                         </div>
 
-                        <div className="space-y-6 pt-6 border-t border-border/50">
+                        <div className="space-y-6 pt-6 border-t border-border">
                             <div className="flex items-center gap-2 mb-2">
                                 <Shield className="h-4 w-4 text-primary" />
                                 <h4 className="text-sm font-bold text-slate-800">System Capability Role</h4>
@@ -182,7 +182,7 @@ export function EditMemberModal({ member, onClose }: EditMemberModalProps) {
                                         onValueChange={(val: any) => val && setFormData({ ...formData, userRole: val })}
                                         disabled={!isAdmin || member.id === (currentUser?.id || "")}
                                     >
-                                        <SelectTrigger className="h-14 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-black transition-all">
+                                        <SelectTrigger className="h-14 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-black transition-all">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent className="rounded-2xl border-none shadow-xl">

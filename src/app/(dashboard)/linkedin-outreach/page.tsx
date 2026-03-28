@@ -77,7 +77,7 @@ export default function LinkedinOutreachPage() {
             {/* Main Navigation */}
             <Tabs value={activeTab} className="space-y-10" onValueChange={setActiveTab}>
                 <div className="flex items-center gap-6">
-                    <TabsList className="bg-card/50 backdrop-blur-sm border border-border/50 p-1.5 rounded-3xl h-auto flex-wrap justify-start gap-1">
+                    <TabsList className="bg-slate-100/30 border border-slate-200/60 p-1.5 rounded-[2rem] h-auto flex-wrap justify-start gap-1 backdrop-blur-sm">
                         {[
                             { value: "overview", label: "Overview", icon: LayoutDashboard },
                             { value: "leads", label: "Leads", icon: Users },
@@ -89,13 +89,13 @@ export default function LinkedinOutreachPage() {
                                 key={tab.value}
                                 value={tab.value}
                                 className={cn(
-                                    "flex items-center gap-2 px-6 py-3 rounded-2xl font-bold transition-all border-none",
+                                    "flex items-center gap-2 px-8 py-3.5 rounded-[1.5rem] font-black text-[10.5px] uppercase tracking-widest transition-all border-none",
                                     activeTab === tab.value 
-                                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
-                                        : "text-muted-foreground hover:text-foreground hover:bg-primary/5"
+                                        ? "bg-primary text-primary-foreground shadow-2xl shadow-primary/20 scale-105" 
+                                        : "text-muted-foreground hover:text-foreground hover:bg-white hover:shadow-lg hover:shadow-black/5"
                                 )}
                             >
-                                <tab.icon className="h-4 w-4" />
+                                <tab.icon className={cn("h-4 w-4", activeTab === tab.value ? "animate-pulse" : "")} />
                                 {tab.label}
                             </TabsTrigger>
                         ))}
@@ -122,10 +122,10 @@ export default function LinkedinOutreachPage() {
                                 color: "text-primary" 
                             },
                         ].map((stat) => (
-                            <Card key={stat.label} className="bg-card/50 backdrop-blur-sm border-none shadow-xl shadow-primary/5 rounded-[2rem] overflow-hidden group hover:shadow-primary/10 transition-all">
+                            <Card key={stat.label} className="bg-white border border-border shadow-xl shadow-primary/5 rounded-[2rem] overflow-hidden group hover:shadow-primary/10 transition-all">
                                 <CardContent className="p-8">
                                     <div className="flex items-center justify-between mb-4">
-                                        <div className={cn("p-2 rounded-xl bg-primary/5", stat.color)}>
+                                        <div className={cn("p-2 rounded-xl bg-slate-50 border border-border", stat.color)}>
                                             <stat.icon className="h-5 w-5" />
                                         </div>
                                     </div>
@@ -140,8 +140,8 @@ export default function LinkedinOutreachPage() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                         {/* Daily Actions Panel */}
-                        <Card className="lg:col-span-2 bg-card/50 backdrop-blur-sm border-none shadow-2xl rounded-[2.5rem] overflow-hidden">
-                            <CardHeader className="p-10 border-b border-border/50 flex flex-row items-center justify-between bg-muted/5">
+                        <Card className="lg:col-span-2 bg-white border border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                            <CardHeader className="p-10 border-b border-border flex flex-row items-center justify-between bg-slate-50">
                                 <div>
                                     <CardTitle className="text-2xl font-bold tracking-tight flex items-center gap-3">
                                         <Calendar className="h-6 w-6 text-primary" /> Daily Actions
@@ -157,7 +157,7 @@ export default function LinkedinOutreachPage() {
                                     {linkedinLeads.filter(l => l.status === 'Not Contacted').slice(0, 3).map(lead => (
                                         <div 
                                             key={lead.id} 
-                                            className="p-6 rounded-3xl bg-muted/20 border border-transparent flex items-center justify-between group hover:border-primary/20 hover:bg-primary/5 transition-all cursor-pointer shadow-sm"
+                                            className="p-6 rounded-3xl bg-slate-50 border border-border flex items-center justify-between group hover:border-primary/20 hover:bg-white hover:shadow-xl hover:shadow-primary/5 transition-all cursor-pointer"
                                             onClick={() => setSelectedLeadId(lead.id)}
                                         >
                                             <div className="flex items-center gap-5">
@@ -173,8 +173,8 @@ export default function LinkedinOutreachPage() {
                                         </div>
                                     ))}
                                     {linkedinLeads.filter(l => l.status === 'Not Contacted').length === 0 && (
-                                        <div className="text-center py-20 bg-muted/10 rounded-[2rem] border-2 border-dashed border-border/50">
-                                            <div className="h-16 w-16 bg-muted/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                        <div className="text-center py-20 bg-slate-50 rounded-[2rem] border-2 border-dashed border-border">
+                                            <div className="h-16 w-16 bg-white border border-border rounded-2xl flex items-center justify-center mx-auto mb-4">
                                                 <CheckSquare className="h-8 w-8 text-muted-foreground/40" />
                                             </div>
                                             <h3 className="text-xl font-bold text-muted-foreground">Inbox Zero Attained</h3>
@@ -186,8 +186,8 @@ export default function LinkedinOutreachPage() {
                         </Card>
 
                         {/* Recent Activity Feed */}
-                        <Card className="bg-card/50 backdrop-blur-sm border-none shadow-2xl rounded-[2.5rem] overflow-hidden">
-                            <CardHeader className="p-10 border-b border-border/50 bg-muted/5">
+                        <Card className="bg-white border border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                            <CardHeader className="p-10 border-b border-border bg-slate-50">
                                 <CardTitle className="text-xl font-bold tracking-tight flex items-center gap-3">
                                     <Activity className="h-6 w-6 text-primary" /> Activity Feed
                                 </CardTitle>
@@ -215,7 +215,7 @@ export default function LinkedinOutreachPage() {
                     </div>
 
                     {/* Integrated Analytics Section */}
-                    <div className="mt-10 pt-10 border-t border-border/50">
+                    <div className="mt-10 pt-10 border-t border-border">
                         <div className="flex items-center gap-3 mb-10">
                             <BarChart3 className="h-8 w-8 text-primary" />
                             <div>

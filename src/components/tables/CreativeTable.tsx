@@ -164,7 +164,7 @@ export function CreativeTable({ projectId }: { projectId?: string }) {
                     { label: "Animation Progress", value: total > 0 ? `${((completedAnimation / total) * 100).toFixed(0)}%` : "0%", sub: `${completedAnimation}/${total} Completed`, color: "text-purple-600" },
                     { label: "Total Projects", value: total.toString(), sub: "In Creative Pipeline", color: "text-primary" },
                 ].map((stat) => (
-                    <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-3xl bg-card/50 backdrop-blur-sm overflow-hidden">
+                    <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-3xl bg-white border border-border overflow-hidden">
                         <CardHeader className="pb-2">
                             <CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">{stat.label}</CardTitle>
                         </CardHeader>

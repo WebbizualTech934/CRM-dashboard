@@ -45,7 +45,7 @@ export function LinkedinAnalytics({ leads, interactions }: LinkedinAnalyticsProp
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
                 {funnelSteps.map((step, idx) => (
                     <div key={step.label} className="relative group">
-                        <Card className="bg-card/50 backdrop-blur-sm border-none shadow-xl rounded-[2rem] overflow-hidden transition-all hover:shadow-primary/10">
+                        <Card className="bg-white border border-border shadow-xl rounded-[2rem] overflow-hidden transition-all hover:shadow-primary/10">
                             <CardContent className="p-8 flex flex-col items-center text-center">
                                 <div className={cn("h-12 w-12 rounded-2xl flex items-center justify-center text-white mb-4 shadow-lg shadow-black/5", step.color)}>
                                     <step.icon className="h-6 w-6" />
@@ -68,8 +68,8 @@ export function LinkedinAnalytics({ leads, interactions }: LinkedinAnalyticsProp
 
             {/* Performance Insights */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <Card className="bg-card/50 backdrop-blur-sm border-none shadow-2xl rounded-[2.5rem] overflow-hidden">
-                    <CardHeader className="p-10 border-b border-border/50 bg-muted/5 flex flex-row items-center justify-between">
+                <Card className="bg-white border border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                    <CardHeader className="p-10 border-b border-border bg-muted/5 flex flex-row items-center justify-between">
                         <CardTitle className="text-xl font-bold tracking-tight">Outreach Velocity</CardTitle>
                         <TrendingUp className="h-5 w-5 text-primary" />
                     </CardHeader>
@@ -94,8 +94,8 @@ export function LinkedinAnalytics({ leads, interactions }: LinkedinAnalyticsProp
                     </CardContent>
                 </Card>
 
-                <Card className="bg-card/50 backdrop-blur-sm border-none shadow-2xl rounded-[2.5rem] overflow-hidden">
-                    <CardHeader className="p-10 border-b border-border/50 bg-muted/5">
+                <Card className="bg-white border border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                    <CardHeader className="p-10 border-b border-border bg-muted/5">
                         <CardTitle className="text-xl font-bold tracking-tight">Conversion Benchmarks</CardTitle>
                     </CardHeader>
                     <CardContent className="p-10 space-y-8">

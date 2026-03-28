@@ -15,13 +15,13 @@ import {
     FileText
 } from "lucide-react"
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetFooter,
-} from "@/components/ui/sheet"
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -97,24 +97,24 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
     }
 
     return (
-        <Sheet open={isOpen} onOpenChange={onClose}>
-            <SheetContent side="right" className="sm:max-w-[540px] p-0 flex flex-col bg-background/95 backdrop-blur-xl border-l border-border/50">
-                <SheetHeader className="p-10 border-b border-border/50 bg-muted/5">
-                    <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent size="lg" className="p-0 flex flex-col bg-background border border-border scrollbar-hide">
+                <DialogHeader className="p-10 border-b border-border bg-slate-50">
+                    <DialogTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
                         <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                             <PlusCircle className="h-7 w-7" />
                         </div>
                         New Prospect
-                    </SheetTitle>
-                    <SheetDescription className="text-muted-foreground font-medium mt-2">
+                    </DialogTitle>
+                    <DialogDescription className="text-muted-foreground font-medium mt-2">
                         Engineer a new deal by adding a high-value LinkedIn lead to your database.
-                    </SheetDescription>
+                    </DialogDescription>
                     {error && (
                         <div className="mt-4 p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs font-bold animate-in fade-in slide-in-from-top-2">
                             {error}
                         </div>
                     )}
-                </SheetHeader>
+                </DialogHeader>
 
                 <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
                     <form id="prospect-form" onSubmit={handleSubmit} className="space-y-10 pb-10">
@@ -129,7 +129,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                         id="contactName"
                                         required
                                         placeholder="e.g. Elon Musk"
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all text-lg"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all text-lg"
                                         value={formData.contactName}
                                         onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
                                     />
@@ -142,7 +142,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                         id="companyName"
                                         required
                                         placeholder="e.g. SpaceX"
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all text-lg"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all text-lg"
                                         value={formData.companyName}
                                         onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                                     />
@@ -158,7 +158,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                     <Input 
                                         id="profileUrl"
                                         placeholder="linkedin.com/in/..."
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         value={formData.profileUrl}
                                         onChange={(e) => setFormData({ ...formData, profileUrl: e.target.value })}
                                     />
@@ -171,7 +171,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                         id="workEmail"
                                         type="email"
                                         placeholder="m@example.com"
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         value={formData.workEmail}
                                         onChange={(e) => setFormData({ ...formData, workEmail: e.target.value })}
                                     />
@@ -186,7 +186,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                         value={formData.priority} 
                                         onValueChange={(v: any) => setFormData({ ...formData, priority: v })}
                                     >
-                                        <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-14 rounded-2xl border-border bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <div className="flex items-center gap-2">
                                                 <Star className={cn(
                                                     "h-4 w-4",
@@ -195,7 +195,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                                 <SelectValue placeholder="Priority" />
                                             </div>
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="High" className="rounded-xl font-bold py-3">High Priority</SelectItem>
                                             <SelectItem value="Medium" className="rounded-xl font-bold py-3">Medium Priority</SelectItem>
                                             <SelectItem value="Low" className="rounded-xl font-bold py-3">Low Priority</SelectItem>
@@ -208,10 +208,10 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                         value={formData.status} 
                                         onValueChange={(v: any) => setFormData({ ...formData, status: v })}
                                     >
-                                        <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-14 rounded-2xl border-border bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue placeholder="Status" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="Not Contacted" className="rounded-xl font-bold py-3">Not Contacted</SelectItem>
                                             <SelectItem value="Connection Sent" className="rounded-xl font-bold py-3">Connection Sent</SelectItem>
                                             <SelectItem value="Accepted" className="rounded-xl font-bold py-3">Accepted</SelectItem>
@@ -229,7 +229,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                     <Input 
                                         id="sentTimeIST"
                                         placeholder="e.g. 10:30 AM"
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         value={formData.sentTimeIST}
                                         onChange={(e) => setFormData({ ...formData, sentTimeIST: e.target.value })}
                                     />
@@ -241,7 +241,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                     <Input 
                                         id="draftedContent"
                                         placeholder="Template Name"
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         value={formData.draftedContent}
                                         onChange={(e) => setFormData({ ...formData, draftedContent: e.target.value })}
                                     />
@@ -256,7 +256,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                     <Input 
                                         id="inMail"
                                         placeholder="Sent / Pending"
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         value={formData.inMail}
                                         onChange={(e) => setFormData({ ...formData, inMail: e.target.value })}
                                     />
@@ -268,7 +268,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                     <Input 
                                         id="followUp"
                                         placeholder="Next: Day 3"
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         value={formData.followUp}
                                         onChange={(e) => setFormData({ ...formData, followUp: e.target.value })}
                                     />
@@ -286,7 +286,7 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                                 <div className="relative group">
                                     <Textarea 
                                         placeholder="What's the unique entry point? (e.g., 'Recent post about AI automation in mid-size agencies')"
-                                        className="min-h-[140px] rounded-3xl border-border/50 bg-muted/20 focus-within:ring-2 focus-within:ring-primary/20 p-6 text-base font-medium transition-all outline-none resize-none"
+                                        className="min-h-[140px] rounded-3xl border-border bg-muted/20 focus-within:ring-2 focus-within:ring-primary/20 p-6 text-base font-medium transition-all outline-none resize-none"
                                         value={formData.hookAngle}
                                         onChange={(e) => setFormData({ ...formData, hookAngle: e.target.value })}
                                     />
@@ -297,12 +297,12 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                     </form>
                 </div>
 
-                <SheetFooter className="p-10 border-t border-border/50 bg-muted/5 sm:justify-between items-center gap-4">
+                <DialogFooter className="p-10 border-t border-border bg-slate-50 sm:justify-between items-center gap-4">
                     <Button 
                         type="button" 
                         variant="ghost" 
                         onClick={onClose} 
-                        className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50 transition-all"
+                        className="rounded-2xl h-14 px-8 font-bold hover:bg-slate-200 transition-all"
                     >
                         Cancel
                     </Button>
@@ -314,8 +314,8 @@ export function NewLinkedinLeadModal({ isOpen, onClose, onSubmit }: NewLinkedinL
                     >
                         {isSubmitting ? "Engineering..." : "Engineer Deal"}
                     </Button>
-                </SheetFooter>
-            </SheetContent>
-        </Sheet>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }

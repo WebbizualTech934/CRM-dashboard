@@ -55,7 +55,7 @@ export function TemplateList({ projectId }: { projectId?: string }) {
             cell: (t: any) => (
                 <div className="flex gap-1.5 flex-wrap">
                     {['firstName', 'company'].map(v => (
-                        <code key={v} className="bg-muted px-1.5 py-0.5 rounded text-[8px] font-black text-muted-foreground uppercase tracking-widest border border-border/50">
+                        <code key={v} className="bg-muted px-1.5 py-0.5 rounded text-[8px] font-black text-muted-foreground uppercase tracking-widest border border-border">
                             {'{'}{v}{'}'}
                         </code>
                     ))}
@@ -82,7 +82,7 @@ export function TemplateList({ projectId }: { projectId?: string }) {
                     <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all">
                         <Copy className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl border-border/50 text-primary hover:bg-primary/5 font-black text-[10px] uppercase tracking-widest transition-all">
+                    <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl border-border text-primary hover:bg-primary/5 font-black text-[10px] uppercase tracking-widest transition-all">
                         <Edit className="h-3.5 w-3.5 mr-2" /> Edit
                     </Button>
                 </div>

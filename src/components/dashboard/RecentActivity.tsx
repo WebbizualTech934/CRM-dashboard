@@ -27,8 +27,8 @@ export function RecentActivity() {
     ].sort((a, b) => new Date(b.time || 0).getTime() - new Date(a.time || 0).getTime())
 
     return (
-        <Card className="col-span-3 border-none shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-            <CardHeader className="border-b border-border/50 p-8 pb-6">
+        <Card className="col-span-3 border border-border shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-white overflow-hidden">
+            <CardHeader className="border-b border-border p-8 pb-6 bg-slate-50">
                 <CardTitle className="text-2xl font-bold tracking-tight">Recent Activity</CardTitle>
             </CardHeader>
             <CardContent className="p-8">

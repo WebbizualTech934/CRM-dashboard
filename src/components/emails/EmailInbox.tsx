@@ -79,15 +79,15 @@ export function EmailInbox({ projectId }: { projectId?: string }) {
     return (
         <div className="flex h-[700px] gap-6 overflow-hidden">
             {/* Thread List */}
-            <Card className="w-80 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col shrink-0">
-                <div className="p-6 border-b border-border/50 space-y-4">
+            <Card className="w-80 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden flex flex-col shrink-0">
+                <div className="p-6 border-b border-border space-y-4">
                     <div className="flex items-center justify-between">
                         <h3 className="font-extrabold text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60">Unified Inbox</h3>
                         <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-primary/5 hover:text-primary"><Filter className="h-4 w-4" /></Button>
                     </div>
                     <div className="relative">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input placeholder="Search messages..." className="pl-11 h-11 rounded-xl bg-background/50 border-border/50 text-xs font-medium focus-visible:ring-primary/20" />
+                        <Input placeholder="Search messages..." className="pl-11 h-11 rounded-xl bg-background/50 border-border text-xs font-medium focus-visible:ring-primary/20" />
                     </div>
                 </div>
                 <div className="flex-1 overflow-y-auto p-3 space-y-2">
@@ -133,7 +133,7 @@ export function EmailInbox({ projectId }: { projectId?: string }) {
                                     )}
                                 </div>
                                 {thread.count > 1 && (
-                                    <span className="text-[9px] font-black bg-muted/50 px-2 rounded-full border border-border/50">{thread.count}</span>
+                                    <span className="text-[9px] font-black bg-muted/50 px-2 rounded-full border border-border">{thread.count}</span>
                                 )}
                             </div>
                         </div>
@@ -148,10 +148,10 @@ export function EmailInbox({ projectId }: { projectId?: string }) {
             </Card>
  
             {/* Conversation View */}
-            <Card className="flex-1 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col">
+            <Card className="flex-1 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden flex flex-col">
                 {selectedThread ? (
                     <>
-                        <div className="p-8 border-b border-border/50 flex items-center justify-between bg-white/30 shrink-0">
+                        <div className="p-8 border-b border-border flex items-center justify-between bg-white/30 shrink-0">
                             <div className="flex items-center gap-5">
                                 <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-white shadow-xl shadow-primary/20">
                                     <User className="h-7 w-7" />
@@ -178,7 +178,7 @@ export function EmailInbox({ projectId }: { projectId?: string }) {
                                 </div>
                             </div>
                             <div className="flex gap-3">
-                                <Button variant="outline" size="sm" className="rounded-xl h-12 px-6 font-bold gap-2 border-border/50 hover:bg-primary/5 hover:text-primary transition-all shadow-sm">
+                                <Button variant="outline" size="sm" className="rounded-xl h-12 px-6 font-bold gap-2 border-border hover:bg-primary/5 hover:text-primary transition-all shadow-sm">
                                     <MessageCircle className="h-4 w-4" /> CRM Activity
                                 </Button>
                                 <Button variant="ghost" size="icon" className="rounded-xl h-12 w-12 hover:bg-muted/50"><MoreVertical className="h-5 w-5" /></Button>
@@ -212,10 +212,10 @@ export function EmailInbox({ projectId }: { projectId?: string }) {
                             ))}
                         </div>
  
-                        <div className="p-8 border-t border-border/50 shrink-0 bg-white/50 backdrop-blur-md">
+                        <div className="p-8 border-t border-border shrink-0 bg-white">
                             <div className="relative group">
                                 <textarea
-                                    className="w-full h-36 p-6 rounded-[2rem] border-2 border-border/50 bg-background focus:border-primary/50 focus:ring-0 transition-all text-[0.95rem] font-medium resize-none shadow-inner"
+                                    className="w-full h-36 p-6 rounded-[2rem] border-2 border-border bg-background focus:border-primary/50 focus:ring-0 transition-all text-[0.95rem] font-medium resize-none shadow-inner"
                                     placeholder="Draft a premium response..."
                                     value={replyText}
                                     onChange={(e) => setReplyText(e.target.value)}
@@ -241,7 +241,7 @@ export function EmailInbox({ projectId }: { projectId?: string }) {
                     </>
                 ) : (
                     <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-10 bg-muted/5">
-                        <div className="h-24 w-24 rounded-[2.5rem] bg-card border border-border/50 shadow-xl shadow-primary/5 flex items-center justify-center mb-6 animate-pulse">
+                        <div className="h-24 w-24 rounded-[2.5rem] bg-card border border-border shadow-xl shadow-primary/5 flex items-center justify-center mb-6 animate-pulse">
                             <Inbox className="h-10 w-10 text-primary/20" />
                         </div>
                         <h3 className="text-2xl font-black tracking-tighter text-foreground">Select a thread</h3>

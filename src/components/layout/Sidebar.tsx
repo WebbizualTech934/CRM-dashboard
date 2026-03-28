@@ -48,13 +48,13 @@ export function Sidebar() {
 
     return (
         <div className={cn(
-            "flex flex-col h-screen border-r bg-card/50 backdrop-blur-xl transition-all duration-300 ease-in-out shadow-sm",
+            "flex flex-col h-screen border-r border-border bg-white transition-all duration-300 ease-in-out",
             isCollapsed ? "w-20" : "w-72"
         )}>
-            <div className="flex items-center justify-between px-6 h-20 border-b border-border/50">
+            <div className="flex items-center justify-between px-6 h-20 border-b border-border bg-white">
                 {!isCollapsed && (
                     <div className="flex items-center gap-3 font-bold text-2xl text-primary tracking-tight">
-                        <div className="bg-primary/10 p-2 rounded-xl">
+                        <div className="bg-slate-50 p-2 rounded-xl border border-border">
                             <Layers className="w-6 h-6 text-primary" />
                         </div>
                         <span>CRM Dash</span>
@@ -64,27 +64,27 @@ export function Sidebar() {
                     variant="ghost"
                     size="icon"
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className={cn("hover:bg-primary/5", isCollapsed && "mx-auto")}
+                    className={cn("hover:bg-slate-100", isCollapsed && "mx-auto")}
                 >
                     {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
                 </Button>
             </div>
 
-            <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+            <nav className="flex-1 p-4 space-y-2 overflow-y-auto bg-slate-50">
                 {visibleNavItems.map((item) => {
                     const isActive = pathname === item.href
                     return (
                         <Link key={item.name} href={item.href}>
                             <div className={cn(
-                                "flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group",
+                                "flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group border border-transparent",
                                 isActive
-                                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                                    : "text-muted-foreground hover:bg-primary/5 hover:text-primary",
+                                    ? "bg-white border-border shadow-sm text-primary"
+                                    : "text-muted-foreground hover:bg-white hover:border-border hover:text-primary",
                                 isCollapsed && "justify-center px-0"
                             )}>
                                 <item.icon className={cn(
                                     "w-5 h-5 shrink-0 transition-transform group-hover:scale-110",
-                                    isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-primary"
+                                    isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
                                 )} />
                                 {!isCollapsed && <span className="font-bold tracking-tight">{item.name}</span>}
                             </div>
@@ -93,12 +93,12 @@ export function Sidebar() {
                 })}
             </nav>
 
-            <div className="p-4 border-t border-border/50">
+            <div className="p-4 border-t border-border bg-white">
                 <Button
                     variant="ghost"
                     onClick={signOut}
                     className={cn(
-                        "w-full flex items-center gap-4 justify-start px-4 py-6 rounded-xl text-muted-foreground hover:bg-destructive/5 hover:text-destructive transition-colors",
+                        "w-full flex items-center gap-4 justify-start px-4 py-6 rounded-xl text-muted-foreground hover:bg-slate-50 hover:text-destructive transition-colors",
                         isCollapsed && "justify-center px-0"
                     )}
                 >

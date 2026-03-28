@@ -138,10 +138,10 @@ export function SignupForm() {
             {/* Divider */}
             <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-border/50" />
+                    <span className="w-full border-t border-border" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white/80 px-3 text-muted-foreground/60 font-bold tracking-widest">
+                    <span className="bg-white px-3 text-muted-foreground/60 font-bold tracking-widest">
                         or register with email
                     </span>
                 </div>
@@ -163,7 +163,7 @@ export function SignupForm() {
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
                             placeholder="John Smith"
-                            className="w-full h-14 pl-11 pr-4 rounded-2xl border border-border/50 bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
+                            className="w-full h-14 pl-11 pr-4 rounded-2xl border border-border bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
                         />
                     </div>
                 </div>
@@ -182,7 +182,7 @@ export function SignupForm() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="name@company.com"
-                            className="w-full h-14 pl-11 pr-4 rounded-2xl border border-border/50 bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
+                            className="w-full h-14 pl-11 pr-4 rounded-2xl border border-border bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
                         />
                     </div>
                 </div>
@@ -201,7 +201,7 @@ export function SignupForm() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Min. 6 characters"
-                            className="w-full h-14 pl-11 pr-12 rounded-2xl border border-border/50 bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
+                            className="w-full h-14 pl-11 pr-12 rounded-2xl border border-border bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
                         />
                         <button
                             type="button"
@@ -244,7 +244,7 @@ export function SignupForm() {
                                     ? "border-red-300 focus:ring-red-200"
                                     : confirmPassword && confirmPassword === password
                                     ? "border-green-300 focus:ring-green-200"
-                                    : "border-border/50 focus:ring-primary/20 focus:border-primary/30"
+                                    : "border-border focus:ring-primary/20 focus:border-primary/30"
                             }`}
                         />
                         <button

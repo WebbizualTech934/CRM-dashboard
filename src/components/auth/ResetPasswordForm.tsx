@@ -114,7 +114,7 @@ export function ResetPasswordForm() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Min. 6 characters"
-                            className="w-full h-14 pl-11 pr-12 rounded-2xl border border-border/50 bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
+                            className="w-full h-14 pl-11 pr-12 rounded-2xl border border-border bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
                         />
                         <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-primary transition-colors">
                             {showPassword ? <EyeOff className="h-[18px] w-[18px]" /> : <Eye className="h-[18px] w-[18px]" />}
@@ -135,7 +135,7 @@ export function ResetPasswordForm() {
                             className={`w-full h-14 pl-11 pr-12 rounded-2xl border bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all ${
                                 confirmPassword && confirmPassword !== password
                                     ? "border-red-300 focus:ring-red-200"
-                                    : "border-border/50 focus:ring-primary/20 focus:border-primary/30"
+                                    : "border-border focus:ring-primary/20 focus:border-primary/30"
                             }`}
                         />
                         <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-primary transition-colors">

@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react"
 import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetDescription,
-    SheetFooter,
-} from "@/components/ui/sheet"
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -119,19 +119,19 @@ export function NewCreativeModal({ open, onOpenChange, projectId, asset }: NewCr
     }
 
     return (
-        <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right">
-                <SheetHeader>
-                    <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent size="lg" className="p-0 border border-border">
+                <DialogHeader className="p-10 border-b border-border bg-slate-50">
+                    <DialogTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                        <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                             <Palette className="h-6 w-6" />
                         </div>
                         {asset ? "Edit Creative Asset" : "New Creative Asset"}
-                    </SheetTitle>
-                    <SheetDescription className="text-muted-foreground font-medium mt-1">
+                    </DialogTitle>
+                    <DialogDescription className="text-muted-foreground font-medium mt-1">
                         Define project scope, production tracking, and resource links.
-                    </SheetDescription>
-                </SheetHeader>
+                    </DialogDescription>
+                </DialogHeader>
 
                 <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
                     <form id="creative-form" onSubmit={handleSubmit} className="space-y-10 pb-10">
@@ -144,7 +144,7 @@ export function NewCreativeModal({ open, onOpenChange, projectId, asset }: NewCr
                                     <Input
                                         value={formData.companyName}
                                         onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                                        className="h-12 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         required
                                     />
                                 </div>
@@ -154,7 +154,7 @@ export function NewCreativeModal({ open, onOpenChange, projectId, asset }: NewCr
                                         value={formData.website}
                                         onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                                         placeholder="e.g. acme.com"
-                                        className="h-12 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                             </div>
@@ -341,17 +341,25 @@ export function NewCreativeModal({ open, onOpenChange, projectId, asset }: NewCr
                     </form>
                 </div>
 
-                <SheetFooter>
+                <DialogFooter className="p-10 border-t border-border bg-slate-50 flex-row gap-4 sm:justify-between items-center">
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={() => onOpenChange(false)}
+                        className="rounded-2xl h-14 px-8 font-bold hover:bg-slate-200 transition-all"
+                    >
+                        Cancel
+                    </Button>
                     <Button
                         form="creative-form"
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full rounded-2xl h-14 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
+                        className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
                     >
                         {isSubmitting ? (asset ? "Saving Asset..." : "Creating Asset...") : (asset ? "Save Changes" : "Add to Creative Table")}
                     </Button>
-                </SheetFooter>
-            </SheetContent>
-        </Sheet>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }

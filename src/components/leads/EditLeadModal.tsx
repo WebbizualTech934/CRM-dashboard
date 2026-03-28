@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react"
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-} from "@/components/ui/sheet"
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -64,13 +64,13 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
 
         return (
             <Select value={value} onValueChange={(val) => onChange(val || "New")}>
-                <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all hover:bg-muted/30 group">
+                <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all hover:bg-muted/30 group">
                     <div className="flex items-center gap-2">
                         <div className={cn("h-2 w-2 rounded-full", statuses.find(s => s.label === value)?.color)}></div>
                         <SelectValue placeholder="Select status" />
                     </div>
                 </SelectTrigger>
-                <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                     {statuses.map((s) => (
                         <SelectItem
                             key={s.label}
@@ -91,20 +91,20 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
     if (!lead) return null
 
     return (
-        <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right">
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent size="lg" className="p-0 border border-border">
                 <form id="edit-lead-form" onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
-                    <SheetHeader>
-                        <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                    <DialogHeader className="p-10 border-b border-border bg-slate-50">
+                        <DialogTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
                             <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                                 <User className="h-6 w-6" />
                             </div>
                             Edit Lead Details
-                        </SheetTitle>
-                        <SheetDescription className="text-muted-foreground font-medium mt-1">
+                        </DialogTitle>
+                        <DialogDescription className="text-muted-foreground font-medium mt-1">
                             Update lead information and requirements.
-                        </SheetDescription>
-                    </SheetHeader>
+                        </DialogDescription>
+                    </DialogHeader>
 
                     <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
                         <div className="grid grid-cols-2 gap-6">
@@ -116,7 +116,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.firstName || ""}
                                     onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                                     placeholder="e.g. John"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     required
                                 />
                             </div>
@@ -128,7 +128,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.lastName || ""}
                                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                                     placeholder="e.g. Doe"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     required
                                 />
                             </div>
@@ -144,7 +144,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.email || ""}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     placeholder="john@acme.com"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     required
                                 />
                             </div>
@@ -156,7 +156,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.company || ""}
                                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                                     placeholder="e.g. Acme Corp"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     required
                                 />
                             </div>
@@ -171,7 +171,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.jobTitle || ""}
                                     onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
                                     placeholder="e.g. CEO"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -182,7 +182,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.phone || ""}
                                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                     placeholder="e.g. +1 234 567 890"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
                         </div>
@@ -196,7 +196,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.website || ""}
                                     onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                                     placeholder="e.g. acme.com"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -207,7 +207,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.websiteLink || ""}
                                     onChange={(e) => setFormData({ ...formData, websiteLink: e.target.value })}
                                     placeholder="www.google.com"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
                         </div>
@@ -221,7 +221,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.speciality || ""}
                                     onChange={(e) => setFormData({ ...formData, speciality: e.target.value })}
                                     placeholder="e.g. Marketing"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -232,7 +232,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.subSpeciality || ""}
                                     onChange={(e) => setFormData({ ...formData, subSpeciality: e.target.value })}
                                     placeholder="e.g. Digital Ads"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
                         </div>
@@ -246,10 +246,10 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.companySize || ""}
                                     onValueChange={(val) => setFormData({ ...formData, companySize: val || "" })}
                                 >
-                                    <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                    <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                         <SelectValue placeholder="Select size" />
                                     </SelectTrigger>
-                                    <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                    <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                         <SelectItem value="1-10" className="rounded-xl font-bold py-3">1-10</SelectItem>
                                         <SelectItem value="11-50" className="rounded-xl font-bold py-3">11-50</SelectItem>
                                         <SelectItem value="51-200" className="rounded-xl font-bold py-3">51-200</SelectItem>
@@ -266,7 +266,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.country || ""}
                                     onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                                     placeholder="e.g. USA"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
                         </div>
@@ -280,7 +280,7 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                     value={formData.serviceInterest || ""}
                                     onChange={(e) => setFormData({ ...formData, serviceInterest: e.target.value })}
                                     placeholder="e.g. Consulting"
-                                    className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -302,17 +302,17 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                                 value={formData.message || ""}
                                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, message: e.target.value })}
                                 placeholder="Describe lead requirements..."
-                                className="min-h-[100px] rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold resize-none transition-all"
+                                className="min-h-[100px] rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold resize-none transition-all"
                             />
                         </div>
                     </div>
 
-                    <SheetFooter className="flex-row gap-4 sm:justify-between items-center">
+                    <DialogFooter className="p-10 border-t border-border bg-slate-50 flex-row gap-4 sm:justify-between items-center">
                         <Button
                             type="button"
                             variant="ghost"
                             onClick={() => onOpenChange(false)}
-                            className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50"
+                            className="rounded-2xl h-14 px-8 font-bold hover:bg-slate-200 transition-all"
                         >
                             Cancel
                         </Button>
@@ -323,9 +323,9 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                         >
                             Save Changes
                         </Button>
-                    </SheetFooter>
+                    </DialogFooter>
                 </form>
-            </SheetContent>
-        </Sheet>
+            </DialogContent>
+        </Dialog>
     )
 }

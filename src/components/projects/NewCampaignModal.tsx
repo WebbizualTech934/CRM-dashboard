@@ -2,13 +2,13 @@
 
 import { useState, useMemo } from "react"
 import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetDescription,
-    SheetFooter,
-} from "@/components/ui/sheet"
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -143,18 +143,17 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
     ]
 
     return (
-        <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right">
-                <SheetHeader>
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                                <Mail className="h-5 w-5" />
-                            </div>
-                            <div>
-                                <SheetTitle className="text-3xl font-black tracking-tighter text-primary">
-                                    New Campaign
-                                </SheetTitle>
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent size="xl" className="p-0 border border-border">
+                <DialogHeader className="p-10 border-b border-border bg-slate-50 flex flex-row items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                            <Mail className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <DialogTitle className="text-3xl font-black tracking-tighter text-primary">
+                                New Campaign
+                            </DialogTitle>
                                 <div className="flex items-center gap-1.5 mt-2">
                                     {steps.map((s, i) => (
                                         <div key={s.id} className="flex items-center gap-1.5">
@@ -172,8 +171,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </SheetHeader>
+                </DialogHeader>
 
                 <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
                     {step === "setup" && (
@@ -191,7 +189,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         placeholder="e.g. Q4 Growth Sequence"
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold text-xl transition-all"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold text-xl transition-all"
                                     />
                                 </div>
                                 <div className="space-y-3">
@@ -199,10 +197,10 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                         <Activity className="h-3 w-3" /> Campaign Type
                                     </Label>
                                     <Select value={campaignType} onValueChange={(val) => setCampaignType(val || "")}>
-                                        <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold text-lg transition-all">
+                                        <SelectTrigger className="h-14 rounded-2xl border-border bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold text-lg transition-all">
                                             <SelectValue />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="Cold Outreach" className="rounded-xl font-bold py-4">Cold Outreach</SelectItem>
                                             <SelectItem value="Follow-up" className="rounded-xl font-bold py-4">Follow-up</SelectItem>
                                             <SelectItem value="Re-engagement" className="rounded-xl font-bold py-4">Re-engagement</SelectItem>
@@ -236,7 +234,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                                 value={newTagName}
                                                 onChange={(e) => setNewTagName(e.target.value)}
                                                 placeholder="Create new tag..."
-                                                className="h-12 pl-4 pr-12 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold text-sm transition-all"
+                                                className="h-12 pl-4 pr-12 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold text-sm transition-all"
                                                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
                                             />
                                             <Button 
@@ -271,7 +269,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                             value={leadSearch}
                                             onChange={(e) => setLeadSearch(e.target.value)}
                                             placeholder="Search leads..."
-                                            className="h-12 w-72 pl-12 rounded-2xl border-border/50 bg-muted/20 font-bold focus-visible:ring-2 focus-visible:ring-primary/20 transition-all"
+                                            className="h-12 w-72 pl-12 rounded-2xl border-border bg-muted/20 font-bold focus-visible:ring-2 focus-visible:ring-primary/20 transition-all"
                                         />
                                     </div>
                                     <Button
@@ -284,7 +282,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                 </div>
                             </div>
 
-                            <div className="flex-1 min-h-[400px] border border-border/50 rounded-[2.5rem] bg-muted/5 overflow-hidden flex flex-col shadow-inner">
+                            <div className="flex-1 min-h-[400px] border border-border rounded-[2.5rem] bg-muted/5 overflow-hidden flex flex-col shadow-inner">
                                 <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
                                     {filteredLeads.map(lead => (
                                         <div
@@ -317,7 +315,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                                 <div className="text-right hidden sm:block">
                                                     <div className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-widest">{lead.jobTitle}</div>
                                                 </div>
-                                                <Badge variant="outline" className="text-[9px] font-black uppercase tracking-widest h-7 rounded-xl px-3 border-border/50 bg-white text-muted-foreground shadow-sm">
+                                                <Badge variant="outline" className="text-[9px] font-black uppercase tracking-widest h-7 rounded-xl px-3 border-border bg-white text-muted-foreground shadow-sm">
                                                     {lead.status}
                                                 </Badge>
                                             </div>
@@ -331,7 +329,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                     )}
                                 </div>
                             </div>
-                            <div className="flex items-center justify-between shrink-0 p-4 bg-muted/10 rounded-[2rem] mx-2 mb-2 border border-border/50">
+                            <div className="flex items-center justify-between shrink-0 p-4 bg-muted/10 rounded-[2rem] mx-2 mb-2 border border-border">
                                 <div className="flex items-center gap-2">
                                     <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                                     <span className="text-[10px] font-black uppercase tracking-widest text-primary">{selectedLeadIds.length} leads selected</span>
@@ -356,7 +354,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                         value={subject}
                                         onChange={(e) => setSubject(e.target.value)}
                                         placeholder="e.g. Quick question regarding {{company}}"
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold text-lg transition-all"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold text-lg transition-all"
                                     />
                                 </div>
                                 <div className="space-y-4">
@@ -380,7 +378,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                     <textarea
                                         value={body}
                                         onChange={(e) => setBody(e.target.value)}
-                                        className="w-full h-80 p-8 rounded-[2.5rem] border border-border/50 bg-muted/20 focus:ring-2 focus:ring-primary/20 transition-all font-bold text-base leading-relaxed resize-none shadow-inner"
+                                        className="w-full h-80 p-8 rounded-[2.5rem] border border-border bg-muted/20 focus:ring-2 focus:ring-primary/20 transition-all font-bold text-base leading-relaxed resize-none shadow-inner"
                                         placeholder="Type your message here..."
                                     />
                                     <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 italic">
@@ -409,7 +407,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                         type="number"
                                         value={dailyLimit}
                                         onChange={(e) => setDailyLimit(e.target.value)}
-                                        className="h-14 rounded-2xl border-border/50 bg-muted/20 font-black text-xl transition-all text-center"
+                                        className="h-14 rounded-2xl border-border bg-muted/20 font-black text-xl transition-all text-center"
                                     />
                                 </div>
                                 <div className="space-y-3">
@@ -417,10 +415,10 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                         <Globe className="h-3 w-3" /> Timezone
                                     </Label>
                                     <Select value={timezone} onValueChange={(val) => setTimezone(val || "")}>
-                                        <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 font-bold transition-all">
+                                        <SelectTrigger className="h-14 rounded-2xl border-border bg-muted/20 font-bold transition-all">
                                             <SelectValue />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="UTC" className="rounded-xl font-bold py-3">UTC (London)</SelectItem>
                                             <SelectItem value="EST" className="rounded-xl font-bold py-3">EST (New York)</SelectItem>
                                             <SelectItem value="PST" className="rounded-xl font-bold py-3">PST (San Francisco)</SelectItem>
@@ -437,13 +435,13 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                             type="time"
                                             value={startTime}
                                             onChange={(e) => setStartTime(e.target.value)}
-                                            className="h-14 rounded-2xl border-border/50 bg-muted/20 font-bold transition-all text-center px-2"
+                                            className="h-14 rounded-2xl border-border bg-muted/20 font-bold transition-all text-center px-2"
                                         />
                                         <Input
                                             type="time"
                                             value={endTime}
                                             onChange={(e) => setEndTime(e.target.value)}
-                                            className="h-14 rounded-2xl border-border/50 bg-muted/20 font-bold transition-all text-center px-2"
+                                            className="h-14 rounded-2xl border-border bg-muted/20 font-bold transition-all text-center px-2"
                                         />
                                     </div>
                                     <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest text-center mt-2">Active Window Hours</p>
@@ -484,7 +482,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                     )}
                 </div>
 
-                <SheetFooter className="flex items-center justify-between border-t border-border/50">
+                <DialogFooter className="p-10 border-t border-border bg-slate-50 flex items-center justify-between">
                     <Button
                         variant="ghost"
                         onClick={() => {
@@ -494,34 +492,42 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                             else if (step === "leads") setStep("setup")
                         }}
                         disabled={step === "setup"}
-                        className="rounded-2xl h-14 px-8 font-black uppercase tracking-widest text-[11px] gap-3 text-muted-foreground hover:bg-muted/50 hover:text-slate-900 disabled:opacity-30 transition-all border border-transparent hover:border-border/50"
+                        className="rounded-2xl h-14 px-8 font-black uppercase tracking-widest text-[11px] gap-3 text-muted-foreground hover:bg-slate-200 hover:text-slate-900 disabled:opacity-30 transition-all border border-transparent hover:border-border"
                     >
                         <ArrowLeft className="h-4 w-4" /> Previous
                     </Button>
-
-                    {step !== "launch" ? (
+                    <div className="flex gap-4">
                         <Button
-                            onClick={() => {
-                                if (step === "setup") setStep("leads")
-                                else if (step === "leads") setStep("sequence")
-                                else if (step === "sequence") setStep("settings")
-                                else if (step === "settings") setStep("launch")
-                            }}
-                            disabled={step === "setup" && !name}
-                            className="rounded-2xl h-14 px-10 font-black uppercase tracking-widest text-[11px] gap-3 bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] border-none"
+                            variant="ghost"
+                            onClick={() => onOpenChange(false)}
+                            className="rounded-2xl h-14 px-8 font-bold hover:bg-slate-200 transition-all"
                         >
-                            Next Module <ArrowRight className="h-4 w-4" />
+                            Cancel
                         </Button>
-                    ) : (
-                        <Button
-                            onClick={handleSubmit}
-                            className="rounded-2xl h-14 px-12 bg-primary text-white hover:bg-primary/90 font-black uppercase tracking-widest text-[11px] gap-3 shadow-xl shadow-primary/20 transition-all hover:scale-[1.05] active:scale-[0.95] border-none"
-                        >
-                            Confirm & Deploy <Rocket className="h-4 w-4" />
-                        </Button>
-                    )}
-                </SheetFooter>
-            </SheetContent>
-        </Sheet>
+                        {step !== "launch" ? (
+                            <Button
+                                onClick={() => {
+                                    if (step === "setup") setStep("leads")
+                                    else if (step === "leads") setStep("sequence")
+                                    else if (step === "sequence") setStep("settings")
+                                    else if (step === "settings") setStep("launch")
+                                }}
+                                disabled={step === "setup" && !name}
+                                className="rounded-2xl h-14 px-10 font-black uppercase tracking-widest text-[11px] gap-3 bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] border-none"
+                            >
+                                Next Module <ArrowRight className="h-4 w-4" />
+                            </Button>
+                        ) : (
+                            <Button
+                                onClick={handleSubmit}
+                                className="rounded-2xl h-14 px-12 bg-primary text-white hover:bg-primary/90 font-black uppercase tracking-widest text-[11px] gap-3 shadow-xl shadow-primary/20 transition-all hover:scale-[1.05] active:scale-[0.95] border-none"
+                            >
+                                Confirm & Deploy <Rocket className="h-4 w-4" />
+                            </Button>
+                        )}
+                    </div>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }

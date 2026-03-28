@@ -19,6 +19,13 @@ import {
     ArrowUpRight,
     Briefcase
 } from "lucide-react"
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -60,52 +67,44 @@ export function LeadDetailPanel({ lead, interactions, onClose, onAddInteraction,
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex justify-end bg-background/40 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="w-full max-w-4xl bg-background/95 backdrop-blur-3xl border-l border-border/50 h-full flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.2)] animate-in slide-in-from-right duration-500 overflow-hidden">
+        <Dialog open={!!lead} onOpenChange={(open) => !open && onClose()}>
+            <DialogContent size="xl" className="p-0 border border-border">
+                <div className="flex flex-col h-full overflow-hidden">
                 {/* Header */}
-                <div className="p-10 border-b border-border/50 flex items-center justify-between bg-muted/5">
-                    <div className="flex items-center gap-8">
-                        <div className="h-20 w-20 rounded-3xl bg-primary/10 flex items-center justify-center font-black text-3xl text-primary shadow-inner">
-                            {lead.contactName.charAt(0)}
-                        </div>
-                        <div>
-                            <div className="flex items-center gap-4 mb-2">
-                                <h2 className="text-3xl font-black tracking-tighter text-foreground">{lead.contactName}</h2>
-                                <Badge className="bg-primary/10 text-primary border-none font-black text-[10px] px-3 tracking-widest">PROSPECT</Badge>
-                                {error && (
-                                    <Badge variant="destructive" className="font-bold text-[8px] animate-in fade-in slide-in-from-left-2">{error}</Badge>
-                                )}
+                    <DialogHeader className="p-10 border-b border-border bg-slate-50 flex flex-row items-center justify-between">
+                        <div className="flex items-center gap-8">
+                            <div className="h-20 w-20 rounded-3xl bg-primary/10 flex items-center justify-center font-black text-3xl text-primary shadow-inner">
+                                {lead.contactName.charAt(0)}
                             </div>
-                            <div className="flex items-center gap-6 text-sm text-muted-foreground font-medium">
-                                <span className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-primary/60" /> {lead.companyName}</span>
-                                <span className="flex items-center gap-2"><ArrowUpRight className="h-4 w-4 text-primary/60" /> {lead.leadSource}</span>
-                                <span className="flex items-center gap-2"><Star className={cn("h-4 w-4", lead.priority === 'High' ? "fill-primary text-primary" : "text-primary/40")} /> {lead.priority} Priority</span>
+                            <div>
+                                <div className="flex items-center gap-4 mb-2">
+                                    <DialogTitle className="text-3xl font-black tracking-tighter text-foreground leading-none">
+                                        {lead.contactName}
+                                    </DialogTitle>
+                                    <Badge className="bg-primary/10 text-primary border-none font-black text-[10px] px-3 tracking-widest">PROSPECT</Badge>
+                                </div>
+                                <div className="flex items-center gap-6 text-sm text-muted-foreground font-medium">
+                                    <span className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-primary/60" /> {lead.companyName}</span>
+                                    <span className="flex items-center gap-2"><ArrowUpRight className="h-4 w-4 text-primary/60" /> {lead.leadSource}</span>
+                                    <span className="flex items-center gap-2"><Star className={cn("h-4 w-4", lead.priority === 'High' ? "fill-primary text-primary" : "text-primary/40")} /> {lead.priority} Priority</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <Button 
-                            variant="outline" 
-                            size="icon" 
-                            className="h-12 w-12 rounded-2xl border-border/50 hover:bg-primary/5 hover:text-primary transition-all shadow-sm"
-                            onClick={() => window.open(lead.profileUrl, '_blank')}
-                        >
-                            <ExternalLink className="h-5 w-5" />
-                        </Button>
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-12 w-12 rounded-2xl hover:bg-muted font-bold transition-all"
-                            onClick={onClose}
-                        >
-                            <X className="h-6 w-6" />
-                        </Button>
-                    </div>
-                </div>
+                        <div className="flex items-center gap-4">
+                            <Button 
+                                variant="outline" 
+                                size="icon" 
+                                className="h-12 w-12 rounded-2xl border-border hover:bg-primary/5 hover:text-primary transition-all shadow-sm"
+                                onClick={() => window.open(lead.profileUrl, '_blank')}
+                            >
+                                <ExternalLink className="h-5 w-5" />
+                            </Button>
+                        </div>
+                    </DialogHeader>
 
                 <div className="flex-1 overflow-y-auto p-10 space-y-10 custom-scrollbar">
                     {/* Status Progress */}
-                    <div className="space-y-4 bg-muted/20 p-8 rounded-[2rem] border border-border/30">
+                    <div className="space-y-4 bg-slate-50 p-8 rounded-[2rem] border border-border">
                         <div className="flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Outreach Lifecycle</span>
                             <Badge className="bg-primary text-primary-foreground font-black text-[10px] uppercase tracking-widest px-4 py-1 rounded-full border-none shadow-lg shadow-primary/20">
@@ -124,8 +123,8 @@ export function LeadDetailPanel({ lead, interactions, onClose, onAddInteraction,
                         {/* Main Interaction Hub */}
                         <div className="lg:col-span-2 space-y-10">
                             {/* Personalized Strategy / Hook Angle */}
-                            <Card className="bg-card/30 backdrop-blur-sm border-none shadow-xl rounded-[2.5rem] overflow-hidden group hover:shadow-primary/5 transition-all">
-                                <CardHeader className="p-8 border-b border-border/50 bg-muted/5">
+                            <Card className="bg-white border border-border shadow-md rounded-[2.5rem] overflow-hidden group hover:shadow-primary/5 transition-all">
+                                <CardHeader className="p-8 border-b border-border bg-slate-50/50">
                                     <CardTitle className="text-xl font-bold tracking-tight flex items-center gap-3">
                                         <Zap className="h-5 w-5 text-primary" /> The Hook Angle
                                     </CardTitle>
@@ -133,7 +132,7 @@ export function LeadDetailPanel({ lead, interactions, onClose, onAddInteraction,
                                 <CardContent className="p-8 space-y-8">
                                     <div className="space-y-3">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Strategic Entry Point</label>
-                                        <div className="p-6 rounded-3xl bg-muted/40 border border-border/50 font-medium text-base leading-relaxed italic text-foreground shadow-sm">
+                                        <div className="p-6 rounded-3xl bg-muted/40 border border-border font-medium text-base leading-relaxed italic text-foreground shadow-sm">
                                             "{lead.hookAngle || "Initial research pending. Identify high-leverage entry points from recent activity."}"
                                         </div>
                                     </div>
@@ -155,14 +154,14 @@ export function LeadDetailPanel({ lead, interactions, onClose, onAddInteraction,
                                     <h3 className="text-2xl font-bold tracking-tight flex items-center gap-3">
                                         <History className="h-6 w-6 text-primary" /> Activity Feed
                                     </h3>
-                                    <Badge variant="outline" className="border-border/50 text-muted-foreground font-black text-[10px] tracking-widest px-3 py-1 uppercase rounded-full">
+                                    <Badge variant="outline" className="border-border text-muted-foreground font-black text-[10px] tracking-widest px-3 py-1 uppercase rounded-full">
                                         {interactions.length} Events
                                     </Badge>
                                 </div>
 
                                 <div className="relative space-y-10 before:absolute before:left-[17px] before:top-4 before:bottom-4 before:w-[2px] before:bg-border/50 px-2">
                                     {interactions.length === 0 ? (
-                                        <div className="text-center p-20 text-muted-foreground font-medium border-2 border-dashed border-border/50 rounded-[2.5rem] bg-muted/10">
+                                        <div className="text-center p-20 text-muted-foreground font-medium border-2 border-dashed border-border rounded-[2.5rem] bg-muted/10">
                                             <Clock className="h-10 w-10 text-muted-foreground/20 mx-auto mb-4" />
                                             No interactions logged yet.
                                         </div>
@@ -176,7 +175,7 @@ export function LeadDetailPanel({ lead, interactions, onClose, onAddInteraction,
                                                     <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">{new Date(interaction.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</div>
                                                     <Badge className="bg-primary/5 text-primary border-none font-black text-[8px] px-2 py-0.5 uppercase tracking-tighter">LOGGED</Badge>
                                                 </div>
-                                                <div className="bg-card/50 border border-border/50 rounded-2xl p-5 group-hover:border-primary/20 transition-all shadow-sm">
+                                                <div className="bg-card/50 border border-border rounded-2xl p-5 group-hover:border-primary/20 transition-all shadow-sm">
                                                     <div className="text-sm font-bold text-foreground mb-1">{interaction.type}</div>
                                                     <div className="text-xs text-muted-foreground font-medium leading-relaxed italic">"{interaction.content}"</div>
                                                 </div>
@@ -191,7 +190,7 @@ export function LeadDetailPanel({ lead, interactions, onClose, onAddInteraction,
                         <div className="space-y-8">
                             {/* Action Engine */}
                             <Card className="bg-primary border-none rounded-[2.5rem] overflow-hidden shadow-2xl shadow-primary/20">
-                                <CardHeader className="p-8 border-b border-white/10">
+                                <CardHeader className="p-8 border-b border-border">
                                     <CardTitle className="text-primary-foreground text-xl font-bold tracking-tight flex items-center gap-3">
                                         <Zap className="h-6 w-6" /> Action Engine
                                     </CardTitle>
@@ -215,8 +214,8 @@ export function LeadDetailPanel({ lead, interactions, onClose, onAddInteraction,
                             </Card>
 
                             {/* Details Grid */}
-                            <Card className="bg-card/30 backdrop-blur-sm border-none shadow-xl rounded-[2.5rem] overflow-hidden">
-                                <CardHeader className="p-8 border-b border-border/50 bg-muted/5">
+                            <Card className="bg-white border border-border shadow-md rounded-[2.5rem] overflow-hidden">
+                                <CardHeader className="p-8 border-b border-border bg-slate-50/50">
                                     <CardTitle className="text-sm font-black tracking-widest uppercase flex items-center gap-3">
                                         <FileText className="h-4 w-4 text-primary" /> Intelligence
                                     </CardTitle>
@@ -318,7 +317,7 @@ export function LeadDetailPanel({ lead, interactions, onClose, onAddInteraction,
                 </div>
 
                 {/* Footer Action Bar */}
-                <div className="p-8 bg-card/50 backdrop-blur-xl border-t border-border/50 flex items-center gap-4">
+                <div className="p-8 bg-slate-50 border-t border-border flex items-center gap-4">
                     <div className="relative flex-1 group">
                         <MessageSquare className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                         <input 
@@ -337,7 +336,8 @@ export function LeadDetailPanel({ lead, interactions, onClose, onAddInteraction,
                         <Send className="h-6 w-6" />
                     </Button>
                 </div>
-            </div>
-        </div>
+                </div>
+            </DialogContent>
+        </Dialog>
     )
 }

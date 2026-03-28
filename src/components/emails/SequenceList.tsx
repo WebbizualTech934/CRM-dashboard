@@ -86,7 +86,7 @@ export function SequenceList({ projectId }: { projectId?: string }) {
             accessorKey: "id",
             cell: (s: any) => (
                 <div className="flex justify-end gap-3">
-                    <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl border-border/50 text-[10px] font-black uppercase tracking-widest hover:bg-primary/5 hover:text-primary transition-all">
+                    <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl border-border text-[10px] font-black uppercase tracking-widest hover:bg-primary/5 hover:text-primary transition-all">
                         Edit Flow
                     </Button>
                     <Button size="icon" className="h-9 w-9 rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-105">

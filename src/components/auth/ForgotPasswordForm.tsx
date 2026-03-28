@@ -111,7 +111,7 @@ export function ForgotPasswordForm() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="name@company.com"
-                            className="w-full h-14 pl-11 pr-4 rounded-2xl border border-border/50 bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
+                            className="w-full h-14 pl-11 pr-4 rounded-2xl border border-border bg-muted/20 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all"
                         />
                     </div>
                 </div>

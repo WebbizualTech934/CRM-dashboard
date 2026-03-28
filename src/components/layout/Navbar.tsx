@@ -39,7 +39,7 @@ export function Navbar() {
     ).slice(0, 3)
 
     return (
-        <header className="h-20 border-b border-border/50 bg-card/50 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-10">
+        <header className="h-20 border-b border-border bg-white flex items-center justify-between px-8 sticky top-0 z-10 transition-all">
             <div className="flex items-center flex-1 max-w-xl relative">
                 <div className="relative w-full group">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
@@ -54,7 +54,7 @@ export function Navbar() {
 
                 {/* Search Results Dropdown */}
                 {searchQuery && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-card/95 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl shadow-primary/10 p-2 z-50">
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-border rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                         <div className="p-2">
                             {filteredProjects.length > 0 && (
                                 <>
@@ -100,7 +100,7 @@ export function Navbar() {
                                 </div>
                             )}
 
-                            <div className="mt-2 p-2 border-t border-border/50">
+                            <div className="mt-2 p-2 border-t border-border">
                                 <button className="w-full text-center py-2 text-xs font-bold text-primary hover:underline">
                                     View all results
                                 </button>
@@ -118,7 +118,7 @@ export function Navbar() {
                                 <HelpCircle className="h-5 w-5" />
                             </Button>
                         } />
-                        <DropdownMenuContent className="w-80 p-4 rounded-2xl shadow-2xl border-border/50" align="end">
+                        <DropdownMenuContent className="w-80 p-4 rounded-2xl shadow-2xl border-border" align="end">
                             <DropdownMenuGroup>
                                 <DropdownMenuLabel className="flex items-center gap-2 px-2 pb-4 pt-1">
                                     <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
@@ -155,7 +155,7 @@ export function Navbar() {
                                 <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-primary rounded-full border-2 border-card shadow-sm shadow-primary/50"></span>
                             </Button>
                         } />
-                        <DropdownMenuContent className="w-[350px] p-0 rounded-2xl shadow-2xl border-border/50 overflow-hidden" align="end">
+                        <DropdownMenuContent className="w-[350px] p-0 rounded-2xl shadow-2xl border-border overflow-hidden" align="end">
                             <div className="p-4 bg-primary/5 border-b border-primary/10 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <Bell className="h-4 w-4 text-primary" />
@@ -194,14 +194,14 @@ export function Navbar() {
                                     </DropdownMenuItem>
                                 </div>
                             </div>
-                            <div className="p-3 bg-muted/20 border-t border-border/50 text-center">
+                            <div className="p-3 bg-muted/20 border-t border-border text-center">
                                 <button className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline">Mark all as read</button>
                             </div>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
 
-                <div className="w-px h-8 bg-border/50 mx-2"></div>
+                <div className="w-px h-8 bg-border mx-2"></div>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger render={
@@ -216,7 +216,7 @@ export function Navbar() {
                             </div>
                         </Button>
                     } />
-                    <DropdownMenuContent className="w-64 p-2 rounded-2xl shadow-2xl border-border/50" align="end">
+                    <DropdownMenuContent className="w-64 p-2 rounded-2xl shadow-2xl border-border" align="end">
                         <DropdownMenuGroup>
                             <DropdownMenuLabel className="font-normal p-3">
                                 <div className="flex flex-col space-y-2">

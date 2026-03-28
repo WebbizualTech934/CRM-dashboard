@@ -120,7 +120,7 @@ export function TasksTable({ projectId }: TasksTableProps) {
             width: "150px",
             cell: (task: Task) => (
                 task.relatedType ? (
-                    <Badge variant="outline" className="rounded-lg h-6 px-2 text-[9px] font-black uppercase tracking-tighter border-border/50 bg-background/50">
+                    <Badge variant="outline" className="rounded-lg h-6 px-2 text-[9px] font-black uppercase tracking-tighter border-border bg-background/50">
                         {task.relatedType}: {task.relatedId?.slice(0, 4)}...
                     </Badge>
                 ) : <span className="text-xs text-muted-foreground italic">-</span>

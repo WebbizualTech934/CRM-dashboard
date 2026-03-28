@@ -58,8 +58,8 @@ export function NewTemplateModal({ open, onOpenChange, projectId }: NewTemplateM
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right" className="w-full sm:max-w-xl p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
-                <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0">
+            <SheetContent side="right" className="w-full sm:max-w-xl p-0 flex flex-col bg-white border-l border-border shadow-2xl">
+                <div className="bg-primary/[0.03] p-8 border-b border-border shrink-0">
                     <SheetHeader>
                         <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
                             <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
@@ -82,7 +82,7 @@ export function NewTemplateModal({ open, onOpenChange, projectId }: NewTemplateM
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     placeholder="e.g. Initial Outreach - Marketing"
-                                    className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     required
                                 />
                             </div>
@@ -95,7 +95,7 @@ export function NewTemplateModal({ open, onOpenChange, projectId }: NewTemplateM
                                     value={formData.subject}
                                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                                     placeholder="e.g. Quick question for {{firstName}}"
-                                    className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     required
                                 />
                             </div>
@@ -122,7 +122,7 @@ export function NewTemplateModal({ open, onOpenChange, projectId }: NewTemplateM
                                     value={formData.body}
                                     onChange={(e) => setFormData({ ...formData, body: e.target.value })}
                                     placeholder="Write your email content here..."
-                                    className="min-h-[300px] rounded-3xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold resize-none p-6 transition-all text-base leading-relaxed"
+                                    className="min-h-[300px] rounded-3xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold resize-none p-6 transition-all text-base leading-relaxed"
                                     required
                                 />
                                 <div className="flex items-start gap-3 mt-4 p-4 rounded-2xl bg-blue-50/50 border border-blue-100 italic">
@@ -136,7 +136,7 @@ export function NewTemplateModal({ open, onOpenChange, projectId }: NewTemplateM
                     </form>
                 </div>
 
-                <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md">
+                <div className="shrink-0 p-8 pt-4 border-t border-border bg-white">
                     <SheetFooter className="sm:justify-between items-center gap-4">
                         <Button
                             type="button"

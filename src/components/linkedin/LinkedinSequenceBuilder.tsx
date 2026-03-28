@@ -59,7 +59,7 @@ export function LinkedinSequenceBuilder() {
                     <p className="text-muted-foreground font-medium mt-1">Orchestrate automated multi-step outreach flows.</p>
                 </div>
                 <div className="flex items-center gap-4">
-                    <Button variant="ghost" className="rounded-2xl h-12 px-6 font-bold hover:bg-muted/50 transition-all">Discard Changes</Button>
+                    <Button variant="ghost" className="rounded-2xl h-12 px-6 font-bold hover:bg-slate-200 transition-all">Discard Changes</Button>
                     <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-black uppercase tracking-widest rounded-2xl h-12 px-10 gap-2 shadow-xl shadow-primary/20 border-none transition-all hover:scale-[1.05]">
                         <Save className="h-5 w-5" /> Save Sequence
                     </Button>
@@ -77,12 +77,12 @@ export function LinkedinSequenceBuilder() {
                             )}
 
                             <Card className={cn(
-                                "bg-card/50 backdrop-blur-xl border-none shadow-xl rounded-[2.5rem] overflow-hidden transition-all group-hover:shadow-2xl group-hover:shadow-primary/5",
+                                "bg-white border border-border shadow-xl rounded-[2.5rem] overflow-hidden transition-all group-hover:shadow-2xl group-hover:shadow-primary/5",
                                 step.type === 'Wait' ? "border-dashed border-2 border-primary/20" : ""
                             )}>
                                 <CardContent className="p-8 flex items-start gap-8">
                                     <div className="flex flex-col items-center gap-2">
-                                        <div className="h-10 w-10 shrink-0 rounded-2xl bg-white shadow-sm border border-border/50 flex items-center justify-center font-black text-slate-400 text-xs">
+                                        <div className="h-10 w-10 shrink-0 rounded-2xl bg-white shadow-sm border border-border flex items-center justify-center font-black text-slate-400 text-xs">
                                             {idx + 1}
                                         </div>
                                         <GripVertical className="h-5 w-5 text-muted-foreground/20 cursor-grab active:cursor-grabbing" />
@@ -95,7 +95,7 @@ export function LinkedinSequenceBuilder() {
                                                     "h-10 w-10 rounded-2xl flex items-center justify-center shadow-lg shadow-black/5",
                                                     step.type === 'Connection' ? "bg-blue-500 text-white" :
                                                     step.type === 'Message' ? "bg-indigo-500 text-white" :
-                                                    step.type === 'Wait' ? "bg-slate-200 text-slate-600 shadow-none border border-border/50" :
+                                                    step.type === 'Wait' ? "bg-slate-200 text-slate-600 shadow-none border border-border" :
                                                     "bg-purple-500 text-white"
                                                 )}>
                                                     {step.type === 'Connection' ? <Plus className="h-5 w-5" /> : 
@@ -126,7 +126,7 @@ export function LinkedinSequenceBuilder() {
                                                     <div className="text-xs font-bold text-muted-foreground mb-2 ml-1">DELAY (DAYS)</div>
                                                     <Input 
                                                         type="number" 
-                                                        className="h-14 rounded-2xl bg-muted/20 border-none font-bold text-lg" 
+                                                        className="h-14 rounded-2xl bg-slate-50 border border-border font-bold text-lg focus:ring-1 focus:ring-primary" 
                                                         value={step.delayDays}
                                                         onChange={(e) => updateStep(step.id, { delayDays: parseInt(e.target.value) })}
                                                     />
@@ -144,7 +144,7 @@ export function LinkedinSequenceBuilder() {
                                                         CONTENT TEMPLATE <Badge className="bg-primary/10 text-primary border-none text-[8px] px-2 py-0.5">DYNAMIC</Badge>
                                                     </div>
                                                     <Textarea 
-                                                        className="min-h-[120px] rounded-3xl bg-muted/20 border-none font-medium text-base p-6 resize-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                                        className="min-h-[120px] rounded-3xl bg-slate-50 border border-border font-medium text-base p-6 resize-none focus:ring-1 focus:ring-primary transition-all"
                                                         placeholder="Write your dynamic template here..."
                                                         value={step.content}
                                                         onChange={(e) => updateStep(step.id, { content: e.target.value })}
@@ -154,7 +154,7 @@ export function LinkedinSequenceBuilder() {
                                                     {['{{name}}', '{{company}}', '{{job_title}}'].map(tag => (
                                                         <button 
                                                             key={tag}
-                                                            className="px-3 py-1.5 rounded-lg bg-white shadow-sm border border-border/50 text-[10px] font-black tracking-widest text-primary hover:bg-primary hover:text-white transition-all"
+                                                            className="px-3 py-1.5 rounded-lg bg-white shadow-sm border border-border text-[10px] font-black tracking-widest text-primary hover:bg-primary hover:text-white transition-all"
                                                             onClick={() => updateStep(step.id, { content: step.content + ' ' + tag })}
                                                         >
                                                             {tag}
@@ -170,7 +170,7 @@ export function LinkedinSequenceBuilder() {
                     ))}
 
                     <div className="flex items-center justify-center pt-10">
-                        <div className="flex gap-4 p-2 rounded-3xl bg-white border border-border/50 shadow-2xl">
+                        <div className="flex gap-4 p-2 rounded-3xl bg-white border border-border shadow-2xl">
                             <Button 
                                 onClick={() => addStep('Connection')}
                                 className="h-12 px-6 rounded-2xl bg-blue-500 hover:bg-blue-600 text-white font-bold gap-2 text-xs transition-all hover:scale-[1.05]"
@@ -201,8 +201,8 @@ export function LinkedinSequenceBuilder() {
 
                 {/* Sidebar Config */}
                 <div className="space-y-10">
-                    <Card className="bg-card/50 backdrop-blur-xl border-none shadow-2xl rounded-[2.5rem] overflow-hidden">
-                        <CardHeader className="p-10 border-b border-border/50 bg-muted/5">
+                    <Card className="bg-white border border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                        <CardHeader className="p-10 border-b border-border bg-slate-50">
                             <CardTitle className="text-xl font-bold tracking-tight flex items-center gap-3">
                                 <Settings2 className="h-5 w-5 text-primary" /> Sequence Config
                             </CardTitle>
@@ -210,13 +210,13 @@ export function LinkedinSequenceBuilder() {
                         <CardContent className="p-10 space-y-8">
                             <div className="space-y-3">
                                 <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1">Sequence Name</div>
-                                <Input className="h-14 rounded-2xl bg-muted/20 border-none font-bold" placeholder="e.g. Founders Engagement" />
+                                <Input className="h-14 rounded-2xl bg-slate-50 border border-border font-bold focus:ring-1 focus:ring-primary" placeholder="e.g. Founders Engagement" />
                             </div>
                             <div className="space-y-3">
                                 <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1">Target Persona</div>
-                                <Input className="h-14 rounded-2xl bg-muted/20 border-none font-bold" placeholder="e.g. Agency CEO / Founder" />
+                                <Input className="h-14 rounded-2xl bg-slate-50 border border-border font-bold focus:ring-1 focus:ring-primary" placeholder="e.g. Agency CEO / Founder" />
                             </div>
-                            <div className="pt-6 border-t border-border/50">
+                            <div className="pt-6 border-t border-border">
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="text-sm font-bold">Estimated Duration</div>
                                     <div className="text-sm font-black text-primary">{steps.reduce((acc, s) => acc + (s.delayDays || 0), 0)} Days</div>
@@ -229,7 +229,7 @@ export function LinkedinSequenceBuilder() {
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-primary/5 border-none shadow-2xl rounded-[2.5rem] overflow-hidden p-10 space-y-6">
+                    <Card className="bg-slate-50 border border-border shadow-2xl rounded-[2.5rem] overflow-hidden p-10 space-y-6">
                         <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                             <CheckCircle2 className="h-6 w-6" />
                         </div>

@@ -52,7 +52,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
                         {stats.map((stat) => (
                             <div
                                 key={stat.label}
-                                className="bg-white/70 backdrop-blur-sm border border-white/80 rounded-2xl p-5 shadow-sm"
+                                className="bg-white border border-white/80 rounded-2xl p-5 shadow-sm"
                             >
                                 <stat.icon className="h-5 w-5 text-primary mb-3" />
                                 <div className="text-2xl font-black tracking-tighter text-foreground">
@@ -79,7 +79,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
                         <Logo size="md" showTagline />
                     </div>
 
-                    <div className="bg-white/80 backdrop-blur-xl border border-white/90 rounded-3xl shadow-2xl shadow-primary/8 p-8 xl:p-10">
+                    <div className="bg-white  border border-white/90 rounded-3xl shadow-2xl shadow-primary/8 p-8 xl:p-10">
                         {children}
                     </div>
                 </div>

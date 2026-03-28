@@ -48,7 +48,7 @@ export default function TeamPage() {
                     { label: "Total Leads Added", value: totalLeads.toLocaleString(), color: "text-foreground" },
                     { label: "Total Emails Sent", value: totalEmails.toLocaleString(), color: "text-foreground" }
                 ].map((stat) => (
-                    <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-3xl bg-card/50 backdrop-blur-sm">
+                    <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-3xl bg-white border border-border">
                         <CardHeader className="pb-2">
                             <CardTitle className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{stat.label}</CardTitle>
                         </CardHeader>
@@ -59,8 +59,8 @@ export default function TeamPage() {
                 ))}
             </div>
 
-            <Card className="border-none shadow-xl shadow-primary/5 rounded-3xl bg-card/50 backdrop-blur-sm overflow-hidden">
-                <CardHeader className="border-b border-border/50 pb-6">
+            <Card className="border-none shadow-xl shadow-primary/5 rounded-3xl bg-white border border-border overflow-hidden">
+                <CardHeader className="border-b border-border pb-6">
                     <CardTitle className="text-xl font-bold tracking-tight">Team Members</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">

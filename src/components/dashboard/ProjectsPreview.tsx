@@ -27,8 +27,8 @@ export function ProjectsPreview() {
         .slice(0, 4)
 
     return (
-        <Card className="col-span-4 border-none shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 p-8 pb-6">
+        <Card className="col-span-4 border border-border shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-white overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between border-b border-border p-8 pb-6 bg-slate-50">
                 <CardTitle className="text-2xl font-bold tracking-tight">Active Projects</CardTitle>
                 <Button variant="ghost" size="sm" nativeButton={false} render={<Link href="/projects" className="flex items-center gap-2 font-bold text-primary hover:bg-primary/5 rounded-xl px-4 h-10" />}>
                     View All <ArrowUpRight className="h-4 w-4" />
@@ -37,17 +37,17 @@ export function ProjectsPreview() {
             <CardContent className="p-0">
                 <Table>
                     <TableHeader>
-                        <TableRow className="hover:bg-transparent border-b border-border/50 bg-muted/20">
-                            <TableHead className="pl-10 h-16 text-[11px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground/80">Project Name</TableHead>
-                            <TableHead className="h-16 text-[11px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground/80">Leads</TableHead>
-                            <TableHead className="h-16 text-[11px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground/80">Status</TableHead>
-                            <TableHead className="h-16 text-[11px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground/80">Team</TableHead>
-                            <TableHead className="pr-10 h-16 text-[11px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground/80 text-right">Last Update</TableHead>
+                        <TableRow className="hover:bg-transparent border-b border-border bg-slate-100/50">
+                            <TableHead className="pl-10 h-16 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">Project Name</TableHead>
+                            <TableHead className="h-16 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">Leads</TableHead>
+                            <TableHead className="h-16 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">Status</TableHead>
+                            <TableHead className="h-16 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">Team</TableHead>
+                            <TableHead className="pr-10 h-16 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80 text-right">Last Update</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {activeProjects.map((project) => (
-                            <TableRow key={project.id} className="group hover:bg-primary/[0.02] transition-colors border-b border-border/50 last:border-0">
+                            <TableRow key={project.id} className="group hover:bg-primary/[0.02] transition-colors border-b border-border last:border-0">
                                 <TableCell className="pl-10 py-6 font-bold text-[0.925rem] text-foreground group-hover:text-primary transition-colors">
                                     <Link href={`/projects/${project.id}`}>{project.name}</Link>
                                 </TableCell>
@@ -56,8 +56,8 @@ export function ProjectsPreview() {
                                 </TableCell>
                                 <TableCell className="py-6">
                                     <Badge variant={project.status === "Active" ? "default" : "secondary"} className={cn(
-                                        "rounded-full px-4 py-1 text-[10px] font-bold uppercase tracking-widest",
-                                        project.status === "Active" ? "bg-primary shadow-lg shadow-primary/20" : "bg-muted text-muted-foreground"
+                                        "rounded-full px-4 py-1 text-[10px] font-bold uppercase tracking-widest border-none",
+                                        project.status === "Active" ? "bg-primary shadow-lg shadow-primary/20" : "bg-slate-100 text-slate-600"
                                     )}>
                                         {project.status}
                                     </Badge>

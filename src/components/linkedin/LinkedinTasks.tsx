@@ -35,8 +35,8 @@ export function LinkedinTasks({ leads, onSelectLead }: LinkedinTasksProps) {
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                 {/* Urgent Follow-ups */}
-                <Card className="bg-card/50 backdrop-blur-sm border-none shadow-2xl rounded-[2.5rem] overflow-hidden">
-                    <CardHeader className="p-10 border-b border-border/50 bg-red-500/5 flex flex-row items-center justify-between">
+                <Card className="bg-white border border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                    <CardHeader className="p-10 border-b border-border bg-red-500/5 flex flex-row items-center justify-between">
                         <div>
                             <CardTitle className="text-2xl font-bold tracking-tight flex items-center gap-3 text-red-600">
                                 <AlertCircle className="h-6 w-6" /> Urgent Outreach
@@ -82,8 +82,8 @@ export function LinkedinTasks({ leads, onSelectLead }: LinkedinTasksProps) {
                 </Card>
 
                 {/* Status-based Actions */}
-                <Card className="bg-card/50 backdrop-blur-sm border-none shadow-2xl rounded-[2.5rem] overflow-hidden">
-                    <CardHeader className="p-10 border-b border-border/50 bg-primary/5 flex flex-row items-center justify-between">
+                <Card className="bg-white border border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                    <CardHeader className="p-10 border-b border-border bg-primary/5 flex flex-row items-center justify-between">
                         <div>
                             <CardTitle className="text-2xl font-bold tracking-tight flex items-center gap-3">
                                 <CheckSquare className="h-6 w-6 text-primary" /> Action Required

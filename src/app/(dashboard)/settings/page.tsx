@@ -46,7 +46,7 @@ export default function SettingsPage() {
             <div className="flex flex-col md:flex-row gap-8">
                 {/* Sidebar Navigation */}
                 <aside className="w-full md:w-64 shrink-0">
-                    <nav className="flex flex-row md:flex-col gap-2 bg-card/50 backdrop-blur-sm p-2 rounded-[2rem] border border-border/50 sticky top-8">
+                    <nav className="flex flex-row md:flex-col gap-2 bg-slate-50 p-2 rounded-[2rem] border border-border sticky top-8">
                         <button
                             onClick={() => setActiveTab("general")}
                             className={cn(
@@ -93,13 +93,13 @@ export default function SettingsPage() {
                     {activeTab === "general" && (
                         <div className="space-y-8">
                             {/* Profile Card */}
-                            <Card className="border-none shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-xl overflow-hidden">
+                            <Card className="border border-border shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-white overflow-hidden">
                                 <CardHeader className="p-8 pb-4">
                                     <CardTitle className="text-2xl font-bold tracking-tight">Profile Information</CardTitle>
                                     <CardDescription className="text-base font-medium">Update your personal details and how others see you.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="p-8 pt-0 space-y-8">
-                                    <div className="flex flex-col sm:flex-row items-center gap-8 py-4 border-b border-border/50">
+                                    <div className="flex flex-col sm:flex-row items-center gap-8 py-4 border-b border-border">
                                         <div className="relative group">
                                             <Avatar className="h-24 w-24 border-4 border-white shadow-xl">
                                                 <AvatarImage src={currentUser.avatar} />
@@ -150,11 +150,11 @@ export default function SettingsPage() {
                             {/* Performance/Personal Stats Card */}
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                                 {[
-                                    { label: "Leads Added", value: currentUser.leadsAdded?.toString() || "0", icon: Users, color: "text-blue-600", bg: "bg-blue-500/5" },
-                                    { label: "Emails Sent", value: currentUser.emailsSent?.toString() || "0", icon: Mail, color: "text-purple-600", bg: "bg-purple-500/5" },
-                                    { label: "Account Status", value: currentUser.status, icon: CheckCircle2, color: "text-green-600", bg: "bg-green-500/5" },
+                                    { label: "Leads Added", value: currentUser.leadsAdded?.toString() || "0", icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
+                                    { label: "Emails Sent", value: currentUser.emailsSent?.toString() || "0", icon: Mail, color: "text-purple-600", bg: "bg-purple-50" },
+                                    { label: "Account Status", value: currentUser.status, icon: CheckCircle2, color: "text-green-600", bg: "bg-green-50" },
                                 ].map((stat) => (
-                                    <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-card/50 backdrop-blur-sm overflow-hidden group">
+                                    <Card key={stat.label} className="border border-border shadow-xl shadow-primary/5 rounded-[2rem] bg-white overflow-hidden group">
                                         <CardContent className="p-6">
                                             <div className="flex items-center justify-between mb-4">
                                                 <div className={cn("p-2 rounded-xl", stat.bg)}>
@@ -174,21 +174,21 @@ export default function SettingsPage() {
                     )}
 
                     {activeTab === "security" && (
-                        <Card className="border-none shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-xl overflow-hidden">
+                        <Card className="border border-border shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-white overflow-hidden">
                             <CardHeader className="p-8 pb-4">
                                 <CardTitle className="text-2xl font-bold tracking-tight">Security Settings</CardTitle>
                                 <CardDescription className="text-base font-medium">Protect your account with modern security standards.</CardDescription>
                             </CardHeader>
                             <CardContent className="p-8 pt-0 space-y-8">
                                 <div className="space-y-6">
-                                    <div className="flex items-center justify-between py-6 border-b border-border/50">
+                                    <div className="flex items-center justify-between py-6 border-b border-border">
                                         <div className="space-y-1">
                                             <div className="font-bold flex items-center gap-2">Two-Factor Authentication <Badge className="bg-green-500/10 text-green-600 border-none text-[8px] uppercase">Recommended</Badge></div>
                                             <div className="text-sm text-muted-foreground font-medium">Add an extra layer of security to your account.</div>
                                         </div>
                                         <Switch className="data-[state=checked]:bg-primary" />
                                     </div>
-                                    <div className="flex items-center justify-between py-6 border-b border-border/50">
+                                    <div className="flex items-center justify-between py-6 border-b border-border">
                                         <div className="space-y-1">
                                             <div className="font-bold">Last Security Audit</div>
                                             <div className="text-sm text-muted-foreground font-medium">Your account was last audited 3 days ago.</div>
@@ -226,28 +226,28 @@ export default function SettingsPage() {
                     )}
 
                     {activeTab === "preferences" && (
-                        <Card className="border-none shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-xl overflow-hidden">
+                        <Card className="border border-border shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-white overflow-hidden">
                             <CardHeader className="p-8 pb-4">
                                 <CardTitle className="text-2xl font-bold tracking-tight">App Preferences</CardTitle>
                                 <CardDescription className="text-base font-medium">Customize your workspace experience.</CardDescription>
                             </CardHeader>
                             <CardContent className="p-8 pt-0 space-y-8">
                                 <div className="space-y-6">
-                                    <div className="flex items-center justify-between py-6 border-b border-border/50">
+                                    <div className="flex items-center justify-between py-6 border-b border-border">
                                         <div className="space-y-1">
                                             <div className="font-bold">Email Notifications</div>
                                             <div className="text-sm text-muted-foreground font-medium">Receive weekly productivity reports and team updates.</div>
                                         </div>
                                         <Switch defaultChecked className="data-[state=checked]:bg-primary" />
                                     </div>
-                                    <div className="flex items-center justify-between py-6 border-b border-border/50">
+                                    <div className="flex items-center justify-between py-6 border-b border-border">
                                         <div className="space-y-1">
                                             <div className="font-bold">Compact View</div>
                                             <div className="text-sm text-muted-foreground font-medium">Maximize information density across all CRM tables.</div>
                                         </div>
                                         <Switch className="data-[state=checked]:bg-primary" />
                                     </div>
-                                    <div className="flex items-center justify-between py-6 border-b border-border/50">
+                                    <div className="flex items-center justify-between py-6 border-b border-border">
                                         <div className="space-y-1">
                                             <div className="font-bold">Auto-Collapse Sidebar</div>
                                             <div className="text-sm text-muted-foreground font-medium">Automatically shrink the menu when navigating between modules.</div>
@@ -267,8 +267,8 @@ export default function SettingsPage() {
 
                     {activeTab === "system" && isAdmin && (
                         <div className="space-y-8">
-                            <Card className="border-none shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-xl overflow-hidden text-primary-foreground relative overflow-hidden bg-primary">
-                                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none" />
+                            <Card className="border border-primary/20 shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-primary overflow-hidden text-primary-foreground relative">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none" />
                                 <CardHeader className="p-8 relative z-10">
                                     <div className="flex items-center gap-3 mb-2">
                                         <Badge className="bg-white/20 text-white border-none text-[9px] uppercase tracking-widest px-3">System Admin Mode</Badge>
@@ -277,28 +277,28 @@ export default function SettingsPage() {
                                     <CardDescription className="text-white/80 font-medium text-base">Monitor and configure system-wide parameters.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="p-8 pt-0 grid sm:grid-cols-3 gap-6 relative z-10">
-                                    <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-md">
+                                    <div className="bg-white/10 p-4 rounded-2xl">
                                         <div className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Total Leads</div>
                                         <div className="text-2xl font-bold">{leads.length}</div>
                                     </div>
-                                    <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-md">
+                                    <div className="bg-white/10 p-4 rounded-2xl">
                                         <div className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Active Members</div>
                                         <div className="text-2xl font-bold">{teamMembers.filter(m => m.status === 'Active').length}</div>
                                     </div>
-                                    <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-md">
+                                    <div className="bg-white/10 p-4 rounded-2xl">
                                         <div className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Live Campaigns</div>
                                         <div className="text-2xl font-bold">{campaigns.filter(c => c.status === 'Active').length}</div>
                                     </div>
                                 </CardContent>
                             </Card>
 
-                            <Card className="border-none shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-xl overflow-hidden">
+                            <Card className="border-none shadow-2xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
                                 <CardHeader className="p-8 pb-4">
                                     <CardTitle className="text-2xl font-bold tracking-tight">System Controls</CardTitle>
                                     <CardDescription className="text-base font-medium">Advanced settings for global workspace management.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="p-8 pt-0 space-y-4">
-                                    <div className="flex items-center justify-between py-5 border-b border-border/50">
+                                    <div className="flex items-center justify-between py-5 border-b border-border">
                                         <div className="flex items-center gap-4">
                                             <div className="h-10 w-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-600">
                                                 <Globe className="h-5 w-5" />
@@ -310,7 +310,7 @@ export default function SettingsPage() {
                                         </div>
                                         <Switch className="data-[state=checked]:bg-primary" />
                                     </div>
-                                    <div className="flex items-center justify-between py-5 border-b border-border/50">
+                                    <div className="flex items-center justify-between py-5 border-b border-border">
                                         <div className="flex items-center gap-4">
                                             <div className="h-10 w-10 bg-orange-500/10 rounded-xl flex items-center justify-center text-orange-600">
                                                 <Zap className="h-5 w-5" />
@@ -322,7 +322,7 @@ export default function SettingsPage() {
                                         </div>
                                         <Switch defaultChecked className="data-[state=checked]:bg-primary" />
                                     </div>
-                                    <div className="flex items-center justify-between py-5 border-b border-border/50">
+                                    <div className="flex items-center justify-between py-5 border-b border-border">
                                         <div className="flex items-center gap-4">
                                             <div className="h-10 w-10 bg-slate-500/10 rounded-xl flex items-center justify-center text-slate-600">
                                                 <Eye className="h-5 w-5" />

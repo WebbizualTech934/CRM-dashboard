@@ -40,7 +40,7 @@ export function EmailDashboard({ projectId, status }: { projectId?: string, stat
         <div className="space-y-8">
             <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-6">
                 {stats.map((stat) => (
-                    <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-card/50 backdrop-blur-sm overflow-hidden group">
+                    <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-[2rem] bg-white border border-border overflow-hidden group">
                         <CardHeader className="pb-2 flex flex-row items-center justify-between">
                             <CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">{stat.label}</CardTitle>
                             <div className={cn("p-2 rounded-xl transition-colors", stat.bg)}>
@@ -56,8 +56,8 @@ export function EmailDashboard({ projectId, status }: { projectId?: string, stat
             </div>
 
             <div className="grid gap-6 lg:grid-cols-7">
-                <Card className="col-span-4 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                    <CardHeader className="border-b border-border/50 p-8 pb-6">
+                <Card className="col-span-4 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                    <CardHeader className="border-b border-border p-8 pb-6">
                         <CardTitle className="text-xl font-bold tracking-tight">Campaign Funnel</CardTitle>
                     </CardHeader>
                     <CardContent className="p-8">
@@ -86,14 +86,14 @@ export function EmailDashboard({ projectId, status }: { projectId?: string, stat
                     </CardContent>
                 </Card>
 
-                <Card className="col-span-3 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                    <CardHeader className="border-b border-border/50 p-8 pb-6 flex flex-row items-center justify-between">
+                <Card className="col-span-3 border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                    <CardHeader className="border-b border-border p-8 pb-6 flex flex-row items-center justify-between">
                         <CardTitle className="text-xl font-bold tracking-tight">Top Campaigns</CardTitle>
                         <TrendingUp className="h-5 w-5 text-green-500" />
                     </CardHeader>
                     <CardContent className="p-6 space-y-4">
                         {projCampaigns.slice(0, 4).map((c) => (
-                            <div key={c.id} className="flex items-center justify-between p-4 rounded-2xl bg-muted/20 hover:bg-white/50 transition-all group cursor-pointer border border-transparent hover:border-border/50">
+                            <div key={c.id} className="flex items-center justify-between p-4 rounded-2xl bg-muted/20 hover:bg-white/50 transition-all group cursor-pointer border border-transparent hover:border-border">
                                 <div className="space-y-1">
                                     <div className="text-sm font-bold group-hover:text-primary transition-colors">{c.name}</div>
                                     <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{c.status}</div>
@@ -114,12 +114,12 @@ export function EmailDashboard({ projectId, status }: { projectId?: string, stat
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-                <Card className="border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                    <CardHeader className="border-b border-border/50 p-8 pb-6">
+                <Card className="border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                    <CardHeader className="border-b border-border p-8 pb-6">
                         <CardTitle className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">Engagement Heatmap</CardTitle>
                     </CardHeader>
                     <CardContent className="p-8">
-                        <div className="h-44 flex items-center justify-center bg-muted/20 rounded-[2rem] border border-dashed border-border/50">
+                        <div className="h-44 flex items-center justify-center bg-muted/20 rounded-[2rem] border border-dashed border-border">
                             <div className="text-center space-y-2">
                                 <BarChart3 className="h-10 w-10 text-muted-foreground/10 mx-auto" />
                                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/30 px-6">Engagement by Timezone Comparison</p>
@@ -127,8 +127,8 @@ export function EmailDashboard({ projectId, status }: { projectId?: string, stat
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
-                    <CardHeader className="border-b border-border/50 p-8 pb-6">
+                <Card className="border-none shadow-xl shadow-primary/5 rounded-[2.5rem] bg-white border border-border overflow-hidden">
+                    <CardHeader className="border-b border-border p-8 pb-6">
                         <CardTitle className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">Lead Sentiment</CardTitle>
                     </CardHeader>
                     <CardContent className="p-8">

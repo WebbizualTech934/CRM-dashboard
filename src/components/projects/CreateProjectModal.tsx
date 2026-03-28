@@ -2,14 +2,13 @@
 
 import { useState } from "react"
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetFooter,
-    SheetTrigger
-} from "@/components/ui/sheet"
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -65,23 +64,22 @@ export function CreateProjectModal({ children }: { children?: React.ReactNode })
                     </Button>
                 )}
             </div>
-        <Sheet open={open} onOpenChange={setOpen}>
-
-            <SheetContent side="right">
-                <SheetHeader>
-                    <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                            <Layout className="h-6 w-6" />
-                        </div>
-                        New Project
-                    </SheetTitle>
-                    <SheetDescription className="text-muted-foreground font-medium mt-1">
-                        Set up a new lead generation or outreach workspace.
-                    </SheetDescription>
-                </SheetHeader>
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent size="md" className="p-0 border border-border">
+                <form id="project-form" onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+                    <DialogHeader className="p-10 border-b border-border bg-slate-50">
+                        <DialogTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                <Layout className="h-6 w-6" />
+                            </div>
+                            New Project
+                        </DialogTitle>
+                        <DialogDescription className="text-muted-foreground font-medium mt-1">
+                            Set up a new lead generation or outreach workspace.
+                        </DialogDescription>
+                    </DialogHeader>
 
                 <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-                    <form id="project-form" onSubmit={handleSubmit} className="space-y-8 pb-10">
                         <div className="space-y-6">
                             <div className="space-y-2">
                                 <Label htmlFor="name" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1 flex items-center gap-2">
@@ -93,7 +91,7 @@ export function CreateProjectModal({ children }: { children?: React.ReactNode })
                                     required
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all text-lg"
+                                    className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all text-lg"
                                 />
                             </div>
 
@@ -106,7 +104,7 @@ export function CreateProjectModal({ children }: { children?: React.ReactNode })
                                     placeholder="What is the goal of this campaign?"
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                    className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                    className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                 />
                             </div>
 
@@ -117,10 +115,10 @@ export function CreateProjectModal({ children }: { children?: React.ReactNode })
                                         value={formData.type}
                                         onValueChange={(v: string | null) => v && setFormData({ ...formData, type: v })}
                                     >
-                                        <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-14 rounded-2xl border-border bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue placeholder="Select type" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="lead-gen" className="rounded-xl font-bold py-3">Lead Gen</SelectItem>
                                             <SelectItem value="outreach" className="rounded-xl font-bold py-3">Outreach</SelectItem>
                                             <SelectItem value="creative" className="rounded-xl font-bold py-3">Creative</SelectItem>
@@ -134,10 +132,10 @@ export function CreateProjectModal({ children }: { children?: React.ReactNode })
                                         value={formData.status}
                                         onValueChange={(v: string | null) => v && setFormData({ ...formData, status: v })}
                                     >
-                                        <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-14 rounded-2xl border-border bg-muted/20 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue placeholder="Select status" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="Active" className="rounded-xl font-bold py-3">Active</SelectItem>
                                             <SelectItem value="Draft" className="rounded-xl font-bold py-3">Draft</SelectItem>
                                             <SelectItem value="Paused" className="rounded-xl font-bold py-3">Paused</SelectItem>
@@ -166,29 +164,29 @@ export function CreateProjectModal({ children }: { children?: React.ReactNode })
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
 
-                <SheetFooter className="sm:justify-between items-center gap-4">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={() => setOpen(false)}
-                        className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        form="project-form"
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
-                    >
-                        {isSubmitting ? "Creating..." : "Create Project"}
-                    </Button>
-                </SheetFooter>
-            </SheetContent>
-        </Sheet>
+                    <DialogFooter className="p-10 border-t border-border bg-slate-50 flex-row gap-4 sm:justify-between items-center">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={() => setOpen(false)}
+                            className="rounded-2xl h-14 px-8 font-bold hover:bg-slate-200 transition-all"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            form="project-form"
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
+                        >
+                            {isSubmitting ? "Creating..." : "Create Project"}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
         </>
     )
 }

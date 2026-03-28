@@ -64,8 +64,8 @@ export function NewSequenceModal({ open, onOpenChange, projectId }: NewSequenceM
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right" className="w-full sm:max-w-xl p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
-                <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0">
+            <SheetContent side="right" className="w-full sm:max-w-xl p-0 flex flex-col bg-white border-l border-border shadow-2xl">
+                <div className="bg-primary/[0.03] p-8 border-b border-border shrink-0">
                     <SheetHeader>
                         <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
                             <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
@@ -87,7 +87,7 @@ export function NewSequenceModal({ open, onOpenChange, projectId }: NewSequenceM
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="e.g. Cold SaaS Outreach - V1"
-                                className="h-14 rounded-2xl border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold text-lg transition-all"
+                                className="h-14 rounded-2xl border-border bg-muted/20 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold text-lg transition-all"
                                 required
                             />
                         </div>
@@ -115,7 +115,7 @@ export function NewSequenceModal({ open, onOpenChange, projectId }: NewSequenceM
                                         )}>
                                             {step.type === "wait" ? <Clock className="h-5 w-5" /> : <Mail className="h-5 w-5" />}
                                         </div>
-                                        <div className="flex-1 bg-muted/20 rounded-3xl p-6 border border-border/50 group-hover:bg-muted/30 transition-all group-hover:shadow-md group-hover:border-primary/20">
+                                        <div className="flex-1 bg-muted/20 rounded-3xl p-6 border border-border group-hover:bg-muted/30 transition-all group-hover:shadow-md group-hover:border-primary/20">
                                             <div className="flex items-center justify-between mb-4">
                                                 <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 flex items-center gap-2">
                                                     <span className="h-4 w-4 rounded bg-white flex items-center justify-center text-[9px] font-black shadow-sm text-primary">{i + 1}</span>
@@ -137,7 +137,7 @@ export function NewSequenceModal({ open, onOpenChange, projectId }: NewSequenceM
                                                         type="number"
                                                         value={step.waitDays}
                                                         onChange={(e) => updateStep(i, { waitDays: parseInt(e.target.value) || 0 })}
-                                                        className="w-24 h-12 rounded-2xl bg-white border-border/50 font-black text-center text-lg focus:ring-2 focus:ring-primary/20"
+                                                        className="w-24 h-12 rounded-2xl bg-white border-border font-black text-center text-lg focus:ring-2 focus:ring-primary/20"
                                                         min="0"
                                                     />
                                                     <span className="text-sm font-bold text-muted-foreground">days</span>
@@ -149,10 +149,10 @@ export function NewSequenceModal({ open, onOpenChange, projectId }: NewSequenceM
                                                         value={step.templateId}
                                                         onValueChange={(val) => updateStep(i, { templateId: val })}
                                                     >
-                                                        <SelectTrigger className="h-12 rounded-2xl bg-white border-border/50 shadow-sm font-bold text-sm focus:ring-2 focus:ring-primary/20">
+                                                        <SelectTrigger className="h-12 rounded-2xl bg-white border-border shadow-sm font-bold text-sm focus:ring-2 focus:ring-primary/20">
                                                             <SelectValue placeholder="Choose a template..." />
                                                         </SelectTrigger>
-                                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2 min-w-[240px]">
+                                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2 min-w-[240px]">
                                                             {templates.map((t) => (
                                                                 <SelectItem key={t.id} value={t.id} className="rounded-xl font-bold py-3">
                                                                     {t.name}
@@ -176,7 +176,7 @@ export function NewSequenceModal({ open, onOpenChange, projectId }: NewSequenceM
                     </form>
                 </div>
 
-                <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md">
+                <div className="shrink-0 p-8 pt-4 border-t border-border bg-white">
                     <SheetFooter className="sm:justify-between items-center gap-4">
                         <Button
                             type="button"

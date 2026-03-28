@@ -34,8 +34,8 @@ export function RowDetailDrawer({ open, onOpenChange, data, onEdit }: RowDetailD
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right" className="w-full sm:max-w-xl p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
-                <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0">
+            <SheetContent side="right" className="w-full sm:max-w-xl p-0 flex flex-col bg-white border-l border-border shadow-2xl">
+                <div className="bg-primary/[0.03] p-8 border-b border-border shrink-0">
                     <SheetHeader>
                         <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2.5">
@@ -59,8 +59,8 @@ export function RowDetailDrawer({ open, onOpenChange, data, onEdit }: RowDetailD
 
                 <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar bg-slate-50/30">
                     {/* Key Properties Card */}
-                    <div className="bg-white rounded-[2rem] border border-border/50 shadow-sm overflow-hidden transition-all hover:shadow-md">
-                        <div className="px-6 py-4 border-b border-border/50 bg-primary/[0.02] flex justify-between items-center">
+                    <div className="bg-white rounded-[2rem] border border-border shadow-sm overflow-hidden transition-all hover:shadow-md">
+                        <div className="px-6 py-4 border-b border-border bg-primary/[0.02] flex justify-between items-center">
                             <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Properties</h3>
                             <Button 
                                 variant="ghost" 
@@ -148,8 +148,8 @@ export function RowDetailDrawer({ open, onOpenChange, data, onEdit }: RowDetailD
                     </div>
 
                     {/* Contact Info Card */}
-                    <div className="bg-white rounded-[2rem] border border-border/50 shadow-sm overflow-hidden transition-all hover:shadow-md">
-                        <div className="px-6 py-4 border-b border-border/50 bg-primary/[0.02]">
+                    <div className="bg-white rounded-[2rem] border border-border shadow-sm overflow-hidden transition-all hover:shadow-md">
+                        <div className="px-6 py-4 border-b border-border bg-primary/[0.02]">
                             <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Contact Details</h3>
                         </div>
                         <div className="p-6 space-y-6">
@@ -193,8 +193,8 @@ export function RowDetailDrawer({ open, onOpenChange, data, onEdit }: RowDetailD
 
                     {/* Notes Card */}
                     {(data.note || data.message) && (
-                        <div className="bg-white rounded-[2rem] border border-border/50 shadow-sm overflow-hidden transition-all hover:shadow-md">
-                            <div className="px-6 py-4 border-b border-border/50 bg-primary/[0.02]">
+                        <div className="bg-white rounded-[2rem] border border-border shadow-sm overflow-hidden transition-all hover:shadow-md">
+                            <div className="px-6 py-4 border-b border-border bg-primary/[0.02]">
                                 <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Internal Notes</h3>
                             </div>
                             <div className="p-6">
@@ -233,7 +233,7 @@ export function RowDetailDrawer({ open, onOpenChange, data, onEdit }: RowDetailD
                     </div>
                 </div>
 
-                <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md z-20">
+                <div className="shrink-0 p-8 pt-4 border-t border-border bg-white z-20">
                     <SheetFooter className="flex-row gap-4 sm:justify-between items-center">
                         <Button variant="ghost" onClick={() => onOpenChange(false)} className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50">Close Details</Button>
                         <Button 

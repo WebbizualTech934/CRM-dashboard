@@ -2,13 +2,13 @@
 
 import { useState } from "react"
 import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetDescription,
-    SheetFooter,
-} from "@/components/ui/sheet"
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from "@/components/ui/dialog"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -145,13 +145,13 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
 
         return (
             <Select value={value} onValueChange={(val) => onChange(val || "New")}>
-                <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all hover:bg-muted/30 group">
+                <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all hover:bg-muted/30 group">
                     <div className="flex items-center gap-2">
                         <div className={cn("h-2 w-2 rounded-full", statuses.find(s => s.label === value)?.color)}></div>
                         <SelectValue placeholder="Select status" />
                     </div>
                 </SelectTrigger>
-                <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                     {statuses.map((s) => (
                         <SelectItem
                             key={s.label}
@@ -179,13 +179,13 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
 
         return (
             <Select value={value} onValueChange={(val) => onChange(val || "Cold")}>
-                <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all hover:bg-muted/30 group">
+                <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all hover:bg-muted/30 group">
                     <div className="flex items-center gap-2">
                         <div className={cn("h-2 w-2 rounded-full", stages.find(s => s.label === value)?.color || "bg-blue-300")}></div>
                         <SelectValue placeholder="Select lead stage" />
                     </div>
                 </SelectTrigger>
-                <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                     {stages.map((s) => (
                         <SelectItem
                             key={s.label}
@@ -204,20 +204,20 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
     }
 
     return (
-        <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right">
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent size="lg" className="p-0 border border-border">
                 <form id="new-lead-form" onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
-                    <SheetHeader>
-                        <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                    <DialogHeader className="p-10 border-b border-border bg-slate-50">
+                        <DialogTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                            <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                                 {type === "manufacturers" ? <Briefcase className="h-6 w-6" /> : <User className="h-6 w-6" />}
                             </div>
                             {type === "manufacturers" ? "Add New Manufacturer" : "Create New Lead"}
-                        </SheetTitle>
-                        <SheetDescription className="text-muted-foreground font-medium mt-1">
+                        </DialogTitle>
+                        <DialogDescription className="text-muted-foreground font-medium mt-1">
                             {type === "manufacturers" ? "Add a new manufacturer to your database." : "Generate a high-quality marketing lead for your project."}
-                        </SheetDescription>
-                    </SheetHeader>
+                        </DialogDescription>
+                    </DialogHeader>
 
                     <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
                     {type === "manufacturers" ? (
@@ -231,10 +231,10 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={selectedProjectId || "none"}
                                         onValueChange={(val) => setSelectedProjectId(val === "none" ? "" : (val || ""))}
                                     >
-                                        <SelectTrigger className="h-12 w-full rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all hover:bg-muted/30">
+                                        <SelectTrigger className="h-12 w-full rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all hover:bg-muted/30">
                                             <SelectValue placeholder="Select a project (optional)" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="none" className="rounded-xl font-bold py-3"><span className="text-muted-foreground">No Project</span></SelectItem>
                                             {projects?.map((p: any) => (
                                                 <SelectItem key={p.id} value={p.id} className="rounded-xl font-bold py-3">
@@ -255,7 +255,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.parentCompany}
                                         onChange={(e) => setFormData({ ...formData, parentCompany: e.target.value })}
                                         placeholder="e.g. Acme Corp"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         required
                                     />
                                     <datalist id="parent-companies">
@@ -272,7 +272,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.peerBrand}
                                         onChange={(e) => setFormData({ ...formData, peerBrand: e.target.value })}
                                         placeholder="e.g. Acme Premium"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                             </div>
@@ -286,7 +286,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.websiteLink}
                                         onChange={(e) => setFormData({ ...formData, websiteLink: e.target.value })}
                                         placeholder="e.g. example.com"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -297,7 +297,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.linkedin}
                                         onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
                                         placeholder="linkedin.com/company/..."
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                             </div>
@@ -311,7 +311,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.country}
                                         onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                                         placeholder="e.g. USA"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -322,10 +322,10 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.companySize}
                                         onValueChange={(val) => setFormData({ ...formData, companySize: val || "" })}
                                     >
-                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue placeholder="Select size" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="1-10" className="rounded-xl font-bold py-2">1-10 employees</SelectItem>
                                             <SelectItem value="11-50" className="rounded-xl font-bold py-2">11-50 employees</SelectItem>
                                             <SelectItem value="51-200" className="rounded-xl font-bold py-2">51-200 employees</SelectItem>
@@ -346,13 +346,13 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.fitLevel}
                                         onValueChange={(val) => setFormData({ ...formData, fitLevel: val || "Medium" })}
                                     >
-                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <div className="flex items-center gap-2">
                                                 <div className={cn("h-2 w-2 rounded-full", formData.fitLevel === "High" ? "bg-green-500" : formData.fitLevel === "Low" ? "bg-red-500" : "bg-yellow-500")}></div>
                                                 <SelectValue placeholder="Select fit" />
                                             </div>
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="High" className="rounded-xl font-bold py-3"><div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-green-500"></div>High Fit</div></SelectItem>
                                             <SelectItem value="Medium" className="rounded-xl font-bold py-3"><div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-yellow-500"></div>Medium Fit</div></SelectItem>
                                             <SelectItem value="Low" className="rounded-xl font-bold py-3"><div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-red-500"></div>Low Fit</div></SelectItem>
@@ -367,10 +367,10 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.productMatchRate}
                                         onValueChange={(val) => setFormData({ ...formData, productMatchRate: val || "" })}
                                     >
-                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue placeholder="Select match rate" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="< 25%" className="rounded-xl font-bold py-2">&lt; 25%</SelectItem>
                                             <SelectItem value="25% - 50%" className="rounded-xl font-bold py-2">25% - 50%</SelectItem>
                                             <SelectItem value="50% - 75%" className="rounded-xl font-bold py-2">50% - 75%</SelectItem>
@@ -390,7 +390,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.decisionMaker}
                                         onChange={(e) => setFormData({ ...formData, decisionMaker: e.target.value })}
                                         placeholder="e.g. John Doe, CEO"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -401,10 +401,10 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.visualPresence}
                                         onValueChange={(val) => setFormData({ ...formData, visualPresence: val || "Medium" })}
                                     >
-                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue placeholder="Select rating" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="Excellent" className="rounded-xl font-bold py-2 text-green-600">Excellent</SelectItem>
                                             <SelectItem value="Good" className="rounded-xl font-bold py-2 text-blue-600">Good</SelectItem>
                                             <SelectItem value="Average" className="rounded-xl font-bold py-2 text-yellow-600">Average</SelectItem>
@@ -423,10 +423,10 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.leadBy}
                                         onValueChange={(val) => setFormData({ ...formData, leadBy: val || "" })}
                                     >
-                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue placeholder="Select team member" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             {teamMembers?.map((m: any) => (
                                                 <SelectItem key={m.id} value={m.name} className="rounded-xl font-bold py-2">
                                                     {m.name}
@@ -443,7 +443,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         type="date"
                                         value={formData.date}
                                         onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                             </div>
@@ -456,7 +456,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                     value={formData.note}
                                     onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                                     placeholder="Add any additional notes here..."
-                                    className="min-h-[100px] rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold resize-none transition-all"
+                                    className="min-h-[100px] rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold resize-none transition-all"
                                 />
                             </div>
                         </>
@@ -471,10 +471,10 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={selectedProjectId || "none"}
                                         onValueChange={(val) => setSelectedProjectId(val === "none" ? "" : (val || ""))}
                                     >
-                                        <SelectTrigger className="h-12 w-full rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all hover:bg-muted/30">
+                                        <SelectTrigger className="h-12 w-full rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all hover:bg-muted/30">
                                             <SelectValue placeholder="Select a project (optional)" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="none" className="rounded-xl font-bold py-3"><span className="text-muted-foreground">No Project</span></SelectItem>
                                             {projects?.map((p: any) => (
                                                 <SelectItem key={p.id} value={p.id} className="rounded-xl font-bold py-3">
@@ -494,7 +494,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.firstName}
                                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                                         placeholder="e.g. John"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         required
                                     />
                                 </div>
@@ -506,7 +506,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.lastName}
                                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                                         placeholder="e.g. Doe"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         required
                                     />
                                 </div>
@@ -522,7 +522,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                         placeholder="john@acme.com"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         required
                                     />
                                 </div>
@@ -534,7 +534,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.company}
                                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                                         placeholder="e.g. Acme Corp"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                         required
                                     />
                                 </div>
@@ -549,7 +549,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.jobTitle}
                                         onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
                                         placeholder="e.g. CEO"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -560,7 +560,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.phone}
                                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                         placeholder="e.g. +1 234 567 890"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                             </div>
@@ -574,7 +574,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.website}
                                         onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                                         placeholder="e.g. acme.com"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -585,7 +585,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.websiteLink}
                                         onChange={(e) => setFormData({ ...formData, websiteLink: e.target.value })}
                                         placeholder="www.google.com"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                             </div>
@@ -599,7 +599,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.speciality}
                                         onChange={(e) => setFormData({ ...formData, speciality: e.target.value })}
                                         placeholder="e.g. Marketing"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -610,7 +610,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.subSpeciality}
                                         onChange={(e) => setFormData({ ...formData, subSpeciality: e.target.value })}
                                         placeholder="e.g. Digital Ads"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                             </div>
@@ -624,7 +624,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.country}
                                         onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                                         placeholder="e.g. USA"
-                                        className="h-12 rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
+                                        className="h-12 rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold transition-all"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -646,7 +646,7 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                     value={formData.message}
                                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, message: e.target.value })}
                                     placeholder="Describe lead requirements..."
-                                    className="min-h-[100px] rounded-2xl bg-muted/20 border-border/50 focus-visible:ring-2 focus-visible:ring-primary/20 font-bold resize-none transition-all"
+                                    className="min-h-[100px] rounded-2xl bg-muted/20 border-border focus-visible:ring-2 focus-visible:ring-primary/20 font-bold resize-none transition-all"
                                 />
                             </div>
 
@@ -668,10 +668,10 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                                         value={formData.priority}
                                         onValueChange={(val) => setFormData({ ...formData, priority: val || "Medium" })}
                                     >
-                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border/50 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                                        <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-border focus:ring-2 focus:ring-primary/20 font-bold transition-all">
                                             <SelectValue placeholder="Select priority" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2">
+                                        <SelectContent className="rounded-2xl border-border shadow-2xl p-2">
                                             <SelectItem value="Low" className="rounded-xl font-bold py-3">Low</SelectItem>
                                             <SelectItem value="Medium" className="rounded-xl font-bold py-3">Medium</SelectItem>
                                             <SelectItem value="High" className="rounded-xl font-bold py-3">High</SelectItem>
@@ -684,12 +684,12 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
 
                     </div>
 
-                    <SheetFooter className="flex-row gap-4 sm:justify-between items-center">
+                    <DialogFooter className="p-10 border-t border-border bg-slate-50 flex-row gap-4 sm:justify-between items-center">
                         <Button
                             type="button"
                             variant="ghost"
                             onClick={() => onOpenChange(false)}
-                            className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50"
+                            className="rounded-2xl h-14 px-8 font-bold hover:bg-slate-200 transition-all"
                         >
                             Cancel
                         </Button>
@@ -701,9 +701,9 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
                         >
                             {isSubmitting ? "Processing..." : (type === "manufacturers" ? "Add Manufacturer" : "Create Lead")}
                         </Button>
-                    </SheetFooter>
+                    </DialogFooter>
                 </form>
-            </SheetContent>
-        </Sheet>
+            </DialogContent>
+        </Dialog>
     )
 }

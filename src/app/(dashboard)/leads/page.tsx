@@ -25,7 +25,7 @@ export default function LeadsPage() {
             </div>
 
             <Tabs defaultValue="leads" className="space-y-10">
-                <TabsList className="bg-card/50 backdrop-blur-sm border border-border/50 p-2 rounded-2xl h-auto min-h-16 gap-2 flex-wrap justify-start w-full">
+                <TabsList className="bg-slate-100/50 border border-border p-2 rounded-2xl h-auto min-h-16 gap-2 flex-wrap justify-start w-full">
                     {[
                         { value: "leads", label: "All Leads", icon: Users },
                         { value: "manufacturers", label: "Manufacturers", icon: Briefcase },

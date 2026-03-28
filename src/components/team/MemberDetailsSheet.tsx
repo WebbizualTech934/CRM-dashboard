@@ -86,14 +86,14 @@ export function MemberDetailsSheet({ member, onClose, onEdit }: MemberDetailsShe
                 <div className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar">
                     {/* Performance Stats */}
                     <div className="grid grid-cols-2 gap-6">
-                        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-border/50 flex flex-col gap-1 transition-all hover:shadow-md">
+                        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-border flex flex-col gap-1 transition-all hover:shadow-md">
                             <div className="flex items-center gap-2 text-muted-foreground mb-2">
                                 <MousePointer2 className="h-4 w-4 text-primary" />
                                 <span className="text-[10px] font-black uppercase tracking-widest">Leads Added</span>
                             </div>
                             <div className="text-4xl font-black text-slate-900 tracking-tighter">{member.leadsAdded.toLocaleString()}</div>
                         </div>
-                        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-border/50 flex flex-col gap-1 transition-all hover:shadow-md">
+                        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-border flex flex-col gap-1 transition-all hover:shadow-md">
                             <div className="flex items-center gap-2 text-muted-foreground mb-2">
                                 <Send className="h-4 w-4 text-primary" />
                                 <span className="text-[10px] font-black uppercase tracking-widest">Emails Sent</span>
@@ -108,7 +108,7 @@ export function MemberDetailsSheet({ member, onClose, onEdit }: MemberDetailsShe
                             <UserCircle className="h-4 w-4 text-primary" />
                             <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Account Details</h4>
                         </div>
-                        <div className="bg-white rounded-[2.5rem] border border-border/50 divide-y divide-slate-50 overflow-hidden shadow-sm">
+                        <div className="bg-white rounded-[2.5rem] border border-border divide-y divide-slate-50 overflow-hidden shadow-sm">
                             <div className="px-8 py-5 flex items-center justify-between group hover:bg-slate-50/50 transition-colors">
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Level</span>
                                 <span className="text-xs font-black text-slate-700 uppercase tracking-tight">{member.userRole}</span>
@@ -133,7 +133,7 @@ export function MemberDetailsSheet({ member, onClose, onEdit }: MemberDetailsShe
                             {allowedMenus.map((menu) => (
                                 <div 
                                     key={menu.id} 
-                                    className="flex items-center space-x-3 p-5 rounded-2xl bg-white border border-border/50 shadow-sm group hover:border-primary/20 transition-all hover:shadow-md"
+                                    className="flex items-center space-x-3 p-5 rounded-2xl bg-white border border-border shadow-sm group hover:border-primary/20 transition-all hover:shadow-md"
                                 >
                                     <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary transition-transform group-hover:scale-110">
                                         <menu.icon className="h-5 w-5" />
@@ -147,12 +147,12 @@ export function MemberDetailsSheet({ member, onClose, onEdit }: MemberDetailsShe
                     </div>
                 </div>
 
-                <div className="p-8 border-t border-border/50 bg-white/80 backdrop-blur-md shrink-0">
+                <div className="p-8 border-t border-border bg-white shrink-0">
                     <div className="flex flex-row gap-4">
                         <Button
                             variant="ghost"
                             onClick={onClose}
-                            className="flex-1 h-14 rounded-2xl font-black uppercase tracking-widest text-xs border border-border/50 hover:bg-slate-50 transition-all"
+                            className="flex-1 h-14 rounded-2xl font-black uppercase tracking-widest text-xs border border-border hover:bg-slate-50 transition-all"
                         >
                             Close
                         </Button>

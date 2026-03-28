@@ -330,7 +330,7 @@ export default function CustomTablesPage() {
                         const cnt = customRecords.filter(r => r.schemaId === schema.id).length
                         return (
                             <div key={schema.id} onClick={() => { setSelectedSchemaId(schema.id); setTableSearch(""); setSortCol(null); setSelectedRows(new Set()); setFilterCol("all"); setFilterVal("") }}
-                                className="group bg-card/50 backdrop-blur-xl rounded-2xl border border-white/10 shadow-xl hover:shadow-2xl hover:border-primary/50 transition-all cursor-pointer flex flex-col h-full overflow-hidden">
+                                className="group bg-white border border-border rounded-2xl border border-border shadow-xl hover:shadow-2xl hover:border-primary/50 transition-all cursor-pointer flex flex-col h-full overflow-hidden">
                                 <div className="h-1 w-full rounded-t-md" style={{ background: schema.color }} />
                                 <div className="p-5 flex-1">
                                     <div className="flex items-start justify-between">
@@ -501,7 +501,7 @@ export default function CustomTablesPage() {
                     <input ref={fileInputRef} type="file" accept=".csv,.tsv" className="hidden" onChange={handleImport} />
                     
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="h-9 px-4 rounded-xl border border-white/10 bg-card/50 backdrop-blur-md font-bold text-xs hover:bg-card/80 transition-all inline-flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm">
+                        <DropdownMenuTrigger className="h-9 px-4 rounded-xl border border-border bg-card/50  font-bold text-xs hover:bg-white transition-all inline-flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm">
                             Actions <ChevronDown className="h-3 w-3 opacity-50" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48 rounded-md bg-white border border-slate-200 shadow-md p-1 min-w-[160px]">
@@ -525,7 +525,7 @@ export default function CustomTablesPage() {
                 <div className="relative w-64">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
                     <Input placeholder={`Search ${selectedSchema.name.toLowerCase()}...`} value={tableSearch} onChange={e => setTableSearch(e.target.value)}
-                        className="pl-9 h-9 text-xs border-white/10 rounded-xl shadow-none focus-visible:ring-1 focus-visible:ring-primary/20 bg-card/30 backdrop-blur-md transition-all" />
+                        className="pl-9 h-9 text-xs border-border rounded-xl shadow-none focus-visible:ring-1 focus-visible:ring-primary/20 bg-white border border-border transition-all" />
                 </div>
                 
                 <div className="h-5 w-[1px] bg-slate-200 mx-1" />

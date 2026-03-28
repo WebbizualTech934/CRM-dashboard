@@ -18,7 +18,7 @@ export function CopyrightFooter() {
             {/* Sliding Footer */}
             <footer 
                 className={cn(
-                    "fixed bottom-0 left-0 right-0 h-12 bg-white/80 backdrop-blur-xl border-t border-border/50 flex items-center justify-center px-8 transition-transform duration-500 ease-out z-50 pointer-events-none",
+                    "fixed bottom-0 left-0 right-0 h-12 bg-white  border-t border-border flex items-center justify-center px-8 transition-transform duration-500 ease-out z-50 pointer-events-none",
                     isHovered ? "translate-y-0" : "translate-y-full"
                 )}
             >

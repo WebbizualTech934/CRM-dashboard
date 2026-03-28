@@ -115,7 +115,7 @@ export default function ProjectsPage() {
             </div>
 
             <div className="flex flex-col gap-6">
-                <div className="flex items-center gap-4 bg-card/50 backdrop-blur-sm p-4 rounded-3xl border border-border/50 shadow-sm">
+                <div className="flex items-center gap-4 bg-white border border-border p-4 rounded-3xl border border-border shadow-sm">
                     <div className="relative flex-1 max-w-md group">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                         <Input
@@ -150,7 +150,7 @@ export default function ProjectsPage() {
                             onClick={() => setStatusFilter(filter)}
                             className={cn(
                                 "rounded-full px-6 h-10 font-bold text-xs transition-all",
-                                statusFilter === filter ? "shadow-lg shadow-primary/20" : "border-border/50 hover:bg-primary/5 hover:text-primary"
+                                statusFilter === filter ? "shadow-lg shadow-primary/20" : "border-border hover:bg-primary/5 hover:text-primary"
                             )}
                         >
                             {filter}
@@ -161,7 +161,7 @@ export default function ProjectsPage() {
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {filteredProjects.map((project) => (
-                    <Card key={project.id} className="flex flex-col border-none shadow-xl shadow-primary/5 hover:shadow-primary/10 transition-all duration-300 group rounded-[2.5rem] bg-card/50 backdrop-blur-sm overflow-hidden">
+                    <Card key={project.id} className="flex flex-col border-none shadow-xl shadow-primary/5 hover:shadow-primary/10 transition-all duration-300 group rounded-[2.5rem] bg-white border border-border overflow-hidden">
                         <CardHeader className="flex flex-row items-start justify-between space-y-0 p-8 pb-4">
                             <div className="space-y-2">
                                 <div className="flex items-center gap-2">

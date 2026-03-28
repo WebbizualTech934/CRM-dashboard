@@ -356,7 +356,7 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
         }}>
             <DialogTrigger
                 render={
-                    <Button variant="outline" size="sm" className="flex items-center gap-2 rounded-xl h-10 border-border/50 hover:bg-primary/5 hover:text-primary transition-all">
+                    <Button variant="outline" size="sm" className="flex items-center gap-2 rounded-xl h-10 border-border hover:bg-primary/5 hover:text-primary transition-all">
                         {mode === "import" ? <Upload className="h-4 w-4" /> : <Download className="h-4 w-4" />}
                         {mode === "import" ? "Import" : "Export"}
                     </Button>
@@ -404,7 +404,7 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
 
                             {step === "mapping" && (
                                 <div className="space-y-6">
-                                    <div className="flex items-center justify-between bg-muted/30 p-4 rounded-2xl border border-border/50">
+                                    <div className="flex items-center justify-between bg-muted/30 p-4 rounded-2xl border border-border">
                                         <div className="flex items-center gap-3">
                                             <div className="h-10 w-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-600">
                                                 <FileText className="h-5 w-5" />
@@ -499,13 +499,13 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 gap-4">
-                            <Button onClick={handleExportCSV} variant="outline" className="h-32 flex flex-col gap-3 rounded-[2rem] border-border/50 hover:bg-primary/5 hover:text-primary hover:border-primary/20 transition-all group">
+                            <Button onClick={handleExportCSV} variant="outline" className="h-32 flex flex-col gap-3 rounded-[2rem] border-border hover:bg-primary/5 hover:text-primary hover:border-primary/20 transition-all group">
                                 <div className="h-12 w-12 rounded-2xl bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                                     <FileText className="h-6 w-6" />
                                 </div>
                                 <span className="font-black uppercase tracking-widest text-[10px]">Export as CSV</span>
                             </Button>
-                            <Button variant="outline" className="h-32 flex flex-col gap-3 rounded-[2rem] border-border/50 hover:bg-primary/5 hover:text-primary hover:border-primary/20 transition-all group">
+                            <Button variant="outline" className="h-32 flex flex-col gap-3 rounded-[2rem] border-border hover:bg-primary/5 hover:text-primary hover:border-primary/20 transition-all group">
                                 <div className="h-12 w-12 rounded-2xl bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                                     <FileSpreadsheet className="h-6 w-6" />
                                 </div>
