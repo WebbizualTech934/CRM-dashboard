@@ -205,21 +205,19 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right" className="w-full sm:max-w-2xl sm:w-[700px] p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
+            <SheetContent side="right">
                 <form id="new-lead-form" onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
-                    <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0">
-                        <SheetHeader>
-                            <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                                <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                                    {type === "manufacturers" ? <Briefcase className="h-6 w-6" /> : <User className="h-6 w-6" />}
-                                </div>
-                                {type === "manufacturers" ? "Add New Manufacturer" : "Create New Lead"}
-                            </SheetTitle>
-                            <SheetDescription className="text-muted-foreground font-medium mt-1">
-                                {type === "manufacturers" ? "Add a new manufacturer to your database." : "Generate a high-quality marketing lead for your project."}
-                            </SheetDescription>
-                        </SheetHeader>
-                    </div>
+                    <SheetHeader>
+                        <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                {type === "manufacturers" ? <Briefcase className="h-6 w-6" /> : <User className="h-6 w-6" />}
+                            </div>
+                            {type === "manufacturers" ? "Add New Manufacturer" : "Create New Lead"}
+                        </SheetTitle>
+                        <SheetDescription className="text-muted-foreground font-medium mt-1">
+                            {type === "manufacturers" ? "Add a new manufacturer to your database." : "Generate a high-quality marketing lead for your project."}
+                        </SheetDescription>
+                    </SheetHeader>
 
                     <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
                     {type === "manufacturers" ? (
@@ -686,26 +684,24 @@ export function NewLeadModal({ open, onOpenChange, projectId: initialProjectId, 
 
                     </div>
 
-                    <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md">
-                        <SheetFooter className="flex-row gap-4 sm:justify-between items-center">
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                onClick={() => onOpenChange(false)}
-                                className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                form="new-lead-form"
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-[#ff7a59] text-white border-none hover:bg-[#ff7a59]/90"
-                            >
-                                {isSubmitting ? "Processing..." : (type === "manufacturers" ? "Add Manufacturer" : "Create Lead")}
-                            </Button>
-                        </SheetFooter>
-                    </div>
+                    <SheetFooter className="flex-row gap-4 sm:justify-between items-center">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={() => onOpenChange(false)}
+                            className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            form="new-lead-form"
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
+                        >
+                            {isSubmitting ? "Processing..." : (type === "manufacturers" ? "Add Manufacturer" : "Create Lead")}
+                        </Button>
+                    </SheetFooter>
                 </form>
             </SheetContent>
         </Sheet>

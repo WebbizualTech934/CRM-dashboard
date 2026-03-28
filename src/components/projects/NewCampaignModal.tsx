@@ -6,6 +6,8 @@ import {
     SheetContent,
     SheetHeader,
     SheetTitle,
+    SheetDescription,
+    SheetFooter,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -142,8 +144,8 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right" className="w-full sm:max-w-2xl sm:w-[700px] p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
-                <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0 z-10 relative">
+            <SheetContent side="right">
+                <SheetHeader>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
@@ -171,7 +173,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                             </div>
                         </div>
                     </div>
-                </div>
+                </SheetHeader>
 
                 <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
                     {step === "setup" && (
@@ -219,7 +221,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                                 className={cn(
                                                     "rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest cursor-pointer transition-all border-none ring-1 ring-inset",
                                                     selectedTags.includes(tag.id) 
-                                                        ? "bg-[#ff7a59] text-white shadow-lg shadow-[#ff7a59]/20 ring-[#ff7a59]" 
+                                                        ? "bg-primary text-white shadow-lg shadow-primary/20 ring-primary" 
                                                         : "bg-muted/30 text-muted-foreground ring-border/50 hover:bg-muted/50"
                                                 )}
                                                 onClick={() => toggleTag(tag.id)}
@@ -482,7 +484,7 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                     )}
                 </div>
 
-                <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md flex items-center justify-between relative z-10 transition-all">
+                <SheetFooter className="flex items-center justify-between border-t border-border/50">
                     <Button
                         variant="ghost"
                         onClick={() => {
@@ -506,19 +508,19 @@ export function NewCampaignModal({ open, onOpenChange, projectId }: NewCampaignM
                                 else if (step === "settings") setStep("launch")
                             }}
                             disabled={step === "setup" && !name}
-                            className="rounded-2xl h-14 px-10 font-black uppercase tracking-widest text-[11px] gap-3 bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] border-none"
+                            className="rounded-2xl h-14 px-10 font-black uppercase tracking-widest text-[11px] gap-3 bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] border-none"
                         >
                             Next Module <ArrowRight className="h-4 w-4" />
                         </Button>
                     ) : (
                         <Button
                             onClick={handleSubmit}
-                            className="rounded-2xl h-14 px-12 bg-[#ff7a59] text-white hover:bg-[#ff7a59]/90 font-black uppercase tracking-widest text-[11px] gap-3 shadow-xl shadow-primary/20 transition-all hover:scale-[1.05] active:scale-[0.95] border-none"
+                            className="rounded-2xl h-14 px-12 bg-primary text-white hover:bg-primary/90 font-black uppercase tracking-widest text-[11px] gap-3 shadow-xl shadow-primary/20 transition-all hover:scale-[1.05] active:scale-[0.95] border-none"
                         >
                             Confirm & Deploy <Rocket className="h-4 w-4" />
                         </Button>
                     )}
-                </div>
+                </SheetFooter>
             </SheetContent>
         </Sheet>
     )

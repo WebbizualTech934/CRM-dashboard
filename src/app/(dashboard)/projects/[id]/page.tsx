@@ -4,8 +4,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LeadsTable } from "@/components/tables/LeadsTable"
 import { ManufacturersTable } from "@/components/tables/ManufacturersTable"
 import { CreativeTable } from "@/components/tables/CreativeTable"
-import { EmailModule } from "@/components/emails/EmailModule"
-import { NewCampaignModal } from "@/components/projects/NewCampaignModal"
 import { NewLeadModal } from "@/components/leads/NewLeadModal"
 import { EditProjectModal } from "@/components/projects/EditProjectModal"
 import { ManageTeamModal } from "@/components/projects/ManageTeamModal"
@@ -27,8 +25,7 @@ export default function ProjectDetailPage() {
     const params = useParams()
     const router = useRouter()
     const id = params.id as string
-    const { projects, leads, teamMembers, campaigns, creativeAssets, isLoaded, addLead, addCreativeAsset, deleteProject } = useCRMData()
-    const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false)
+    const { projects, leads, teamMembers, creativeAssets, isLoaded, addLead, addCreativeAsset, deleteProject } = useCRMData()
     const [isLeadModalOpen, setIsLeadModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isTeamModalOpen, setIsTeamModalOpen] = useState(false)
@@ -61,13 +58,7 @@ export default function ProjectDetailPage() {
     // Assigned team members
     const assignedTeam = teamMembers.filter(m => project.teamMemberIds?.includes(m.id))
 
-    // Outreach sent (sum of emails sent by assigned members)
-    const projectCampaigns = campaigns.filter(c => c.projectId === project.id)
-    const totalOutreach = projectCampaigns.reduce((acc, c) => acc + c.recipients, 0)
-    const totalOpens = projectCampaigns.reduce((acc, c) => acc + c.opens, 0)
-    const totalReplies = projectCampaigns.reduce((acc, c) => acc + c.replies, 0)
-    const avgOpenRate = totalOutreach > 0 ? (totalOpens / totalOutreach) * 100 : 0
-    const avgReplyRate = totalOutreach > 0 ? (totalReplies / totalOutreach) * 100 : 0
+    // Recent activity (simulated from leads)
 
     // Recent activity (simulated from leads)
     const recentActivity = projectLeads.slice(0, 5).map(lead => ({
@@ -147,7 +138,6 @@ export default function ProjectDetailPage() {
                         { value: "overview", label: "Overview", icon: LayoutDashboard },
                         { value: "leads", label: "Leads", icon: Users },
                         { value: "manufacturers", label: "Manufacturers", icon: Briefcase },
-                        { value: "emails", label: "Emails", icon: Mail },
                         { value: "creative", label: "Creative", icon: Palette },
                         { value: "tasks", label: "Tasks", icon: CheckSquare },
                         { value: "team", label: "Team", icon: Users },
@@ -169,7 +159,6 @@ export default function ProjectDetailPage() {
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                         {[
                             { label: "Total Leads", value: totalLeads.toString(), sub: `${leadsThisWeek} this week`, icon: Users, color: "text-primary", bg: "bg-primary/5" },
-                            { label: "Emails Sent", value: totalOutreach.toString(), sub: "Campaign outreach", icon: Mail, color: "text-blue-600", bg: "bg-blue-500/5" },
                             { label: "Conversions", value: interestedLeads.toString(), sub: `${((interestedLeads / totalLeads || 0) * 100).toFixed(0)}% conversion`, icon: Activity, color: "text-green-600", bg: "bg-green-500/5" },
                             { label: "Follow-ups Due", value: "0", sub: "Next 24h", icon: Calendar, color: "text-orange-600", bg: "bg-orange-500/5" },
                         ].map((stat) => (
@@ -250,15 +239,6 @@ export default function ProjectDetailPage() {
                                     </div>
                                     Add New Lead
                                 </Button>
-                                <Button
-                                    onClick={() => setIsCampaignModalOpen(true)}
-                                    className="w-full h-14 rounded-2xl font-bold justify-start gap-4 bg-muted/30 text-foreground hover:bg-muted/50 transition-all group/btn"
-                                >
-                                    <div className="h-8 w-8 rounded-xl bg-muted/50 flex items-center justify-center group-hover/btn:bg-white/20 transition-colors">
-                                        <Mail className="h-5 w-5" />
-                                    </div>
-                                    Create Campaign
-                                </Button>
                                 <Button className="w-full h-14 rounded-2xl font-bold justify-start gap-4 bg-muted/30 text-foreground hover:bg-muted/50 transition-all group/btn">
                                     <div className="h-8 w-8 rounded-xl bg-muted/50 flex items-center justify-center group-hover/btn:bg-white/20 transition-colors">
                                         <Download className="h-5 w-5" />
@@ -335,9 +315,6 @@ export default function ProjectDetailPage() {
                 </TabsContent>
                 <TabsContent value="manufacturers" className="mt-6">
                     <ManufacturersTable />
-                </TabsContent>
-                <TabsContent value="emails" className="mt-6 space-y-8">
-                    <EmailModule projectId={project.id} />
                 </TabsContent>
 
                 <TabsContent value="creative" className="mt-6 space-y-8">
@@ -505,11 +482,6 @@ export default function ProjectDetailPage() {
                 </TabsContent>
             </Tabs>
 
-            <NewCampaignModal
-                open={isCampaignModalOpen}
-                onOpenChange={setIsCampaignModalOpen}
-                projectId={project.id}
-            />
 
             <NewLeadModal
                 open={isLeadModalOpen}

@@ -12,7 +12,8 @@ import {
     LogOut,
     Layers,
     Mail,
-    Table2
+    Table2,
+    Linkedin
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -22,6 +23,7 @@ import { useAuth } from "@/hooks/use-auth"
 
 const navItems = [
     { id: 'dashboard', name: "Dashboard", href: "/", icon: LayoutDashboard },
+    { id: 'linkedin-outreach', name: "LinkedIn Outreach", href: "/linkedin-outreach", icon: Linkedin },
     { id: 'projects',  name: "Projects",  href: "/projects", icon: Briefcase },
     { id: 'emails',    name: "Emails",    href: "/emails", icon: Mail },
     { id: 'leads',     name: "Leads",     href: "/leads", icon: Users },

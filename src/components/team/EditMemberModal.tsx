@@ -99,21 +99,19 @@ export function EditMemberModal({ member, onClose }: EditMemberModalProps) {
 
     return (
         <Sheet open={!!member} onOpenChange={(open) => !open && onClose()}>
-            <SheetContent side="right" className="w-full sm:max-w-2xl sm:w-[700px] p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
+            <SheetContent side="right">
                 <form id="edit-member-form" onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
-                    <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0">
-                        <SheetHeader>
-                            <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                                <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                                    <UserCog className="h-6 w-6" />
-                                </div>
-                                Manage Team Member
-                            </SheetTitle>
-                            <SheetDescription className="text-muted-foreground font-medium mt-1">
-                                Update profile details and configure role-based system access.
-                            </SheetDescription>
-                        </SheetHeader>
-                    </div>
+                    <SheetHeader>
+                        <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                <UserCog className="h-6 w-6" />
+                            </div>
+                            Manage Team Member
+                        </SheetTitle>
+                        <SheetDescription className="text-muted-foreground font-medium mt-1">
+                            Update profile details and configure role-based system access.
+                        </SheetDescription>
+                    </SheetHeader>
 
                     <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
                         <div className="space-y-6">
@@ -170,9 +168,9 @@ export function EditMemberModal({ member, onClose }: EditMemberModalProps) {
                             </div>
                         </div>
 
-                        <div className="space-y-6 pt-6 border-t border-slate-100">
+                        <div className="space-y-6 pt-6 border-t border-border/50">
                             <div className="flex items-center gap-2 mb-2">
-                                <Shield className="h-4 w-4 text-[#ff7a59]" />
+                                <Shield className="h-4 w-4 text-primary" />
                                 <h4 className="text-sm font-bold text-slate-800">System Capability Role</h4>
                             </div>
                             
@@ -214,8 +212,8 @@ export function EditMemberModal({ member, onClose }: EditMemberModalProps) {
                                             { label: "Export Data", checked: permissions.canExportData },
                                         ].map((perm, idx) => (
                                             <div key={idx} className="flex items-center justify-between">
-                                                <span className="text-xs font-bold text-slate-700">{perm.label}</span>
-                                                <Switch checked={perm.checked} disabled className="data-[state=checked]:bg-[#ff7a59]" />
+                                                <span className="text-xs font-bold text-muted-foreground">{perm.label}</span>
+                                                <Switch checked={perm.checked} disabled className="data-[state=checked]:bg-primary" />
                                             </div>
                                         ))}
                                     </div>
@@ -262,26 +260,24 @@ export function EditMemberModal({ member, onClose }: EditMemberModalProps) {
                         </div>
                     </div>
 
-                    <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md">
-                        <SheetFooter className="flex-row gap-4 sm:justify-between items-center">
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                onClick={onClose}
-                                className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                form="edit-member-form"
-                                type="submit"
-                                disabled={isSubmitting || !isAdmin}
-                                className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white border-none"
-                            >
-                                {isSubmitting ? "Saving..." : "Save Changes"}
-                            </Button>
-                        </SheetFooter>
-                    </div>
+                <SheetFooter className="flex-row gap-4 sm:justify-between items-center">
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={onClose}
+                        className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        form="edit-member-form"
+                        type="submit"
+                        disabled={isSubmitting || !isAdmin}
+                        className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary hover:bg-primary/90 text-white border-none"
+                    >
+                        {isSubmitting ? "Saving..." : "Save Changes"}
+                    </Button>
+                </SheetFooter>
                 </form>
             </SheetContent>
         </Sheet>

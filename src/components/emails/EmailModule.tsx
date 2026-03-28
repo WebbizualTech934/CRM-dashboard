@@ -1,8 +1,8 @@
 "use client"
-
-import { useState } from "react"
+ 
+import { useState, useMemo } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { LayoutDashboard, Mail, ListTree, FileText, Inbox, BarChart3, Plus, Users, TrendingUp } from "lucide-react"
+import { LayoutDashboard, Mail, ListTree, FileText, Inbox, BarChart3, Plus, Users, TrendingUp, Filter, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCRMData } from "@/hooks/use-crm-data"
 import { cn } from "@/lib/utils"
@@ -11,26 +11,80 @@ import { EmailDashboard } from "./EmailDashboard"
 import { SequenceList } from "./SequenceList"
 import { TemplateList } from "./TemplateList"
 import { EmailInbox } from "./EmailInbox"
-import { EmailLeads } from "./EmailLeads" // New component
+import { EmailLeads } from "./EmailLeads"
 import { NewCampaignModal } from "@/components/projects/NewCampaignModal"
-export function EmailModule({ projectId }: { projectId?: string }) {
-    const { campaigns, isLoaded } = useCRMData()
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+ 
+export function EmailModule({ projectId: initialProjectId }: { projectId?: string }) {
+    const { campaigns, projects, isLoaded } = useCRMData()
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false)
-
+    const [selectedProjectId, setSelectedProjectId] = useState<string>(initialProjectId || "all")
+    const [campaignStatus, setCampaignStatus] = useState<string>("all")
+ 
     if (!isLoaded) return null
-
-    const projs = projectId ? campaigns.filter(c => c.projectId === projectId) : campaigns
-    const totalEmails = projs.reduce((acc: number, c: any) => acc + (c.emailsSent || 0), 0)
-    const totalOpens = projs.reduce((acc: number, c: any) => acc + (c.opens || 0), 0)
-    const totalReplies = projs.reduce((acc: number, c: any) => acc + (c.replies || 0), 0)
-    const totalPositives = projs.reduce((acc: number, c: any) => acc + (c.positives || 0), 0)
+ 
+    const effectiveProjectId = initialProjectId || (selectedProjectId === "all" ? undefined : selectedProjectId)
+    
+    const projectCampaigns = useMemo(() => {
+        let filtered = campaigns
+        if (effectiveProjectId) {
+            filtered = filtered.filter(c => c.projectId === effectiveProjectId)
+        }
+        if (campaignStatus !== "all") {
+            filtered = filtered.filter(c => c.status === campaignStatus)
+        }
+        return filtered
+    }, [campaigns, effectiveProjectId, campaignStatus])
+ 
+    const totalEmails = projectCampaigns.reduce((acc: number, c: any) => acc + (c.emailsSent || 0), 0)
+    const totalOpens = projectCampaigns.reduce((acc: number, c: any) => acc + (c.opens || 0), 0)
+    const totalReplies = projectCampaigns.reduce((acc: number, c: any) => acc + (c.replies || 0), 0)
+    const totalPositives = projectCampaigns.reduce((acc: number, c: any) => acc + (c.positives || 0), 0)
     
     const openRate = totalEmails > 0 ? (totalOpens / totalEmails) * 100 : 0
     const replyRate = totalEmails > 0 ? (totalReplies / totalEmails) * 100 : 0
     const positiveRate = totalReplies > 0 ? (totalPositives / totalReplies) * 100 : 0
-
+ 
     return (
         <div className="space-y-6">
+            {!initialProjectId && (
+                <div className="bg-card/30 backdrop-blur-md border border-border/50 p-6 rounded-[2rem] flex flex-wrap items-center gap-4 shadow-xl shadow-primary/5">
+                    <div className="flex items-center gap-2 text-primary font-black uppercase tracking-widest text-[10px]">
+                        <Filter className="h-4 w-4" /> Filters
+                    </div>
+                    
+                    <div className="w-px h-8 bg-border/50 mx-2 hidden md:block"></div>
+ 
+                    <Select value={selectedProjectId} onValueChange={(val) => setSelectedProjectId(val || "all")}>
+                        <SelectTrigger className="w-[200px] h-11 rounded-xl bg-background/50 border-border/50 font-bold text-xs ring-0 focus:ring-2 focus:ring-primary/20">
+                            <SelectValue placeholder="All Projects" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl border-none shadow-2xl">
+                            <SelectItem value="all" className="font-bold rounded-lg focus:bg-primary/5 focus:text-primary">All Projects</SelectItem>
+                            {projects.map(p => (
+                                <SelectItem key={p.id} value={p.id} className="font-bold rounded-lg focus:bg-primary/5 focus:text-primary">{p.name}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+ 
+                    <Select value={campaignStatus} onValueChange={(val) => setCampaignStatus(val || "all")}>
+                        <SelectTrigger className="w-[160px] h-11 rounded-xl bg-background/50 border-border/50 font-bold text-xs ring-0 focus:ring-2 focus:ring-primary/20">
+                            <SelectValue placeholder="All Statuses" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl border-none shadow-2xl">
+                            <SelectItem value="all" className="font-bold rounded-lg focus:bg-primary/5 focus:text-primary">All Statuses</SelectItem>
+                            <SelectItem value="Active" className="font-bold rounded-lg focus:bg-primary/5 focus:text-primary text-green-600">Active Only</SelectItem>
+                            <SelectItem value="Draft" className="font-bold rounded-lg focus:bg-primary/5 focus:text-primary text-slate-500">Drafts</SelectItem>
+                            <SelectItem value="Completed" className="font-bold rounded-lg focus:bg-primary/5 focus:text-primary text-blue-600">Completed</SelectItem>
+                        </SelectContent>
+                    </Select>
+ 
+                    <Button variant="outline" className="h-11 rounded-xl bg-background/50 border-border/50 font-bold text-xs gap-2 px-4 ml-auto">
+                        <Calendar className="h-4 w-4" /> Last 30 Days
+                    </Button>
+                </div>
+            )}
+ 
             <Tabs defaultValue="overview" className="space-y-8">
                 <div className="flex items-center justify-between">
                     <TabsList className="bg-muted/50 p-1 rounded-xl h-11">
@@ -56,7 +110,7 @@ export function EmailModule({ projectId }: { projectId?: string }) {
                     <div className="flex items-center gap-3">
                         <Button
                             size="sm"
-                            className="rounded-2xl font-black uppercase tracking-widest text-[11px] h-12 px-6 shadow-lg shadow-primary/20 bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white border-none transition-all hover:scale-[1.02] active:scale-[0.98]"
+                            className="rounded-2xl font-black uppercase tracking-widest text-[11px] h-12 px-8 shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90 text-white border-none transition-all hover:scale-[1.02] active:scale-[0.98]"
                             onClick={() => setIsCampaignModalOpen(true)}
                         >
                             <Plus className="h-4 w-4" /> New Campaign
@@ -65,27 +119,27 @@ export function EmailModule({ projectId }: { projectId?: string }) {
                 </div>
  
                 <TabsContent value="overview" className="mt-0">
-                    <EmailDashboard projectId={projectId} />
+                    <EmailDashboard projectId={effectiveProjectId} status={campaignStatus === "all" ? undefined : campaignStatus} />
                 </TabsContent>
  
                 <TabsContent value="campaigns" className="mt-0">
-                    <CampaignTable projectId={projectId} />
+                    <CampaignTable projectId={effectiveProjectId} status={campaignStatus === "all" ? undefined : campaignStatus} />
                 </TabsContent>
  
                 <TabsContent value="leads" className="mt-0">
-                    <EmailLeads projectId={projectId} />
+                    <EmailLeads projectId={effectiveProjectId} />
                 </TabsContent>
  
                 <TabsContent value="sequences" className="mt-0">
-                    <SequenceList projectId={projectId} />
+                    <SequenceList projectId={effectiveProjectId} />
                 </TabsContent>
  
                 <TabsContent value="templates" className="mt-0">
-                    <TemplateList projectId={projectId} />
+                    <TemplateList projectId={effectiveProjectId} />
                 </TabsContent>
  
                 <TabsContent value="inbox" className="mt-0">
-                    <EmailInbox projectId={projectId} />
+                    <EmailInbox projectId={effectiveProjectId} />
                 </TabsContent>
  
                 <TabsContent value="analytics" className="mt-0 space-y-10">
@@ -129,7 +183,7 @@ export function EmailModule({ projectId }: { projectId?: string }) {
             <NewCampaignModal
                 open={isCampaignModalOpen}
                 onOpenChange={setIsCampaignModalOpen}
-                projectId={projectId || ""}
+                projectId={effectiveProjectId || ""}
             />
         </div>
     )

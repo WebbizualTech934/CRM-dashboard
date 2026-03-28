@@ -9,13 +9,19 @@ import { ImportExportDialog } from "@/components/shared/ImportExportDialog"
 import { RowDetailDrawer } from "../tables/RowDetailDrawer"
 import { useState } from "react"
 
-export function CampaignTable({ projectId }: { projectId?: string }) {
-    const { campaigns, deleteCampaign, deleteManyCampaigns, isLoaded } = useCRMData()
+import Link from "next/link"
+
+export function CampaignTable({ projectId, status }: { projectId?: string, status?: string }) {
+    const { campaigns, projects, deleteCampaign, deleteManyCampaigns, isLoaded } = useCRMData()
     const [viewingCampaign, setViewingCampaign] = useState<any>(null)
 
     if (!isLoaded) return null
 
-    const projCampaigns = projectId ? campaigns.filter(c => c.projectId === projectId) : campaigns
+    const projCampaigns = campaigns.filter(c => {
+        if (projectId && c.projectId !== projectId) return false
+        if (status && c.status !== status) return false
+        return true
+    })
 
     const columns = [
         {
@@ -34,6 +40,23 @@ export function CampaignTable({ projectId }: { projectId?: string }) {
                 </div>
             )
         },
+        ...(projectId ? [] : [{
+            header: "Project",
+            accessorKey: "projectId",
+            sortable: true,
+            cell: (c: any) => {
+                const project = projects.find(p => p.id === c.projectId)
+                return (
+                    <Link 
+                        href={`/projects/${c.projectId}`} 
+                        className="text-xs font-bold text-primary hover:underline"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {project?.name || "Global"}
+                    </Link>
+                )
+            }
+        }]),
         {
             header: "Status",
             accessorKey: "status",

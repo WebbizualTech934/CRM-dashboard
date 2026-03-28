@@ -161,7 +161,7 @@ export function MemberDetailsSheet({ member, onClose, onEdit }: MemberDetailsShe
                                 onClose()
                                 onEdit?.(member)
                             }}
-                            className="flex-[2] h-14 rounded-2xl bg-[#ff7a59] text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all border-none gap-3"
+                            className="flex-[2] h-14 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all border-none gap-3"
                         >
                             <UserCircle className="h-5 w-5" /> Quick Edit
                         </Button>

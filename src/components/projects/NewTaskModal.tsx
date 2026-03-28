@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import {
     Sheet,
     SheetContent,
+    SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetFooter,
@@ -92,21 +93,19 @@ export function NewTaskModal({ open, onOpenChange, projectId, task }: NewTaskMod
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right" className="w-full sm:max-w-xl p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
+            <SheetContent side="right">
                 <form id="new-task-form" onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
-                    <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0">
-                        <SheetHeader>
-                            <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                                <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                                    <Layout className="h-6 w-6" />
-                                </div>
-                                {task ? "Edit Task" : "New Task"}
-                            </SheetTitle>
-                            <p className="text-muted-foreground font-medium mt-1">
-                                {task ? "Update the details of your existing task." : "Create a new task for this project."}
-                            </p>
-                        </SheetHeader>
-                    </div>
+                    <SheetHeader>
+                        <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                <Layout className="h-6 w-6" />
+                            </div>
+                            {task ? "Edit Task" : "New Task"}
+                        </SheetTitle>
+                        <SheetDescription className="text-muted-foreground font-medium mt-1">
+                            {task ? "Update the details of your existing task." : "Create a new task for this project."}
+                        </SheetDescription>
+                    </SheetHeader>
 
                     <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
                         <div className="space-y-8 pb-10">
@@ -175,21 +174,19 @@ export function NewTaskModal({ open, onOpenChange, projectId, task }: NewTaskMod
                         </div>
                     </div>
 
-                    <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md">
-                        <SheetFooter className="sm:justify-between items-center gap-4">
-                            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50">
-                                Cancel
-                            </Button>
-                            <Button
-                                form="new-task-form"
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-[#ff7a59] text-white border-none"
-                            >
-                                {isSubmitting ? (task ? "Saving..." : "Creating...") : (task ? "Save Changes" : "Create Task")}
-                            </Button>
-                        </SheetFooter>
-                    </div>
+                    <SheetFooter className="sm:justify-between items-center gap-4">
+                        <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50">
+                            Cancel
+                        </Button>
+                        <Button
+                            form="new-task-form"
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
+                        >
+                            {isSubmitting ? (task ? "Saving..." : "Creating...") : (task ? "Save Changes" : "Create Task")}
+                        </Button>
+                    </SheetFooter>
                 </form>
             </SheetContent>
         </Sheet>

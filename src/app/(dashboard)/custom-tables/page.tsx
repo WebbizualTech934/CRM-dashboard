@@ -35,13 +35,13 @@ const COLUMN_TYPES = [
 ]
 
 const COLORS = [
-    "#00a4bd", // HubSpot teal
-    "#ff7a59", // HubSpot orange
-    "#33475b", // HubSpot dark navy
-    "#00bda5", // HubSpot light teal
-    "#ff8f59", // Light orange
-    "#6a78d1", // Soft purple
-    "#eb5f66", // Soft red
+    "var(--primary)", // CRM Primary
+    "#6366f1", // Indigo
+    "#8b5cf6", // Violet
+    "#ec4899", // Pink
+    "#f59e0b", // Amber
+    "#10b981", // Emerald
+    "#3b82f6", // Blue
 ]
 
 // ── Utility helpers ──────────────────────────────────────────────────────────
@@ -300,7 +300,7 @@ export default function CustomTablesPage() {
                     </h1>
                     <p className="text-sm text-slate-500 mt-1">Manage and define your custom data structures.</p>
                 </div>
-                <Button onClick={openCreateSchema} className="bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white font-medium border-none shadow-sm h-9 px-4 rounded-sm">
+                <Button onClick={openCreateSchema} className="bg-primary hover:bg-primary/90 text-white font-bold h-10 px-6 rounded-xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
                     Create custom object
                 </Button>
             </div>
@@ -330,7 +330,7 @@ export default function CustomTablesPage() {
                         const cnt = customRecords.filter(r => r.schemaId === schema.id).length
                         return (
                             <div key={schema.id} onClick={() => { setSelectedSchemaId(schema.id); setTableSearch(""); setSortCol(null); setSelectedRows(new Set()); setFilterCol("all"); setFilterVal("") }}
-                                className="group bg-white rounded-md border border-slate-200 shadow-sm hover:shadow-md hover:border-[#ff7a59] transition-all cursor-pointer flex flex-col h-full">
+                                className="group bg-card/50 backdrop-blur-xl rounded-2xl border border-white/10 shadow-xl hover:shadow-2xl hover:border-primary/50 transition-all cursor-pointer flex flex-col h-full overflow-hidden">
                                 <div className="h-1 w-full rounded-t-md" style={{ background: schema.color }} />
                                 <div className="p-5 flex-1">
                                     <div className="flex items-start justify-between">
@@ -366,7 +366,7 @@ export default function CustomTablesPage() {
                                 </div>
                                 <div className="px-5 py-3 border-t border-slate-100 bg-slate-50/50 flex items-center text-xs text-slate-500 justify-between mt-auto">
                                     <span>Created {new Date(schema.createdAt).toLocaleDateString()}</span>
-                                    <span className="text-[#ff7a59] font-medium opacity-0 group-hover:opacity-100 transition-opacity">View data →</span>
+                                    <span className="text-primary font-bold opacity-0 group-hover:opacity-100 transition-opacity">View data →</span>
                                 </div>
                             </div>
                         )
@@ -410,7 +410,7 @@ export default function CustomTablesPage() {
                         <div className="space-y-4">
                             <div className="flex items-center justify-between border-b pb-2">
                                 <h3 className="text-sm font-semibold text-slate-800">2. Object Properties (Columns)</h3>
-                                <Button size="sm" variant="ghost" onClick={addCol} className="h-7 text-xs font-medium text-[#00a4bd] hover:text-[#00a4bd] hover:bg-[#00a4bd]/10 px-2 rounded-sm gap-1">
+                                <Button size="sm" variant="ghost" onClick={addCol} className="h-7 text-xs font-medium text-primary hover:text-primary hover:bg-primary/10 px-2 rounded-sm gap-1">
                                     <Plus className="h-3 w-3" /> Add property
                                 </Button>
                             </div>
@@ -465,7 +465,7 @@ export default function CustomTablesPage() {
 
                     <SheetFooter className="px-6 py-4 border-t border-slate-200 bg-slate-50 mt-auto flex-row justify-between sm:justify-between items-center sm:space-x-0">
                         <Button variant="outline" onClick={() => setIsSchemaPanelOpen(false)} className="rounded-sm h-9 bg-white">Cancel</Button>
-                        <Button onClick={handleSaveSchema} disabled={isSaving || !schemaName.trim() || schemaCols.length === 0} className="bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white rounded-sm h-9 px-6 font-medium border-none">
+                        <Button onClick={handleSaveSchema} disabled={isSaving || !schemaName.trim() || schemaCols.length === 0} className="bg-primary hover:bg-primary/90 text-white rounded-xl h-10 px-8 font-bold shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
                             {isSaving ? "Saving..." : editingSchemaId ? "Update Schema" : "Create Object"}
                         </Button>
                     </SheetFooter>
@@ -501,7 +501,7 @@ export default function CustomTablesPage() {
                     <input ref={fileInputRef} type="file" accept=".csv,.tsv" className="hidden" onChange={handleImport} />
                     
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="h-8 px-3 rounded-sm border border-slate-300 bg-white font-medium text-xs hover:bg-slate-50 transition-colors inline-flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-[#ff7a59]/20">
+                        <DropdownMenuTrigger className="h-9 px-4 rounded-xl border border-white/10 bg-card/50 backdrop-blur-md font-bold text-xs hover:bg-card/80 transition-all inline-flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm">
                             Actions <ChevronDown className="h-3 w-3 opacity-50" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48 rounded-md bg-white border border-slate-200 shadow-md p-1 min-w-[160px]">
@@ -514,7 +514,7 @@ export default function CustomTablesPage() {
                         </DropdownMenuContent>
                     </DropdownMenu>
                     
-                    <Button size="sm" onClick={openAddRecord} className="h-8 rounded-sm bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white font-medium text-xs shadow-sm border-none ml-2">
+                    <Button size="sm" onClick={openAddRecord} className="h-9 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] ml-2 px-6">
                         Create record
                     </Button>
                 </div>
@@ -525,7 +525,7 @@ export default function CustomTablesPage() {
                 <div className="relative w-64">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
                     <Input placeholder={`Search ${selectedSchema.name.toLowerCase()}...`} value={tableSearch} onChange={e => setTableSearch(e.target.value)}
-                        className="pl-9 h-8 text-xs border-slate-300 rounded-sm shadow-none focus-visible:ring-1 focus-visible:ring-[#00a4bd] bg-white transition-all" />
+                        className="pl-9 h-9 text-xs border-white/10 rounded-xl shadow-none focus-visible:ring-1 focus-visible:ring-primary/20 bg-card/30 backdrop-blur-md transition-all" />
                 </div>
                 
                 <div className="h-5 w-[1px] bg-slate-200 mx-1" />
@@ -550,9 +550,9 @@ export default function CustomTablesPage() {
                 </div>
 
                 {selectedRows.size > 0 && (
-                    <div className="ml-auto flex items-center gap-2 bg-[#ff7a59]/10 text-[#ff7a59] rounded-sm px-3 py-1.5 border border-[#ff7a59]/20">
+                    <div className="ml-auto flex items-center gap-2 bg-primary/10 text-primary rounded-xl px-4 py-2 border border-primary/20">
                         <span className="text-xs font-bold">{selectedRows.size} selected</span>
-                        <div className="h-3 w-[1px] bg-[#ff7a59]/30 mx-1" />
+                        <div className="h-3 w-[1px] bg-primary/30 mx-1" />
                         <button onClick={deleteSelected} className="text-xs font-bold hover:underline flex items-center gap-1">
                             <Trash2 className="h-3 w-3" /> Delete
                         </button>
@@ -569,7 +569,7 @@ export default function CustomTablesPage() {
                                 <button onClick={toggleAll} className="flex items-center justify-center w-full h-full">
                                     <div className={cn("h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors",
                                         selectedRows.size === visibleRecords.length && visibleRecords.length > 0
-                                            ? "bg-[#ff7a59] border-[#ff7a59] text-white"
+                                            ? "bg-primary border-primary text-white"
                                             : "border-slate-300 bg-white")}>
                                         {selectedRows.size === visibleRecords.length && visibleRecords.length > 0 && <Check className="h-2.5 w-2.5 stroke-[3]" />}
                                     </div>
@@ -614,7 +614,7 @@ export default function CustomTablesPage() {
                                         >
                                             <button onClick={(e) => toggleRow(rec.id, e)} className="flex items-center justify-center w-full h-full">
                                                 <div className={cn("h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors shadow-sm",
-                                                    isSelected ? "bg-[#ff7a59] border-[#ff7a59] text-white" : "border-slate-300 bg-white")}>
+                                                    isSelected ? "bg-primary border-primary text-white" : "border-slate-300 bg-white")}>
                                                     {isSelected && <Check className="h-2.5 w-2.5 stroke-[3]" />}
                                                 </div>
                                             </button>
@@ -631,7 +631,7 @@ export default function CustomTablesPage() {
                                                     onClick={(e) => { if (isEditing) e.stopPropagation() }}
                                                 >
                                                     {isEditing ? (
-                                                        <div className="absolute inset-0 bg-[#e5f5f8] border-2 border-[#00a4bd] z-20 flex items-center px-3" onClick={e=>e.stopPropagation()}>
+                                                        <div className="absolute inset-0 bg-primary/5 border-2 border-primary z-20 flex items-center px-3" onClick={e=>e.stopPropagation()}>
                                                             <input
                                                                 autoFocus
                                                                 value={inlineEditingVal}
@@ -649,7 +649,7 @@ export default function CustomTablesPage() {
                                                                 </span>
                                                             ) : col.type === "url" || col.type === "email" ? (
                                                                 <a href={col.type === "email" ? `mailto:${val}` : val} target="_blank" rel="noopener noreferrer" 
-                                                                    className="text-[#00a4bd] font-medium hover:underline inline-block truncate max-w-full"
+                                                                    className="text-primary font-bold hover:underline inline-block truncate max-w-full"
                                                                     onClick={e => e.stopPropagation()}>
                                                                     {val || "—"}
                                                                 </a>
@@ -658,7 +658,7 @@ export default function CustomTablesPage() {
                                                             )}
                                                             {/* Inline edit hint on hover */}
                                                             <div className="absolute right-2 top-0 bottom-0 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                <div className="bg-white/90 p-1 rounded-sm shadow-sm border border-slate-200 text-slate-400 hover:text-[#00a4bd]"
+                                                                <div className="bg-white/90 p-1 rounded-sm shadow-sm border border-slate-200 text-slate-400 hover:text-primary"
                                                                     title="Double click to edit">
                                                                     <Edit3 className="h-3 w-3" />
                                                                 </div>
@@ -670,7 +670,7 @@ export default function CustomTablesPage() {
                                         })}
                                         <td className="w-full px-4 border-b border-transparent bg-transparent group-hover:bg-[#f5f8fa]">
                                             <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity justify-end pr-4">
-                                                <Button size="sm" variant="ghost" className="h-7 text-xs font-semibold text-[#00a4bd] hover:bg-[#00a4bd]/10 px-3 py-0 rounded-sm"
+                                                <Button size="sm" variant="ghost" className="h-7 text-xs font-bold text-primary hover:bg-primary/10 px-3 py-0 rounded-lg"
                                                     onClick={(e) => { e.stopPropagation(); openEditRecord(rec) }}>
                                                     Preview
                                                 </Button>
@@ -730,7 +730,7 @@ export default function CustomTablesPage() {
                         </div>
                         <div className="flex gap-2">
                             <Button variant="outline" onClick={() => setIsRecordPanelOpen(false)} className="rounded-sm h-9 bg-white font-medium text-slate-600 border-slate-300">Cancel</Button>
-                            <Button onClick={handleSaveRecord} disabled={isSavingRecord} className="rounded-sm h-9 px-6 bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white font-medium border-none shadow-sm">
+                            <Button onClick={handleSaveRecord} disabled={isSavingRecord} className="rounded-xl h-10 px-8 bg-primary hover:bg-primary/90 text-white font-bold border-none shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
                                 {isSavingRecord ? "Saving..." : "Save details"}
                             </Button>
                         </div>

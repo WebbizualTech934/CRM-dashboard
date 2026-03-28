@@ -36,8 +36,8 @@ export function StatsCards() {
             icon: Briefcase,
             trend: `+${newProjectsCount} new this month`,
             trendType: "up",
-            color: "text-blue-600",
-            bg: "bg-blue-100",
+            color: "text-primary",
+            bg: "bg-primary/10",
             link: "/projects"
         },
         {
@@ -46,8 +46,8 @@ export function StatsCards() {
             icon: Users,
             trend: `+${newLeadsCount} newly generated`,
             trendType: "up",
-            color: "text-purple-600",
-            bg: "bg-purple-100",
+            color: "text-purple-500",
+            bg: "bg-purple-500/10",
             link: "/leads"
         },
         {
@@ -56,8 +56,8 @@ export function StatsCards() {
             icon: Send,
             trend: `+${emailIncrease}% from last week`,
             trendType: "up",
-            color: "text-orange-600",
-            bg: "bg-orange-100",
+            color: "text-orange-500",
+            bg: "bg-orange-500/10",
             link: "/emails"
         },
         {
@@ -66,8 +66,8 @@ export function StatsCards() {
             icon: CheckCircle2,
             trend: "92% engagement rate",
             trendType: "up",
-            color: "text-green-600",
-            bg: "bg-green-100",
+            color: "text-green-500",
+            bg: "bg-green-500/10",
             link: "/emails"
         }
     ]
@@ -82,7 +82,7 @@ export function StatsCards() {
                             <CardTitle className="text-[11px] font-extrabold text-muted-foreground uppercase tracking-[0.2em]">
                                 {stat.title}
                             </CardTitle>
-                            <div className={cn("p-4 rounded-[1.25rem] shadow-xl transition-transform group-hover:rotate-12", stat.bg)}>
+                            <div className={cn("p-4 rounded-[1.25rem] transition-transform group-hover:rotate-12", stat.bg)}>
                                 <stat.icon className={cn("h-6 w-6", stat.color)} />
                             </div>
                         </CardHeader>

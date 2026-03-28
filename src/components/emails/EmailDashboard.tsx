@@ -5,12 +5,16 @@ import { Users, Mail, MessageSquare, CheckCircle2, XCircle, Target, TrendingUp, 
 import { useCRMData } from "@/hooks/use-crm-data"
 import { cn } from "@/lib/utils"
 
-export function EmailDashboard({ projectId }: { projectId?: string }) {
+export function EmailDashboard({ projectId, status }: { projectId?: string, status?: string }) {
     const { campaigns, isLoaded } = useCRMData()
 
     if (!isLoaded) return null
 
-    const projCampaigns = projectId ? campaigns.filter(c => c.projectId === projectId) : campaigns
+    const projCampaigns = campaigns.filter(c => {
+        if (projectId && c.projectId !== projectId) return false
+        if (status && c.status !== status) return false
+        return true
+    })
 
     // Aggregated Stats
     const totalLeads = projCampaigns.reduce((acc, c) => acc + c.leadsCount, 0)
@@ -61,7 +65,7 @@ export function EmailDashboard({ projectId }: { projectId?: string }) {
                             {[
                                 { label: "Sent", value: totalSent, max: totalSent, color: "bg-blue-500" },
                                 { label: "Opened", value: Math.floor(totalSent * 0.45), max: totalSent, color: "bg-indigo-500" },
-                                { label: "Replied", value: totalReplies, max: totalSent, color: "bg-[#ff7a59]" },
+                                { label: "Replied", value: totalReplies, max: totalSent, color: "bg-orange-500" },
                                 { label: "Interested", value: totalPositives, max: totalSent, color: "bg-green-500" },
                                 { label: "Meeting", value: totalMeetings, max: totalSent, color: "bg-purple-500" },
                             ].map((step, i) => (
@@ -132,7 +136,7 @@ export function EmailDashboard({ projectId }: { projectId?: string }) {
                             {[
                                 { label: "Positive Reply", value: totalPositives, color: "bg-green-500" },
                                 { label: "Interested", value: Math.floor(totalPositives * 0.7), color: "bg-blue-500" },
-                                { label: "Objected", value: Math.floor(totalReplies * 0.2), color: "bg-[#ff7a59]" },
+                                { label: "Objected", value: Math.floor(totalReplies * 0.2), color: "bg-orange-400" },
                             ].map((item, i) => (
                                 <div key={i} className="space-y-2">
                                     <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">

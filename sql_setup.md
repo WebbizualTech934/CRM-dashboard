@@ -1,11 +1,3 @@
-# Global CRM — Complete Supabase SQL Schema
-
-Copy and paste the **entire block** below into your [Supabase SQL Editor](https://supabase.com/dashboard/project/_/sql/new) and click **Run**.
-
-> [!CAUTION]
-> This script **DROPS and RECREATES** all tables. All existing data will be lost. Run once on a fresh project.
-
-```sql
 -- ============================================================
 -- 0. DROP EXISTING TABLES (clean slate)
 -- ============================================================
@@ -20,8 +12,11 @@ DROP TABLE IF EXISTS public.creative_assets CASCADE;
 DROP TABLE IF EXISTS public.campaigns CASCADE;
 DROP TABLE IF EXISTS public.manufacturers CASCADE;
 DROP TABLE IF EXISTS public.leads CASCADE;
-DROP TABLE IF EXISTS public.team_members CASCADE;
+DROP TABLE IF EXISTS public.profiles CASCADE;
 DROP TABLE IF EXISTS public.projects CASCADE;
+DROP TABLE IF EXISTS public.linkedin_leads CASCADE;
+DROP TABLE IF EXISTS public.linkedin_interactions CASCADE;
+DROP TABLE IF EXISTS public.linkedin_sequences CASCADE;
 DROP TABLE IF EXISTS public.tags CASCADE;
 
 -- ============================================================
@@ -91,35 +86,20 @@ CREATE TABLE public.manufacturers (
 );
 
 -- ============================================================
--- 4. TEAM MEMBERS  (with role + permissions)
+-- 4. PROFILES (Users/Team Members)
 -- ============================================================
-CREATE TABLE public.team_members (
+CREATE TABLE public.profiles (
   id           uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  name         text NOT NULL,
+  full_name    text NOT NULL,
   email        text UNIQUE NOT NULL,
-  role         text DEFAULT '',                          -- display role e.g. "Senior SDR"
+  role         text DEFAULT '',
   user_role    text CHECK (user_role IN ('Admin','Manager','SDR','Specialist','Viewer')) DEFAULT 'Viewer',
   status       text CHECK (status IN ('Active','Invited','Suspended','Removed')) DEFAULT 'Active',
   leads_added  integer DEFAULT 0,
   emails_sent  integer DEFAULT 0,
-  avatar       text DEFAULT '',
+  avatar_url   text DEFAULT '',
   last_active  timestamptz DEFAULT now(),
-  -- Granular permissions set by Admin
-  permissions  jsonb DEFAULT '{
-    "canViewLeads":      true,
-    "canEditLeads":      false,
-    "canDeleteLeads":    false,
-    "canViewProjects":   true,
-    "canEditProjects":   false,
-    "canDeleteProjects": false,
-    "canViewEmails":     true,
-    "canSendEmails":     false,
-    "canViewTeam":       true,
-    "canManageTeam":     false,
-    "canViewReports":    true,
-    "canExportData":     false,
-    "canManageSettings": false
-  }',
+  menu_permissions jsonb DEFAULT '["dashboard", "projects", "leads", "emails", "custom-tables", "team"]',
   created_at   timestamptz DEFAULT now(),
   updated_at   timestamptz DEFAULT now()
 );
@@ -277,12 +257,60 @@ CREATE TABLE public.custom_records (
 );
 
 -- ============================================================
+-- 14. LINKEDIN DEAL ENGINE: LEADS
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.linkedin_leads (
+  id              uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  date_added      timestamptz DEFAULT now(),
+  company_name    text DEFAULT '',
+  contact_name    text DEFAULT '',
+  profile_url     text DEFAULT '',
+  work_email      text DEFAULT '',
+  lead_source     text DEFAULT 'LinkedIn',
+  status          text DEFAULT 'Not Contacted',
+  priority        text DEFAULT 'Medium',
+  sent_time_ist   text DEFAULT '',
+  drafted_content text DEFAULT '',
+  in_mail         text DEFAULT '',
+  follow_up       text DEFAULT '',
+  owner_id        uuid REFERENCES public.profiles(id),
+  notes           text DEFAULT '',
+  hook_angle      text DEFAULT '',
+  created_at      timestamptz DEFAULT now(),
+  updated_at      timestamptz DEFAULT now()
+);
+
+-- ============================================================
+-- 15. LINKEDIN DEAL ENGINE: INTERACTIONS (TIMELINE)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.linkedin_interactions (
+  id              uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  lead_id         uuid REFERENCES public.linkedin_leads(id) ON DELETE CASCADE,
+  type            text NOT NULL,
+  content         text DEFAULT '',
+  timestamp       timestamptz DEFAULT now(),
+  created_at      timestamptz DEFAULT now()
+);
+
+-- ============================================================
+-- 16. LINKEDIN DEAL ENGINE: SEQUENCES
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.linkedin_sequences (
+  id              uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  name            text NOT NULL,
+  target_persona  text DEFAULT '',
+  steps           jsonb NOT NULL DEFAULT '[]',
+  created_at      timestamptz DEFAULT now()
+);
+
+
+-- ============================================================
 -- 14. ENABLE ROW LEVEL SECURITY (open for now — requires auth later)
 -- ============================================================
 ALTER TABLE public.projects         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.leads            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.manufacturers    ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.team_members     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tags             ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.email_templates  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.email_sequences  ENABLE ROW LEVEL SECURITY;
@@ -292,12 +320,15 @@ ALTER TABLE public.creative_assets  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tasks            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.custom_schemas   ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.custom_records   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.linkedin_leads    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.linkedin_interactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.linkedin_sequences ENABLE ROW LEVEL SECURITY;
 
 -- Allow all (no auth yet — replace with user-specific policies when auth is added)
 CREATE POLICY "Allow all on projects"        ON public.projects        FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all on leads"           ON public.leads           FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all on manufacturers"   ON public.manufacturers   FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all on team_members"    ON public.team_members    FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow all on profiles"        ON public.profiles        FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all on tags"            ON public.tags            FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all on email_templates" ON public.email_templates FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all on email_sequences" ON public.email_sequences FOR ALL USING (true) WITH CHECK (true);
@@ -308,6 +339,9 @@ CREATE POLICY "Allow all on tasks"           ON public.tasks           FOR ALL U
 CREATE POLICY "Allow all on custom_schemas"  ON public.custom_schemas  FOR ALL USING (true) WITH CHECK (true);
 ALTER TABLE public.custom_schemas FORCE ROW LEVEL SECURITY;
 CREATE POLICY "Allow all on custom_records"  ON public.custom_records  FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow all on linkedin_leads" ON public.linkedin_leads FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow all on linkedin_interactions" ON public.linkedin_interactions FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow all on linkedin_sequences" ON public.linkedin_sequences FOR ALL USING (true) WITH CHECK (true);
 
 -- ============================================================
 -- 15. ENABLE REALTIME  (run each line individually if you hit errors)
@@ -315,7 +349,7 @@ CREATE POLICY "Allow all on custom_records"  ON public.custom_records  FOR ALL U
 ALTER PUBLICATION supabase_realtime ADD TABLE public.projects;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.leads;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.manufacturers;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.team_members;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.tags;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.email_templates;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.email_sequences;
@@ -325,38 +359,30 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.creative_assets;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.tasks;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.custom_schemas;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.custom_records;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.linkedin_leads;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.linkedin_interactions;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.linkedin_sequences;
 
 -- ============================================================
--- 16. SEED: Default Admin Team Member
+-- 16. SEED: Default Admin Profile
 -- ============================================================
-INSERT INTO public.team_members (name, email, role, user_role, status, permissions) VALUES (
+INSERT INTO public.profiles (full_name, email, role, user_role, status, menu_permissions) VALUES (
   'Admin',
   'admin@crm.local',
   'Administrator',
   'Admin',
   'Active',
-  '{
-    "canViewLeads":      true,
-    "canEditLeads":      true,
-    "canDeleteLeads":    true,
-    "canViewProjects":   true,
-    "canEditProjects":   true,
-    "canDeleteProjects": true,
-    "canViewEmails":     true,
-    "canSendEmails":     true,
-    "canViewTeam":       true,
-    "canManageTeam":     true,
-    "canViewReports":    true,
-    "canExportData":     true,
-    "canManageSettings": true
-  }'
+  '["dashboard", "projects", "emails", "leads", "team", "custom-tables", "settings"]'
 );
-```
 
----
+-- ============================================================
+-- 17. LINKEDIN SCHEMA MIGRATION (RUN IF TABLE ALREADY EXISTS)
+-- ============================================================
+-- These commands ensure existing LinkedIn tables have the latest outreach columns.
+-- Copy and run these in your Supabase SQL Editor if you encounter save errors.
 
-## Troubleshooting
-
-If you see `duplicate key` errors on the `ALTER PUBLICATION` lines, that means realtime was already enabled for those tables — you can safely ignore those errors.
-
-If you see **RLS policy already exists** errors, either drop old policies first or skip step 14.
+ALTER TABLE IF EXISTS public.linkedin_leads 
+ADD COLUMN IF NOT EXISTS sent_time_ist TEXT DEFAULT '',
+ADD COLUMN IF NOT EXISTS drafted_content TEXT DEFAULT '',
+ADD COLUMN IF NOT EXISTS in_mail TEXT DEFAULT '',
+ADD COLUMN IF NOT EXISTS follow_up TEXT DEFAULT '';

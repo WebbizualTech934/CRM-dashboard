@@ -143,7 +143,7 @@ export function CreativeTable({ projectId }: { projectId?: string }) {
                     { label: "Script Progress", value: total > 0 ? `${((completedScript / total) * 100).toFixed(0)}%` : "0%", sub: `${completedScript}/${total} Completed`, color: "text-primary" },
                     { label: "Website Status", value: total > 0 ? `${((liveWebsites / total) * 100).toFixed(0)}%` : "0%", sub: `${liveWebsites}/${total} Live`, color: "text-blue-600" },
                     { label: "Animation Progress", value: total > 0 ? `${((completedAnimation / total) * 100).toFixed(0)}%` : "0%", sub: `${completedAnimation}/${total} Completed`, color: "text-purple-600" },
-                    { label: "Total Projects", value: total.toString(), sub: "In Creative Pipeline", color: "text-[#33475b]" },
+                    { label: "Total Projects", value: total.toString(), sub: "In Creative Pipeline", color: "text-primary" },
                 ].map((stat) => (
                     <Card key={stat.label} className="border-none shadow-xl shadow-primary/5 rounded-3xl bg-card/50 backdrop-blur-sm overflow-hidden">
                         <CardHeader className="pb-2">
@@ -172,7 +172,7 @@ export function CreativeTable({ projectId }: { projectId?: string }) {
                     <>
                         <Button
                             onClick={() => setIsNewModalOpen(true)}
-                            className="rounded-full bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white px-6 h-10 font-bold gap-2 shadow-none"
+                            className="rounded-full bg-primary hover:bg-primary/90 text-white px-6 h-10 font-bold gap-2 shadow-none"
                         >
                             <Plus className="h-4 w-4" /> Add Asset
                         </Button>

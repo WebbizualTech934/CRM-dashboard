@@ -6,6 +6,7 @@ import {
     SheetContent,
     SheetHeader,
     SheetTitle,
+    SheetDescription,
     SheetFooter,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -119,24 +120,24 @@ export function NewCreativeModal({ open, onOpenChange, projectId, asset }: NewCr
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right" className="w-full sm:max-w-2xl p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
-                <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0">
-                    <SheetHeader>
-                        <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                                <Palette className="h-6 w-6" />
-                            </div>
-                            {asset ? "Edit Creative Asset" : "New Creative Asset"}
-                        </SheetTitle>
-                        <p className="text-muted-foreground font-medium mt-1">Define project scope, production tracking, and resource links.</p>
-                    </SheetHeader>
-                </div>
+            <SheetContent side="right">
+                <SheetHeader>
+                    <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                            <Palette className="h-6 w-6" />
+                        </div>
+                        {asset ? "Edit Creative Asset" : "New Creative Asset"}
+                    </SheetTitle>
+                    <SheetDescription className="text-muted-foreground font-medium mt-1">
+                        Define project scope, production tracking, and resource links.
+                    </SheetDescription>
+                </SheetHeader>
 
                 <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
                     <form id="creative-form" onSubmit={handleSubmit} className="space-y-10 pb-10">
                         {/* Section 1: Basic Information */}
                         <div className="space-y-4">
-                            <h4 className="text-xs font-black uppercase tracking-widest text-[#00a4bd]">Basic Information</h4>
+                            <h4 className="text-xs font-black uppercase tracking-widest text-primary">Basic Information</h4>
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1">Company Name</Label>
@@ -179,7 +180,7 @@ export function NewCreativeModal({ open, onOpenChange, projectId, asset }: NewCr
 
                         {/* Section 2: Production Tracking */}
                         <div className="space-y-4 pt-6 border-t border-slate-200">
-                            <h4 className="text-xs font-black uppercase tracking-widest text-[#00a4bd]">Production Tracking</h4>
+                            <h4 className="text-xs font-black uppercase tracking-widest text-primary">Production Tracking</h4>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="space-y-2">
                                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Script Status</Label>
@@ -254,7 +255,7 @@ export function NewCreativeModal({ open, onOpenChange, projectId, asset }: NewCr
 
                         {/* Section 3: Delivery Details */}
                         <div className="space-y-4 pt-6 border-t border-slate-200">
-                            <h4 className="text-xs font-black uppercase tracking-widest text-[#00a4bd]">Delivery Details</h4>
+                            <h4 className="text-xs font-black uppercase tracking-widest text-primary">Delivery Details</h4>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Delivery Deadline</Label>
@@ -279,7 +280,7 @@ export function NewCreativeModal({ open, onOpenChange, projectId, asset }: NewCr
 
                         {/* Section 4: Resource Links */}
                         <div className="space-y-4 pt-6 border-t border-slate-200">
-                            <h4 className="text-xs font-black uppercase tracking-widest text-[#00a4bd]">Resource Links</h4>
+                            <h4 className="text-xs font-black uppercase tracking-widest text-primary">Resource Links</h4>
                             <div className="space-y-3">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
@@ -340,18 +341,16 @@ export function NewCreativeModal({ open, onOpenChange, projectId, asset }: NewCr
                     </form>
                 </div>
 
-                <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md relative z-10">
-                    <SheetFooter>
-                        <Button
-                            form="creative-form"
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="w-full rounded-2xl h-14 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-[#ff7a59] text-white border-none"
-                        >
-                            {isSubmitting ? (asset ? "Saving Asset..." : "Creating Asset...") : (asset ? "Save Changes" : "Add to Creative Table")}
-                        </Button>
-                    </SheetFooter>
-                </div>
+                <SheetFooter>
+                    <Button
+                        form="creative-form"
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full rounded-2xl h-14 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
+                    >
+                        {isSubmitting ? (asset ? "Saving Asset..." : "Creating Asset...") : (asset ? "Save Changes" : "Add to Creative Table")}
+                    </Button>
+                </SheetFooter>
             </SheetContent>
         </Sheet>
     )

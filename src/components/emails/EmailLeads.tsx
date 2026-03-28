@@ -5,9 +5,10 @@ import { Users, Mail, Target, ArrowRight } from "lucide-react"
 import { useCRMData } from "@/hooks/use-crm-data"
 import { cn } from "@/lib/utils"
 import { DataTable } from "@/components/shared/DataTable"
+import Link from "next/link"
 
 export function EmailLeads({ projectId }: { projectId?: string }) {
-    const { leads, campaigns, isLoaded } = useCRMData()
+    const { leads, campaigns, projects, isLoaded } = useCRMData()
 
     if (!isLoaded) return null
 
@@ -31,6 +32,22 @@ export function EmailLeads({ projectId }: { projectId?: string }) {
                 </div>
             )
         },
+        ...(projectId ? [] : [{
+            header: "Project",
+            accessorKey: "projectId",
+            sortable: true,
+            cell: (l: any) => {
+                const project = projects.find(p => p.id === l.projectId)
+                return (
+                    <Link 
+                        href={`/projects/${l.projectId}`} 
+                        className="text-xs font-bold text-primary hover:underline"
+                    >
+                        {project?.name || "Global"}
+                    </Link>
+                )
+            }
+        }]),
         {
             header: "Company",
             accessorKey: "company",
@@ -39,15 +56,13 @@ export function EmailLeads({ projectId }: { projectId?: string }) {
         },
         {
             header: "Active Campaign",
-            accessorKey: "projectId", // We can map this to campaign name
+            accessorKey: "campaignId", 
             cell: (l: any) => {
-                // In a real system, we'd have a lead_campaigns join table
-                // For this mock, we'll just show the first campaign for the project
                 const campaign = campaigns.find(c => c.projectId === l.projectId)
                 return (
                     <div className="flex items-center gap-2">
-                        <Mail className="h-3.5 w-3.5 text-muted-foreground" />
-                        <span className="text-xs font-bold">{campaign?.name || "No Active Campaign"}</span>
+                        <Mail className="h-3.5 w-3.5 text-muted-foreground/40" />
+                        <span className="text-xs font-bold">{campaign?.name || "Direct Outreach"}</span>
                     </div>
                 )
             }

@@ -241,7 +241,7 @@ export function RowDetailDrawer({ open, onOpenChange, data, onEdit }: RowDetailD
                                 onOpenChange(false)
                                 onEdit?.(data)
                             }}
-                            className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-[#ff7a59] text-white border-none gap-3"
+                            className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none gap-3"
                         >
                             <Edit3 className="h-5 w-5" /> Quick Edit
                         </Button>

@@ -179,9 +179,11 @@ export function DataTable<T extends { id: string }>({
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                <Loader2 className="h-10 w-10 text-[#ff7a59] animate-spin" />
-                <p className="text-slate-500 font-medium">Loading {entityType}s...</p>
+            <div className="flex flex-col items-center justify-center py-20 space-y-6 bg-card/50 backdrop-blur-sm rounded-[2.5rem] border border-border/50">
+                <div className="h-16 w-16 bg-primary/10 rounded-2xl flex items-center justify-center animate-pulse">
+                    <Loader2 className="h-8 w-8 text-primary animate-spin" />
+                </div>
+                <p className="text-muted-foreground font-black uppercase tracking-widest text-[10px]">Loading {entityType}s...</p>
             </div>
         )
     }
@@ -189,35 +191,35 @@ export function DataTable<T extends { id: string }>({
     const visibleColsData = columns.filter(c => visibleColumns.includes(c.accessorKey as string))
 
     return (
-        <div className="flex flex-col border border-slate-200 rounded-md bg-white shadow-sm overflow-hidden h-[calc(100vh-220px)] min-h-[500px]">
+        <div className="flex flex-col border border-border/50 rounded-[2.5rem] bg-card/50 backdrop-blur-sm shadow-2xl shadow-primary/5 overflow-hidden h-[calc(100vh-220px)] min-h-[500px]">
             {/* Filter / Search Bar */}
-            <div className="h-14 bg-white border-b border-slate-200 flex items-center px-4 gap-3 shrink-0">
-                <div className="relative w-72">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <div className="h-20 bg-card/40 border-b border-border/50 flex items-center px-8 gap-4 shrink-0">
+                <div className="relative w-80">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                         placeholder={searchPlaceholder}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-9 h-9 text-xs border-slate-300 rounded-sm shadow-none focus-visible:ring-1 focus-visible:ring-[#00a4bd] transition-all"
+                        className="pl-11 h-12 text-sm bg-muted/20 border-none rounded-2xl shadow-none focus-visible:ring-2 focus-visible:ring-primary/20 transition-all font-bold"
                     />
                 </div>
                 
                 {filterConfig && filterConfig.length > 0 && <div className="h-5 w-[1px] bg-slate-200 mx-1" />}
                 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                     {filterConfig?.map(filter => (
                         <Select
                             key={filter.key as string}
                             value={activeFilters[filter.key as string] || "_all"}
                             onValueChange={(val: any) => setActiveFilters(prev => ({ ...prev, [filter.key as string]: val }))}
                         >
-                            <SelectTrigger className="h-9 rounded-sm bg-slate-50 border-slate-200 min-w-[140px] font-semibold text-xs text-slate-700 shadow-none">
+                            <SelectTrigger className="h-12 rounded-2xl bg-muted/20 border-none min-w-[160px] font-bold text-xs text-foreground transition-all focus:ring-2 focus:ring-primary/20">
                                 <SelectValue placeholder={`Filter by ${filter.label}`} />
                             </SelectTrigger>
-                            <SelectContent className="rounded-sm border-slate-200 shadow-md">
-                                <SelectItem value="_all" className="font-semibold text-xs text-slate-500">All {filter.label}</SelectItem>
+                            <SelectContent className="rounded-2xl border-border/50 shadow-2xl p-2 backdrop-blur-xl">
+                                <SelectItem value="_all" className="font-bold text-xs text-muted-foreground rounded-xl">All {filter.label}</SelectItem>
                                 {filter.options.map(opt => (
-                                    <SelectItem key={opt.value} value={opt.value} className="text-xs font-medium text-slate-800">
+                                    <SelectItem key={opt.value} value={opt.value} className="text-xs font-bold text-foreground rounded-xl py-3">
                                         {opt.label}
                                     </SelectItem>
                                 ))}
@@ -226,29 +228,29 @@ export function DataTable<T extends { id: string }>({
                     ))}
                 </div>
 
-                <div className="ml-auto flex items-center gap-2">
+                <div className="ml-auto flex items-center gap-3">
                     {selectedIds.size > 0 ? (
-                        <div className="flex items-center gap-2 bg-[#ff7a59]/10 text-[#ff7a59] rounded-sm px-3 py-1.5 border border-[#ff7a59]/20 mr-2">
-                            <span className="text-xs font-bold">{selectedIds.size} selected</span>
-                            <div className="h-3 w-[1px] bg-[#ff7a59]/30 mx-1" />
+                        <div className="flex items-center gap-2 bg-primary/10 text-primary rounded-2xl px-4 py-2 border border-primary/20 transition-all animate-in fade-in slide-in-from-right-2">
+                            <span className="text-xs font-black uppercase tracking-tight">{selectedIds.size} selected</span>
+                            <div className="h-3 w-[1px] bg-primary/30 mx-1" />
                             <button onClick={() => {
                                 if (onBulkDelete && confirm(`Delete ${selectedIds.size} items?`)) {
                                     onBulkDelete(Array.from(selectedIds))
                                     setSelectedIds(new Set())
                                 }
-                            }} className="text-xs font-bold hover:underline flex items-center gap-1">
-                                <Trash2 className="h-3 w-3" /> Delete
+                            }} className="text-xs font-black uppercase tracking-widest hover:underline flex items-center gap-2">
+                                <Trash2 className="h-3 w-3" /> Bulk Delete
                             </button>
                         </div>
                     ) : (
-                        <span className="text-xs text-slate-400 font-medium mr-2">{filteredData.length} records</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 mr-2">{filteredData.length} total {entityType.toLowerCase()}s</span>
                     )}
                     
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="inline-flex items-center justify-center whitespace-nowrap h-9 px-3 rounded-sm border border-slate-300 font-medium text-xs hover:bg-slate-50 transition-colors shadow-none text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-[#00a4bd]">
-                            <Columns className="h-3.5 w-3.5 mr-2" /> Columns
+                        <DropdownMenuTrigger className="inline-flex items-center justify-center whitespace-nowrap h-12 px-6 rounded-2xl border border-border/50 font-bold text-xs hover:bg-muted/50 transition-all shadow-sm text-foreground bg-card focus:outline-none focus:ring-2 focus:ring-primary/20">
+                            <Columns className="h-4 w-4 mr-2" /> Columns
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-[200px] rounded-sm shadow-md">
+                        <DropdownMenuContent align="end" className="w-[220px] rounded-2xl shadow-2xl border-none p-2 backdrop-blur-xl">
                             {columns.map(col => (
                                 <DropdownMenuCheckboxItem
                                     key={col.accessorKey as string}
@@ -260,7 +262,7 @@ export function DataTable<T extends { id: string }>({
                                                 : prev.filter(c => c !== col.accessorKey)
                                         )
                                     }}
-                                    className="text-xs font-medium cursor-pointer"
+                                    className="text-xs font-bold rounded-xl py-3 cursor-pointer"
                                 >
                                     {col.header as string}
                                 </DropdownMenuCheckboxItem>
@@ -282,29 +284,29 @@ export function DataTable<T extends { id: string }>({
             </div>
 
             {/* Data Grid / Spreadsheet */}
-            <div ref={scrollContainerRef} className="flex-1 overflow-auto bg-white relative">
+            <div ref={scrollContainerRef} className="flex-1 overflow-auto bg-transparent relative custom-scrollbar">
                 <table className="w-full text-sm border-collapse table-fixed min-w-max">
-                    <thead className="bg-[#f5f8fa] border-b border-slate-200 sticky top-0 z-20 shadow-sm text-slate-600">
+                    <thead className="bg-muted/30 border-b border-border/50 sticky top-0 z-20 shadow-sm text-muted-foreground backdrop-blur-md">
                         <tr>
-                            <th className="w-10 h-[36px] sticky left-0 z-30 bg-[#f5f8fa] border-r border-slate-200 text-center px-0">
+                            <th className="w-14 h-[50px] sticky left-0 z-30 bg-muted/40 border-r border-border/50 text-center px-0">
                                 <button onClick={toggleSelectAll} className="flex items-center justify-center w-full h-full">
-                                    <div className={cn("h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors",
+                                    <div className={cn("h-4 w-4 rounded-md border flex items-center justify-center transition-all shadow-sm",
                                         selectedIds.size === filteredData.length && filteredData.length > 0
-                                            ? "bg-[#ff7a59] border-[#ff7a59] text-white"
-                                            : "border-slate-300 bg-white")}>
-                                        {selectedIds.size === filteredData.length && filteredData.length > 0 && <Check className="h-2.5 w-2.5 stroke-[3]" />}
+                                            ? "bg-primary border-primary text-white scale-110"
+                                            : "border-border/50 bg-card hover:border-primary/50")}>
+                                        {selectedIds.size === filteredData.length && filteredData.length > 0 && <Check className="h-3 w-3 stroke-[3]" />}
                                     </div>
                                 </button>
                             </th>
                             {visibleColsData.map((col, i) => (
-                                <th key={i} className="px-4 h-[36px] text-left border-r border-slate-200 font-semibold text-[11px] uppercase tracking-wider select-none overflow-hidden" style={{ width: col.width || '180px' }}>
+                                <th key={i} className="px-6 h-[50px] text-left border-r border-border/50 font-black text-[10px] uppercase tracking-widest select-none overflow-hidden" style={{ width: col.width || '180px' }}>
                                     {col.sortable ? (
-                                        <button onClick={() => handleSort(col.accessorKey as string)} className="flex items-center gap-1.5 w-full hover:text-slate-900 group">
+                                        <button onClick={() => handleSort(col.accessorKey as string)} className="flex items-center gap-2 w-full hover:text-primary transition-all group">
                                             {col.header}
-                                            <span className="text-slate-400">
+                                            <span className="transition-all">
                                                 {sortConfig?.key === col.accessorKey
-                                                    ? (sortConfig.direction === "asc" ? <SortAsc className="h-3 w-3" /> : <SortDesc className="h-3 w-3" />)
-                                                    : <SortAsc className="h-3 w-3 opacity-0 group-hover:opacity-100" />}
+                                                    ? (sortConfig.direction === "asc" ? <SortAsc className="h-3.5 w-3.5 text-primary" /> : <SortDesc className="h-3.5 w-3.5 text-primary" />)
+                                                    : <SortAsc className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0" />}
                                             </span>
                                         </button>
                                     ) : (
@@ -312,7 +314,7 @@ export function DataTable<T extends { id: string }>({
                                     )}
                                 </th>
                             ))}
-                            <th className="w-[80px] px-4 border-b border-l border-slate-200 bg-[#f5f8fa] sticky right-0 z-30 shadow-[-4px_0_12px_rgba(0,0,0,0.02)]"></th>
+                            <th className="w-[100px] px-6 border-b border-l border-border/50 bg-muted/30 sticky right-0 z-30 backdrop-blur-md"></th>
                         </tr>
                     </thead>
                     <tbody className="bg-white text-[13px] text-slate-800">
@@ -332,8 +334,8 @@ export function DataTable<T extends { id: string }>({
                                 const isSelected = selectedIds.has(item.id)
                                 return (
                                     <tr key={item.id}
-                                        className={cn("border-b border-slate-200 group hover:bg-[#f5f8fa] transition-colors relative",
-                                            isSelected ? "bg-blue-50/40" : "",
+                                        className={cn("border-b border-border/50 group hover:bg-primary/5 transition-all relative h-16",
+                                            isSelected ? "bg-primary/5" : "",
                                             (rowClickable !== false && (onRowClick || onView)) && "cursor-pointer"
                                         )}
                                         onClick={() => {
@@ -343,28 +345,28 @@ export function DataTable<T extends { id: string }>({
                                             }
                                         }}
                                     >
-                                        <td className={cn("w-10 h-[40px] sticky left-0 z-10 border-r border-slate-200 text-center px-0 transition-colors", 
-                                            isSelected ? "bg-blue-50/40" : "bg-white group-hover:bg-[#f5f8fa]")}
+                                        <td className={cn("w-14 h-16 sticky left-0 z-10 border-r border-border/50 text-center px-0 transition-all", 
+                                            isSelected ? "bg-primary/10" : "bg-card/40 group-hover:bg-primary/5")}
                                             onClick={(e) => e.stopPropagation()}
                                         >
                                             <button onClick={(e) => toggleSelect(item.id, e)} className="flex items-center justify-center w-full h-full">
-                                                <div className={cn("h-3.5 w-3.5 rounded-sm border flex items-center justify-center transition-colors shadow-sm",
-                                                    isSelected ? "bg-[#ff7a59] border-[#ff7a59] text-white" : "border-slate-300 bg-white")}>
-                                                    {isSelected && <Check className="h-2.5 w-2.5 stroke-[3]" />}
+                                                <div className={cn("h-4 w-4 rounded-md border flex items-center justify-center transition-all shadow-sm",
+                                                    isSelected ? "bg-primary border-primary text-white scale-110 shadow-lg shadow-primary/20" : "border-border/50 bg-card hover:border-primary/50")}>
+                                                    {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
                                                 </div>
                                             </button>
                                         </td>
                                         
                                         {visibleColsData.map((col, i) => (
-                                            <td key={i} className={cn("px-4 h-[40px] border-r border-slate-200 overflow-hidden text-ellipsis whitespace-nowrap", col.className)}>
+                                            <td key={i} className={cn("px-6 h-16 border-r border-border/50 overflow-hidden text-ellipsis whitespace-nowrap font-medium text-foreground/80", col.className)}>
                                                 {col.cell ? col.cell(item, filteredData.indexOf(item)) : (item as any)[col.accessorKey]}
                                             </td>
                                         ))}
 
-                                        <td className="w-[80px] px-4 border-b border-l border-slate-200 bg-white group-hover:bg-[#f5f8fa] sticky right-0 z-10 shadow-[-4px_0_12px_rgba(0,0,0,0.02)] transition-colors">
-                                            <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity justify-end">
+                                        <td className="w-[100px] px-6 border-b border-l border-border/50 bg-card/40 group-hover:bg-primary/5 sticky right-0 z-10 backdrop-blur-md transition-all">
+                                            <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all justify-end scale-90 group-hover:scale-100">
                                                 <DropdownMenu>
-                                                    <DropdownMenuTrigger className="inline-flex items-center justify-center h-7 w-7 p-0 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-sm focus:outline-none focus:ring-2 focus:ring-[#00a4bd]">
+                                                    <DropdownMenuTrigger className="inline-flex items-center justify-center h-9 w-9 p-0 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                                                         <MoreHorizontal className="h-4 w-4" />
                                                     </DropdownMenuTrigger>
                                                      <DropdownMenuContent align="end" className="w-40 rounded-xl shadow-xl border-none p-2 bg-white/95 backdrop-blur-sm" onClick={e=>e.stopPropagation()}>

@@ -47,20 +47,18 @@ export function ManageTeamModal({ project, open, onOpenChange }: ManageTeamModal
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right" className="w-full sm:max-w-xl p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
-                <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0">
-                    <SheetHeader>
-                        <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                                <Users className="h-6 w-6" />
-                            </div>
-                            Manage Team
-                        </SheetTitle>
-                        <SheetDescription className="text-muted-foreground font-medium mt-1">
-                            Assign team members to "{project.name}".
-                        </SheetDescription>
-                    </SheetHeader>
-                </div>
+            <SheetContent side="right">
+                <SheetHeader>
+                    <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                            <Users className="h-6 w-6" />
+                        </div>
+                        Manage Team
+                    </SheetTitle>
+                    <SheetDescription className="text-muted-foreground font-medium mt-1">
+                        Assign team members to "{project.name}".
+                    </SheetDescription>
+                </SheetHeader>
 
                 <div className="flex-1 overflow-y-auto p-8 space-y-4 custom-scrollbar">
                     {teamMembers.map((member) => {
@@ -89,7 +87,7 @@ export function ManageTeamModal({ project, open, onOpenChange }: ManageTeamModal
                                 <div className={cn(
                                     "h-10 w-10 rounded-2xl flex items-center justify-center transition-all",
                                     isAssigned
-                                        ? "bg-[#ff7a59] text-white shadow-lg shadow-primary/20 scale-110"
+                                        ? "bg-primary text-white shadow-lg shadow-primary/20 scale-110"
                                         : "bg-muted/30 text-muted-foreground/30 group-hover:text-muted-foreground"
                                 )}>
                                     {isAssigned ? <Check className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
@@ -99,16 +97,14 @@ export function ManageTeamModal({ project, open, onOpenChange }: ManageTeamModal
                     })}
                 </div>
 
-                <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md">
-                    <SheetFooter>
-                        <Button
-                            onClick={handleSave}
-                            className="w-full rounded-2xl h-14 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-[#ff7a59] text-white border-none"
-                        >
-                            Save Changes
-                        </Button>
-                    </SheetFooter>
-                </div>
+                <SheetFooter>
+                    <Button
+                        onClick={handleSave}
+                        className="w-full rounded-2xl h-14 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
+                    >
+                        Save Changes
+                    </Button>
+                </SheetFooter>
             </SheetContent>
         </Sheet>
     )

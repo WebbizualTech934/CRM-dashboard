@@ -41,11 +41,15 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
         }
     }, [lead])
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (lead && formData) {
-            updateLead(lead.id, formData)
-            onOpenChange(false)
+            try {
+                await updateLead(lead.id, formData)
+                onOpenChange(false)
+            } catch (error) {
+                console.error("Error updating lead:", error)
+            }
         }
     }
 
@@ -88,21 +92,19 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent side="right" className="w-full sm:max-w-2xl p-0 flex flex-col bg-white border-l border-border/50 shadow-2xl">
+            <SheetContent side="right">
                 <form id="edit-lead-form" onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
-                    <div className="bg-primary/[0.03] p-8 border-b border-border/50 shrink-0">
-                        <SheetHeader>
-                            <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                                <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                                    <User className="h-6 w-6" />
-                                </div>
-                                Edit Lead Details
-                            </SheetTitle>
-                            <SheetDescription className="text-muted-foreground font-medium mt-1">
-                                Update lead information and requirements.
-                            </SheetDescription>
-                        </SheetHeader>
-                    </div>
+                    <SheetHeader>
+                        <SheetTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                <User className="h-6 w-6" />
+                            </div>
+                            Edit Lead Details
+                        </SheetTitle>
+                        <SheetDescription className="text-muted-foreground font-medium mt-1">
+                            Update lead information and requirements.
+                        </SheetDescription>
+                    </SheetHeader>
 
                     <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
                         <div className="grid grid-cols-2 gap-6">
@@ -305,25 +307,23 @@ export function EditLeadModal({ open, onOpenChange, lead }: EditLeadModalProps) 
                         </div>
                     </div>
 
-                    <div className="shrink-0 p-8 pt-4 border-t border-border/50 bg-white/80 backdrop-blur-md">
-                        <SheetFooter className="flex-row gap-4 sm:justify-between items-center">
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                onClick={() => onOpenChange(false)}
-                                className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                form="edit-lead-form"
-                                type="submit"
-                                className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-[#ff7a59] text-white border-none hover:bg-[#ff7a59]/90"
-                            >
-                                Save Changes
-                            </Button>
-                        </SheetFooter>
-                    </div>
+                    <SheetFooter className="flex-row gap-4 sm:justify-between items-center">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={() => onOpenChange(false)}
+                            className="rounded-2xl h-14 px-8 font-bold hover:bg-muted/50"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            form="edit-lead-form"
+                            type="submit"
+                            className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
+                        >
+                            Save Changes
+                        </Button>
+                    </SheetFooter>
                 </form>
             </SheetContent>
         </Sheet>

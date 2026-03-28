@@ -210,7 +210,7 @@ export function EditManufacturerModal({ open, onOpenChange, manufacturer }: Edit
                             <Button
                                 form="edit-manufacturer-form"
                                 type="submit"
-                                className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-[#ff7a59] text-white border-none"
+                                className="rounded-2xl h-14 px-12 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] bg-primary text-white border-none"
                             >
                                 Save Changes
                             </Button>

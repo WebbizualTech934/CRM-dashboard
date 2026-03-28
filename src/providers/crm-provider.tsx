@@ -175,6 +175,45 @@ export interface CreativeAsset {
     updatedAt: string
 }
 
+export interface LinkedinLead {
+    id: string
+    dateAdded: string
+    companyName: string
+    contactName: string
+    profileUrl: string
+    workEmail: string
+    leadSource: string
+    status: 'Not Contacted' | 'Connection Sent' | 'Accepted' | 'Message Sent' | 'Replied' | 'Follow-up 1' | 'Follow-up 2' | 'Interested' | 'Not Interested' | 'Converted'
+    priority: 'High' | 'Medium' | 'Low'
+    sentTimeIST?: string
+    draftedContent?: string
+    inMail?: string
+    followUp?: string
+    ownerId?: string
+    notes?: string
+    hookAngle?: string
+    updatedAt: string
+}
+
+export interface LinkedinInteraction {
+    id: string
+    leadId: string
+    type: string
+    content?: string
+    timestamp: string
+}
+
+export interface LinkedinSequence {
+    id: string
+    name: string
+    targetPersona: string
+    steps: Array<{
+        type: 'Connection' | 'Message' | 'Follow-up' | 'Inmail'
+        content: string
+        delay?: number
+    }>
+}
+
 interface CRMContextType {
     projects: Project[]
     leads: Lead[]
@@ -189,6 +228,9 @@ interface CRMContextType {
     tags: Tag[]
     customSchemas: CustomSchema[]
     customRecords: CustomRecord[]
+    linkedinLeads: LinkedinLead[]
+    linkedinInteractions: LinkedinInteraction[]
+    linkedinSequences: LinkedinSequence[]
     isLoaded: boolean
     connectionError: string | null
     currentUser: TeamMember | null
@@ -244,6 +286,15 @@ interface CRMContextType {
     addCustomRecord: (record: Omit<CustomRecord, "id" | "createdAt" | "updatedAt">) => Promise<CustomRecord | null>
     updateCustomRecord: (id: string, updates: Partial<CustomRecord>) => Promise<void>
     deleteCustomRecord: (id: string) => Promise<void>
+    
+    // LinkedIn Deal Engine
+    addLinkedinLead: (lead: Omit<LinkedinLead, "id" | "updatedAt" | "dateAdded">) => Promise<LinkedinLead | null>
+    updateLinkedinLead: (id: string, updates: Partial<LinkedinLead>) => Promise<void>
+    deleteLinkedinLead: (id: string) => Promise<void>
+    addLinkedinInteraction: (interaction: Omit<LinkedinInteraction, "id" | "timestamp">) => Promise<LinkedinInteraction | null>
+    addLinkedinSequence: (sequence: Omit<LinkedinSequence, "id">) => Promise<LinkedinSequence | null>
+    updateLinkedinSequence: (id: string, updates: Partial<LinkedinSequence>) => Promise<void>
+    deleteLinkedinSequence: (id: string) => Promise<void>
     resetData: () => void
 }
 
@@ -324,6 +375,11 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
     const [tags, setTags] = useState<Tag[]>([])
     const [customSchemas, setCustomSchemas] = useState<CustomSchema[]>([])
     const [customRecords, setCustomRecords] = useState<CustomRecord[]>([])
+    
+    // LinkedIn Deal Engine State
+    const [linkedinLeads, setLinkedinLeads] = useState<LinkedinLead[]>([])
+    const [linkedinInteractions, setLinkedinInteractions] = useState<LinkedinInteraction[]>([])
+    const [linkedinSequences, setLinkedinSequences] = useState<LinkedinSequence[]>([])
     const [isLoaded, setIsLoaded] = useState(false)
     const [connectionError, setConnectionError] = useState<string | null>(null)
     const [currentUser, setCurrentUser] = useState<TeamMember | null>(null)
@@ -359,6 +415,9 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                     { data: tagsData, error: tgErr },
                     { data: schemasData, error: schErr },
                     { data: recordsData, error: recErr },
+                    { data: liLeadsData, error: liLErr },
+                    { data: liInteractionsData, error: liIErr },
+                    { data: liSequencesData, error: liSErr },
                     { data: { session }, error: sErr }
                 ] = await Promise.all([
                     supabase.from("projects").select("*").order("updated_at", { ascending: false }),
@@ -374,10 +433,13 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                     supabase.from("tags").select("*"),
                     supabase.from("custom_schemas").select("*").order("created_at", { ascending: false }),
                     supabase.from("custom_records").select("*").order("created_at", { ascending: false }),
+                    supabase.from("linkedin_leads").select("*").order("updated_at", { ascending: false }),
+                    supabase.from("linkedin_interactions").select("*").order("timestamp", { ascending: false }),
+                    supabase.from("linkedin_sequences").select("*").order("created_at", { ascending: false }),
                     supabase.auth.getSession()
                 ])
 
-                const errorFound = [pErr, lErr, mErr, tErr, cErr, tmErr, sqErr, inErr, aErr, tsErr, tgErr, schErr, recErr].find(Boolean)
+                const errorFound = [pErr, lErr, mErr, tErr, cErr, tmErr, sqErr, inErr, aErr, tsErr, tgErr, schErr, recErr, liLErr, liIErr, liSErr].find(Boolean)
                 if (errorFound) {
                     console.error("[Supabase] Fetch error:", errorFound.message)
                     setConnectionError(
@@ -417,7 +479,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                             lastActive: currentProfile.created_at,
                             menuPermissions: isAdminByName 
                                 ? ['dashboard', 'projects', 'emails', 'leads', 'team', 'custom-tables', 'settings']
-                                : (currentProfile.menu_permissions || ['dashboard', 'leads', 'manufacturers', 'creative', 'emails', 'my-tables', 'team'])
+                                : (currentProfile.menu_permissions || ['dashboard', 'projects', 'leads', 'emails', 'custom-tables', 'team'])
                         })
                     } else if (!session.user) {
                         setCurrentUser(null)
@@ -520,7 +582,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                             lastActive: t.created_at,
                             menuPermissions: isAdminByName 
                                 ? ['dashboard', 'projects', 'emails', 'leads', 'team', 'custom-tables', 'settings']
-                                : ['dashboard', 'leads', 'manufacturers', 'creative', 'emails', 'my-tables', 'team']
+                                : ['dashboard', 'projects', 'leads', 'emails', 'custom-tables', 'team']
                         }
                     }))
                 }
@@ -628,6 +690,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         updatedAt: a.updated_at
                     })))
                 }
+ 
 
                 if (tagsData) setTags(tagsData)
                 if (schemasData) {
@@ -652,6 +715,47 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
                         createdBy: r.created_by || '',
                         createdAt: r.created_at,
                         updatedAt: r.updated_at
+                    })))
+                }
+
+                if (liLeadsData) {
+                    setLinkedinLeads(liLeadsData.map((l: any) => ({
+                        id: l.id,
+                        dateAdded: l.date_added,
+                        companyName: l.company_name,
+                        contactName: l.contact_name,
+                        profileUrl: l.profile_url,
+                        workEmail: l.work_email,
+                        leadSource: l.lead_source,
+                        status: l.status,
+                        priority: l.priority,
+                        sentTimeIST: l.sent_time_ist,
+                        draftedContent: l.drafted_content,
+                        inMail: l.in_mail,
+                        followUp: l.follow_up,
+                        ownerId: l.owner_id,
+                        notes: l.notes,
+                        hookAngle: l.hook_angle,
+                        updatedAt: l.updated_at
+                    })))
+                }
+
+                if (liInteractionsData) {
+                    setLinkedinInteractions(liInteractionsData.map((i: any) => ({
+                        id: i.id,
+                        leadId: i.lead_id,
+                        type: i.type,
+                        content: i.content,
+                        timestamp: i.timestamp
+                    })))
+                }
+
+                if (liSequencesData) {
+                    setLinkedinSequences(liSequencesData.map((s: any) => ({
+                        id: s.id,
+                        name: s.name,
+                        targetPersona: s.target_persona,
+                        steps: s.steps || []
                     })))
                 }
 
@@ -683,6 +787,9 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             .on("postgres_changes", { event: "*", schema: "public", table: "tags" }, () => fetchData())
             .on("postgres_changes", { event: "*", schema: "public", table: "custom_schemas" }, () => fetchData())
             .on("postgres_changes", { event: "*", schema: "public", table: "custom_records" }, () => fetchData())
+            .on("postgres_changes", { event: "*", schema: "public", table: "linkedin_leads" }, () => fetchData())
+            .on("postgres_changes", { event: "*", schema: "public", table: "linkedin_interactions" }, () => fetchData())
+            .on("postgres_changes", { event: "*", schema: "public", table: "linkedin_sequences" }, () => fetchData())
             .subscribe()
 
         return () => {
@@ -705,11 +812,13 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             console.error("Error adding project:", error)
             return null
         }
-        return {
+        const newProject = {
             ...data,
             teamMemberIds: data.team_member_ids,
             updatedAt: data.updated_at
         } as Project
+        setProjects(prev => [newProject, ...prev])
+        return newProject
     }
 
     const updateProject = async (id: string, updates: Partial<Project>) => {
@@ -722,12 +831,20 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             ...mappedUpdates, 
             updated_at: new Date().toISOString() 
         }).eq("id", id)
-        if (error) console.error("Error updating project:", error)
+        if (error) {
+            console.error("Error updating project:", error)
+        } else {
+            setProjects(prev => prev.map(p => p.id === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p))
+        }
     }
 
     const deleteProject = async (id: string) => {
         const { error } = await supabase.from("projects").delete().eq("id", id)
-        if (error) console.error("Error deleting project:", error)
+        if (error) {
+            console.error("Error deleting project:", error)
+        } else {
+            setProjects(prev => prev.filter(p => p.id !== id))
+        }
     }
 
     const duplicateProject = async (id: string) => {
@@ -771,12 +888,14 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             console.error("Error adding lead:", error)
             return null
         }
-        return {
+        const newLead = {
             ...lead,
             id: data.id,
             lastContact: data.last_contact,
             projectId: data.project_id
         } as Lead
+        setLeads(prev => [newLead, ...prev])
+        return newLead
     }
 
     const updateLead = async (id: string, updates: Partial<Lead>) => {
@@ -804,17 +923,29 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         mappedUpdates.updated_at = new Date().toISOString()
 
         const { error } = await supabase.from("leads").update(mappedUpdates).eq("id", id)
-        if (error) console.error("Error updating lead:", error)
+        if (error) {
+            console.error("Error updating lead:", error)
+        } else {
+            setLeads(prev => prev.map(l => l.id === id ? { ...l, ...updates } : l))
+        }
     }
 
     const deleteLead = async (id: string) => {
         const { error } = await supabase.from("leads").delete().eq("id", id)
-        if (error) console.error("Error deleting lead:", error)
+        if (error) {
+            console.error("Error deleting lead:", error)
+        } else {
+            setLeads(prev => prev.filter(l => l.id !== id))
+        }
     }
 
     const deleteManyLeads = async (ids: string[]) => {
         const { error } = await supabase.from("leads").delete().in("id", ids)
-        if (error) console.error("Error deleting leads:", error)
+        if (error) {
+            console.error("Error deleting leads:", error)
+        } else {
+            setLeads(prev => prev.filter(l => !ids.includes(l.id)))
+        }
     }
 
     const replaceLeads = async (newLeads: Omit<Lead, "id" | "lastContact">[]) => {
@@ -870,11 +1001,13 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             console.error("Error adding manufacturer:", error)
             return null
         }
-        return {
+        const newM = {
             ...m,
             id: data.id,
             projectId: data.project_id
         } as Manufacturer
+        setManufacturers(prev => [newM, ...prev])
+        return newM
     }
 
     const updateManufacturer = async (id: string, updates: Partial<Manufacturer>) => {
@@ -897,17 +1030,29 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         mapped.updated_at = new Date().toISOString()
 
         const { error } = await supabase.from("manufacturers").update(mapped).eq("id", id)
-        if (error) console.error("Error updating manufacturer:", error)
+        if (error) {
+            console.error("Error updating manufacturer:", error)
+        } else {
+            setManufacturers(prev => prev.map(m => m.id === id ? { ...m, ...updates } : m))
+        }
     }
 
     const deleteManufacturer = async (id: string) => {
         const { error } = await supabase.from("manufacturers").delete().eq("id", id)
-        if (error) console.error("Error deleting manufacturer:", error)
+        if (error) {
+            console.error("Error deleting manufacturer:", error)
+        } else {
+            setManufacturers(prev => prev.filter(m => m.id !== id))
+        }
     }
 
     const deleteManyManufacturers = async (ids: string[]) => {
         const { error } = await supabase.from("manufacturers").delete().in("id", ids)
-        if (error) console.error("Error deleting manufacturers:", error)
+        if (error) {
+            console.error("Error deleting manufacturers:", error)
+        } else {
+            setManufacturers(prev => prev.filter(m => !ids.includes(m.id)))
+        }
     }
 
     const replaceManufacturers = async (newManufacturers: Omit<Manufacturer, "id">[]) => {
@@ -949,17 +1094,23 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             console.error("Error adding team member (profile):", error)
             return null
         }
-        return {
+        const newMember = {
             ...member,
             id: data.id,
             leadsAdded: 0,
             emailsSent: 0
         } as TeamMember
+        setTeamMembers(prev => [newMember, ...prev])
+        return newMember
     }
 
     const deleteTeamMember = async (id: string) => {
         const { error } = await supabase.from("profiles").delete().eq("id", id)
-        if (error) console.error("Error deleting team member (profile):", error)
+        if (error) {
+            console.error("Error deleting team member (profile):", error)
+        } else {
+            setTeamMembers(prev => prev.filter(t => t.id !== id))
+        }
     }
 
     const deleteManyTeamMembers = async (ids: string[]) => {
@@ -991,7 +1142,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             console.error("Error adding campaign:", error)
             return null
         }
-        return {
+        const newCampaign = {
             ...campaign,
             id: data.id,
             emailsSent: 0,
@@ -1002,6 +1153,8 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             meetings: 0,
             updatedAt: data.updated_at
         } as Campaign
+        setCampaigns(prev => [newCampaign, ...prev])
+        return newCampaign
     }
 
     const updateCampaign = async (id: string, updates: Partial<Campaign>) => {
@@ -1022,17 +1175,29 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         mapped.updated_at = new Date().toISOString()
 
         const { error } = await supabase.from("campaigns").update(mapped).eq("id", id)
-        if (error) console.error("Error updating campaign:", error)
+        if (error) {
+            console.error("Error updating campaign:", error)
+        } else {
+            setCampaigns(prev => prev.map(c => c.id === id ? { ...c, ...updates, updatedAt: new Date().toISOString() } : c))
+        }
     }
 
     const deleteCampaign = async (id: string) => {
         const { error } = await supabase.from("campaigns").delete().eq("id", id)
-        if (error) console.error("Error deleting campaign:", error)
+        if (error) {
+            console.error("Error deleting campaign:", error)
+        } else {
+            setCampaigns(prev => prev.filter(c => c.id !== id))
+        }
     }
 
     const deleteManyCampaigns = async (ids: string[]) => {
         const { error } = await supabase.from("campaigns").delete().in("id", ids)
-        if (error) console.error("Error deleting campaigns:", error)
+        if (error) {
+            console.error("Error deleting campaigns:", error)
+        } else {
+            setCampaigns(prev => prev.filter(c => !ids.includes(c.id)))
+        }
     }
 
     const addTemplate = async (template: Omit<EmailTemplate, "id" | "createdAt">) => {
@@ -1048,11 +1213,13 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             console.error("Error adding template:", error)
             return null
         }
-        return {
+        const newTemplate = {
             ...template,
             id: data.id,
             createdAt: data.created_at
         } as EmailTemplate
+        setTemplates(prev => [newTemplate, ...prev])
+        return newTemplate
     }
 
     const updateTemplate = async (id: string, updates: Partial<EmailTemplate>) => {
@@ -1061,12 +1228,20 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         if (updates.subject !== undefined) mapped.subject = updates.subject
         if (updates.body !== undefined) mapped.body = updates.body
         const { error } = await supabase.from("email_templates").update(mapped).eq("id", id)
-        if (error) console.error("Error updating template:", error)
+        if (error) {
+            console.error("Error updating template:", error)
+        } else {
+            setTemplates(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t))
+        }
     }
 
     const deleteTemplate = async (id: string) => {
         const { error } = await supabase.from("email_templates").delete().eq("id", id)
-        if (error) console.error("Error deleting template:", error)
+        if (error) {
+            console.error("Error deleting template:", error)
+        } else {
+            setTemplates(prev => prev.filter(t => t.id !== id))
+        }
     }
 
     const addSequence = async (sequence: Omit<EmailSequence, "id" | "createdAt">) => {
@@ -1081,11 +1256,13 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             console.error("Error adding sequence:", error)
             return null
         }
-        return {
+        const newSequence = {
             ...sequence,
             id: data.id,
             createdAt: data.created_at
         } as EmailSequence
+        setSequences(prev => [newSequence, ...prev])
+        return newSequence
     }
 
     const updateSequence = async (id: string, updates: Partial<EmailSequence>) => {
@@ -1093,12 +1270,20 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         if (updates.name !== undefined) mapped.name = updates.name
         if (updates.steps !== undefined) mapped.steps = updates.steps
         const { error } = await supabase.from("email_sequences").update(mapped).eq("id", id)
-        if (error) console.error("Error updating sequence:", error)
+        if (error) {
+            console.error("Error updating sequence:", error)
+        } else {
+            setSequences(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s))
+        }
     }
 
     const deleteSequence = async (id: string) => {
         const { error } = await supabase.from("email_sequences").delete().eq("id", id)
-        if (error) console.error("Error deleting sequence:", error)
+        if (error) {
+            console.error("Error deleting sequence:", error)
+        } else {
+            setSequences(prev => prev.filter(s => s.id !== id))
+        }
     }
 
     const addInboxMessage = async (message: Omit<EmailMessage, "id" | "sentAt">) => {
@@ -1118,18 +1303,24 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             console.error("Error adding inbox message:", error)
             return null
         }
-        return {
+        const newMsg = {
             ...message,
             id: data.id,
             sentAt: data.sent_at
         } as EmailMessage
+        setInbox(prev => [newMsg, ...prev])
+        return newMsg
     }
 
     const updateInboxMessage = async (id: string, updates: Partial<EmailMessage>) => {
         const mapped: any = {}
         if (updates.status !== undefined) mapped.status = updates.status
         const { error } = await supabase.from("email_messages").update(mapped).eq("id", id)
-        if (error) console.error("Error updating inbox message:", error)
+        if (error) {
+            console.error("Error updating inbox message:", error)
+        } else {
+            setInbox(prev => prev.map(m => m.id === id ? { ...m, ...updates } : m))
+        }
     }
 
     const addCreativeAsset = async (asset: Omit<CreativeAsset, "id" | "updatedAt">) => {
@@ -1161,11 +1352,13 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             console.error("Error adding creative asset:", error)
             return null
         }
-        return {
+        const newAsset = {
             ...asset,
             id: data.id,
             updatedAt: data.updated_at
         } as CreativeAsset
+        setCreativeAssets(prev => [newAsset, ...prev])
+        return newAsset
     }
 
     const updateCreativeAsset = async (id: string, updates: Partial<CreativeAsset>) => {
@@ -1193,17 +1386,29 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         mapped.updated_at = new Date().toISOString()
         
         const { error } = await supabase.from("creative_assets").update(mapped).eq("id", id)
-        if (error) console.error("Error updating creative asset:", error)
+        if (error) {
+            console.error("Error updating creative asset:", error)
+        } else {
+            setCreativeAssets(prev => prev.map(a => a.id === id ? { ...a, ...updates, updatedAt: new Date().toISOString() } : a))
+        }
     }
 
     const deleteCreativeAsset = async (id: string) => {
         const { error } = await supabase.from("creative_assets").delete().eq("id", id)
-        if (error) console.error("Error deleting creative asset:", error)
+        if (error) {
+            console.error("Error deleting creative asset:", error)
+        } else {
+            setCreativeAssets(prev => prev.filter(a => a.id !== id))
+        }
     }
 
     const deleteManyCreativeAssets = async (ids: string[]) => {
         const { error } = await supabase.from("creative_assets").delete().in("id", ids)
-        if (error) console.error("Error deleting creative assets:", error)
+        if (error) {
+            console.error("Error deleting creative assets:", error)
+        } else {
+            setCreativeAssets(prev => prev.filter(a => !ids.includes(a.id)))
+        }
     }
 
     const replaceCreativeAssets = async (newAssets: Omit<CreativeAsset, "id" | "updatedAt">[]) => {
@@ -1232,6 +1437,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         await supabase.from("creative_assets").insert(mapped)
     }
 
+ 
     const addTask = async (task: Omit<Task, "id" | "createdAt" | "updatedAt">) => {
         const mapped = {
             project_id: task.projectId,
@@ -1251,12 +1457,14 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             console.error("Error adding task:", error)
             return null
         }
-        return {
+        const newTask = {
             ...task,
             id: data.id,
             createdAt: data.created_at,
             updatedAt: data.updated_at
         } as Task
+        setTasks(prev => [newTask, ...prev])
+        return newTask
     }
 
     const updateTask = async (id: string, updates: Partial<Task>) => {
@@ -1277,26 +1485,49 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         mapped.updated_at = new Date().toISOString()
         
         const { error } = await supabase.from("tasks").update(mapped).eq("id", id)
-        if (error) console.error("Error updating task:", error)
+        if (error) {
+            console.error("Error updating task:", error)
+        } else {
+            setTasks(prev => prev.map(t => t.id === id ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t))
+        }
     }
 
     const deleteTask = async (id: string) => {
         const { error } = await supabase.from("tasks").delete().eq("id", id)
-        if (error) console.error("Error deleting task:", error)
+        if (error) {
+            console.error("Error deleting task:", error)
+        } else {
+            setTasks(prev => prev.filter(t => t.id !== id))
+        }
     }
 
     const deleteManyTasks = async (ids: string[]) => {
         const { error } = await supabase.from("tasks").delete().in("id", ids)
-        if (error) console.error("Error deleting tasks:", error)
+        if (error) {
+            console.error("Error deleting tasks:", error)
+        } else {
+            setTasks(prev => prev.filter(t => !ids.includes(t.id)))
+        }
     }
 
     const addTag = async (tag: Omit<Tag, "id">) => {
-        const { data } = await supabase.from("tags").insert([tag]).select().single()
-        return data as Tag
+        const { data, error } = await supabase.from("tags").insert([tag]).select().single()
+        if (error) {
+            console.error("Error adding tag:", error)
+            return null
+        }
+        const newTag = data as Tag
+        setTags(prev => [...prev, newTag])
+        return newTag
     }
 
     const deleteTag = async (id: string) => {
-        await supabase.from("tags").delete().eq("id", id)
+        const { error } = await supabase.from("tags").delete().eq("id", id)
+        if (error) {
+            console.error("Error deleting tag:", error)
+        } else {
+            setTags(prev => prev.filter(t => t.id !== id))
+        }
     }
 
     // ── Team Member Update ──────────────────────────────────
@@ -1314,7 +1545,14 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         if ((updates as any).permissions !== undefined) mapped.permissions = (updates as any).permissions
         mapped.updated_at = new Date().toISOString()
         const { error } = await supabase.from("profiles").update(mapped).eq("id", id)
-        if (error) console.error("Error updating team member (profile):", error)
+        if (error) {
+            console.error("Error updating team member (profile):", error)
+        } else {
+            setTeamMembers(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t))
+            if (currentUser?.id === id) {
+                setCurrentUser({ ...currentUser, ...updates } as any)
+            }
+        }
     }
 
     // ── Custom Schemas CRUD ─────────────────────────────────
@@ -1331,12 +1569,14 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         }
         const { data, error } = await supabase.from("custom_schemas").insert([mapped]).select().single()
         if (error) { console.error("Error adding custom schema:", error); return null }
-        return {
+        const newSchema = {
             ...schema,
             id: data.id,
             createdAt: data.created_at,
             updatedAt: data.updated_at
         } as CustomSchema
+        setCustomSchemas(prev => [newSchema, ...prev])
+        return newSchema
     }
 
     const updateCustomSchema = async (id: string, updates: Partial<CustomSchema>) => {
@@ -1348,12 +1588,20 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         if (updates.columns !== undefined) mapped.columns = updates.columns
         mapped.updated_at = new Date().toISOString()
         const { error } = await supabase.from("custom_schemas").update(mapped).eq("id", id)
-        if (error) console.error("Error updating custom schema:", error)
+        if (error) {
+            console.error("Error updating custom schema:", error)
+        } else {
+            setCustomSchemas(prev => prev.map(s => s.id === id ? { ...s, ...updates, updatedAt: new Date().toISOString() } : s))
+        }
     }
 
     const deleteCustomSchema = async (id: string) => {
         const { error } = await supabase.from("custom_schemas").delete().eq("id", id)
-        if (error) console.error("Error deleting custom schema:", error)
+        if (error) {
+            console.error("Error deleting custom schema:", error)
+        } else {
+            setCustomSchemas(prev => prev.filter(s => s.id !== id))
+        }
     }
 
     // ── Custom Records CRUD ─────────────────────────────────
@@ -1367,12 +1615,14 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         }
         const { data, error } = await supabase.from("custom_records").insert([mapped]).select().single()
         if (error) { console.error("Error adding custom record:", error); return null }
-        return {
+        const newRecord = {
             ...record,
             id: data.id,
             createdAt: data.created_at,
             updatedAt: data.updated_at
         } as CustomRecord
+        setCustomRecords(prev => [newRecord, ...prev])
+        return newRecord
     }
 
     const updateCustomRecord = async (id: string, updates: Partial<CustomRecord>) => {
@@ -1380,12 +1630,149 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         if (updates.data !== undefined) mapped.data = updates.data
         mapped.updated_at = new Date().toISOString()
         const { error } = await supabase.from("custom_records").update(mapped).eq("id", id)
-        if (error) console.error("Error updating custom record:", error)
+        if (error) {
+            console.error("Error updating custom record:", error)
+        } else {
+            setCustomRecords(prev => prev.map(r => r.id === id ? { ...r, ...updates, updatedAt: new Date().toISOString() } : r))
+        }
     }
 
     const deleteCustomRecord = async (id: string) => {
         const { error } = await supabase.from("custom_records").delete().eq("id", id)
-        if (error) console.error("Error deleting custom record:", error)
+        if (error) {
+            console.error("Error deleting custom record:", error)
+        } else {
+            setCustomRecords(prev => prev.filter(r => r.id !== id))
+        }
+    }
+    // ── LinkedIn Deal Engine CRUD ──────────────────────────
+    const addLinkedinLead = async (lead: Omit<LinkedinLead, "id" | "updatedAt" | "dateAdded">) => {
+        const mapped = {
+            company_name: lead.companyName,
+            contact_name: lead.contactName,
+            profile_url: lead.profileUrl,
+            work_email: lead.workEmail,
+            lead_source: lead.leadSource,
+            status: lead.status,
+            priority: lead.priority,
+            sent_time_ist: lead.sentTimeIST || '',
+            drafted_content: lead.draftedContent || '',
+            in_mail: lead.inMail || '',
+            follow_up: lead.followUp || '',
+            owner_id: lead.ownerId,
+            notes: lead.notes,
+            hook_angle: lead.hookAngle,
+            date_added: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        }
+        const { data, error } = await supabase.from("linkedin_leads").insert([mapped]).select().single()
+        if (error) { console.error("Error adding linkedin lead:", error); return null }
+        const newLead = {
+            ...lead,
+            id: data.id,
+            dateAdded: data.date_added,
+            updatedAt: data.updated_at
+        } as LinkedinLead
+        setLinkedinLeads(prev => [newLead, ...prev])
+        return newLead
+    }
+
+    const updateLinkedinLead = async (id: string, updates: Partial<LinkedinLead>) => {
+        const mapped: any = {}
+        if (updates.companyName !== undefined) mapped.company_name = updates.companyName
+        if (updates.contactName !== undefined) mapped.contact_name = updates.contactName
+        if (updates.profileUrl !== undefined) mapped.profile_url = updates.profileUrl
+        if (updates.workEmail !== undefined) mapped.work_email = updates.workEmail
+        if (updates.leadSource !== undefined) mapped.lead_source = updates.leadSource
+        if (updates.status !== undefined) mapped.status = updates.status
+        if (updates.priority !== undefined) mapped.priority = updates.priority
+        if (updates.sentTimeIST !== undefined) mapped.sent_time_ist = updates.sentTimeIST
+        if (updates.draftedContent !== undefined) mapped.drafted_content = updates.draftedContent
+        if (updates.inMail !== undefined) mapped.in_mail = updates.inMail
+        if (updates.followUp !== undefined) mapped.follow_up = updates.followUp
+        if (updates.ownerId !== undefined) mapped.owner_id = updates.ownerId
+        if (updates.notes !== undefined) mapped.notes = updates.notes
+        if (updates.hookAngle !== undefined) mapped.hook_angle = updates.hookAngle
+        mapped.updated_at = new Date().toISOString()
+
+        const { error } = await supabase.from("linkedin_leads").update(mapped).eq("id", id)
+        if (error) {
+            console.error("Error updating linkedin lead:", error)
+        } else {
+            setLinkedinLeads(prev => prev.map(l => l.id === id ? { ...l, ...updates, updatedAt: new Date().toISOString() } : l))
+        }
+    }
+
+    const deleteLinkedinLead = async (id: string) => {
+        const { error } = await supabase.from("linkedin_leads").delete().eq("id", id)
+        if (error) {
+            console.error("Error deleting linkedin lead:", error)
+        } else {
+            setLinkedinLeads(prev => prev.filter(l => l.id !== id))
+        }
+    }
+
+    const addLinkedinInteraction = async (interaction: Omit<LinkedinInteraction, "id" | "timestamp">) => {
+        const mapped = {
+            lead_id: interaction.leadId,
+            type: interaction.type,
+            content: interaction.content,
+            timestamp: new Date().toISOString()
+        }
+        const { data, error } = await supabase.from("linkedin_interactions").insert([mapped]).select().single()
+        if (error) { console.error("Error adding interaction:", error); return null }
+        const newInteraction = {
+            ...interaction,
+            id: data.id,
+            timestamp: data.timestamp
+        } as LinkedinInteraction
+        setLinkedinInteractions(prev => [newInteraction, ...prev])
+        
+        // Update the lead's updatedAt timestamp
+        const now = new Date().toISOString()
+        updateLinkedinLead(interaction.leadId, { updatedAt: now })
+        
+        return newInteraction
+    }
+
+    const addLinkedinSequence = async (sequence: Omit<LinkedinSequence, "id">) => {
+        const mapped = {
+            name: sequence.name,
+            target_persona: sequence.targetPersona,
+            steps: sequence.steps,
+            created_at: new Date().toISOString()
+        }
+        const { data, error } = await supabase.from("linkedin_sequences").insert([mapped]).select().single()
+        if (error) { console.error("Error adding linkedin sequence:", error); return null }
+        const newSeq = {
+            ...sequence,
+            id: data.id
+        } as LinkedinSequence
+        setLinkedinSequences(prev => [newSeq, ...prev])
+        return newSeq
+    }
+
+    const updateLinkedinSequence = async (id: string, updates: Partial<LinkedinSequence>) => {
+        const mapped: any = {}
+        if (updates.name !== undefined) mapped.name = updates.name
+        if (updates.targetPersona !== undefined) mapped.target_persona = updates.targetPersona
+        if (updates.steps !== undefined) mapped.steps = updates.steps
+        
+        const { error } = await supabase.from("linkedin_sequences").update(mapped).eq("id", id)
+        if (error) {
+            console.error("Error updating linkedin sequence:", error)
+        } else {
+            setLinkedinSequences(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s))
+        }
+    }
+
+    const deleteLinkedinSequence = async (id: string) => {
+        const { error } = await supabase.from("linkedin_sequences").delete().eq("id", id)
+        if (error) {
+            console.error("Error deleting linkedin sequence:", error)
+        } else {
+            setLinkedinSequences(prev => prev.filter(s => s.id !== id))
+        }
     }
 
     const resetData = () => {
@@ -1398,6 +1785,9 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         setTags([])
         setCustomSchemas([])
         setCustomRecords([])
+        setLinkedinLeads([])
+        setLinkedinInteractions([])
+        setLinkedinSequences([])
         setCurrentUser(null)
     }
 
@@ -1405,6 +1795,7 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
         <CRMContext.Provider value={{
             projects, leads, manufacturers, teamMembers, campaigns, templates, sequences, inbox, creativeAssets, tasks, tags,
             customSchemas, customRecords,
+            linkedinLeads, linkedinInteractions, linkedinSequences,
             isLoaded, connectionError,
             addProject, updateProject, deleteProject, duplicateProject,
             addLead, updateLead, deleteLead, deleteManyLeads, replaceLeads,
@@ -1417,14 +1808,13 @@ export function CRMProvider({ children }: { children: React.ReactNode }) {
             addTask, updateTask, deleteTask, deleteManyTasks,
             addTag, deleteTag, deleteTeamMember, deleteManyTeamMembers,
             addCustomSchema, updateCustomSchema, deleteCustomSchema,
-                addCustomRecord,
-                updateCustomRecord,
-                deleteCustomRecord,
-                resetData,
-                currentUser,
-                setCurrentUser
-            }}
-        >
+            addCustomRecord, updateCustomRecord, deleteCustomRecord,
+            addLinkedinLead, updateLinkedinLead, deleteLinkedinLead,
+            addLinkedinInteraction, addLinkedinSequence, updateLinkedinSequence, deleteLinkedinSequence,
+            resetData,
+            currentUser,
+            setCurrentUser
+        }}>
             {children}
         </CRMContext.Provider>
     )

@@ -362,25 +362,20 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
                     </Button>
                 }
             />
-            <DialogContent className={cn(
-                "border-none shadow-2xl rounded-[2.5rem] p-0 overflow-hidden bg-background/80 backdrop-blur-xl transition-all duration-500 flex flex-col max-h-[90vh]",
-                step === "mapping" ? "sm:max-w-[700px]" : "sm:max-w-[450px]"
-            )}>
-                <div className="bg-primary/5 p-8 border-b border-primary/10">
-                    <DialogHeader>
-                        <DialogTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-2xl bg-primary flex items-center justify-center text-white">
-                                {mode === "import" ? <Upload className="h-6 w-6" /> : <Download className="h-6 w-6" />}
-                            </div>
-                            {mode === "import" ? "Advanced Import" : "Export Data"}
-                        </DialogTitle>
-                        <DialogDescription className="text-muted-foreground font-medium mt-1">
-                            {mode === "import"
-                                ? "Map your file columns to CRM fields with precision."
-                                : "Choose a format to export your project data."}
-                        </DialogDescription>
-                    </DialogHeader>
-                </div>
+            <DialogContent>
+                <DialogHeader className="bg-primary/5 p-8 border-b border-primary/10">
+                    <DialogTitle className="text-3xl font-black tracking-tighter text-primary flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-2xl bg-primary flex items-center justify-center text-white">
+                            {mode === "import" ? <Upload className="h-6 w-6" /> : <Download className="h-6 w-6" />}
+                        </div>
+                        {mode === "import" ? "Advanced Import" : "Export Data"}
+                    </DialogTitle>
+                    <DialogDescription className="text-muted-foreground font-medium mt-1">
+                        {mode === "import"
+                            ? "Map your file columns to CRM fields with precision."
+                            : "Choose a format to export your project data."}
+                    </DialogDescription>
+                </DialogHeader>
 
                 <div className="p-8 overflow-y-auto flex-1 custom-scrollbar">
                     {mode === "import" ? (
@@ -525,12 +520,12 @@ export function ImportExportDialog({ mode, type: entityType = "leads", projectId
                         step === "upload" ? (
                             <Button disabled className="w-full h-14 rounded-2xl font-black uppercase tracking-widest opacity-50">Select File to Continue</Button>
                         ) : step === "mapping" ? (
-                            <Button onClick={handleImport} className="w-full h-14 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white border-none">Start Import</Button>
+                            <Button onClick={handleImport} className="w-full h-14 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 bg-primary hover:bg-primary/90 text-white border-none">Start Import</Button>
                         ) : (
                             <Button onClick={reset} className="w-full h-14 rounded-2xl font-black uppercase tracking-widest">Close</Button>
                         )
                     ) : (
-                        <Button onClick={handleExportCSV} className="w-full h-14 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 bg-[#ff7a59] hover:bg-[#ff7a59]/90 text-white border-none">Download CSV</Button>
+                        <Button onClick={handleExportCSV} className="w-full h-14 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 bg-primary hover:bg-primary/90 text-white border-none">Download CSV</Button>
                     )}
                 </DialogFooter>
             </DialogContent>

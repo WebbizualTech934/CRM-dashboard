@@ -147,7 +147,7 @@ export function ResetPasswordForm() {
                 <button
                     type="submit"
                     disabled={loading || !password || !confirmPassword}
-                    className="w-full h-14 rounded-2xl bg-[#ff7a59] text-white font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-xl shadow-orange-400/20 hover:bg-[#ff6a45] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    className="w-full h-14 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                     {loading ? (
                         <div className="h-5 w-5 border-2 border-white/50 border-t-white rounded-full animate-spin" />
